@@ -1,10 +1,19 @@
 TODO
 ====
 
+- Clean up EMath
+- add Assert: https://github.com/aduros/flambe/blob/master/src/flambe/util/Assert.hx
+- Utils: add build date: https://github.com/aduros/flambe/blob/master/src/flambe/util/Build.hx
+- add Pool: https://github.com/aduros/flambe/blob/master/src/flambe/util/Pool.hx
+- Rand: from https://github.com/aduros/flambe/blob/master/src/flambe/util/Random.hx
+- Sfxr: move as a separate library
+- Point: refactor into a class
+
+
+
 - Color utils
 - is our Heap implementation better than the 3rdp one?
 - PathFinding: works for graph and map
-- Check around Vec2 implementations
 
 
 ugl : µ game libary

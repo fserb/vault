@@ -15,7 +15,7 @@ class TestVec2 extends haxe.unit.TestCase {
   }
 
   public function testOperations() {
-    assertTrue(Vec2.make(3, 4).length() == 5);
+    assertTrue(Vec2.make(3, 4).length == 5);
   }
 
   public function testMatrix() {
@@ -37,13 +37,13 @@ class TestVec2 extends haxe.unit.TestCase {
         if (i == 0 && j == 0) continue;
         var v = Vec2.make(i, j);
         v.normalize();
-        var a = v.angle();
+        var a = v.angle;
 
         var r = Vec2.make(1, 0);
         r.rotate(a);
 
         var d = Vec2.make(r.x - v.x, r.y - v.y);
-        assertTrue(d.length() < 1e-15);
+        assertTrue(d.length < 1e-15);
       }
     }
   }

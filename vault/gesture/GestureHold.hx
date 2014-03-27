@@ -10,7 +10,7 @@ class GestureHold extends GestureDetector {
   var gaveup = false;
 
   function send(gesture: Gesture) {
-    if (gaveup || sent || curEvent.delta.length() > 100 || gesture.triggered != null ||
+    if (gaveup || sent || curEvent.delta.length > 100 || gesture.triggered != null ||
         curEvent.fullTouches.length > 1) {
       gaveup = true;
       return;

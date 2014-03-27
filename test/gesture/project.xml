@@ -11,11 +11,9 @@
 	<window require-shaders="true" />
 
 	<source path="src" />
-	<source path="../../" />
 
 	<haxelib name="openfl" />
 	<haxelib name="openfl-native" unless="flash || html5" />
-
-	<setenv name="NUMBER_OF_PROCESSORS" value="9" />
+	<haxelib name="vault" />
 
 </project>

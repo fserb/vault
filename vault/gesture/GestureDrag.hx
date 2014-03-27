@@ -18,7 +18,7 @@ class GestureDrag extends GestureDetector {
         triggered = false;
 
       case GestureEvent.GESTURE_MOVE:
-        if (ev.delta.length() < 40 && !triggered) {
+        if (ev.delta.length < 40 && !triggered) {
           return;
         }
 

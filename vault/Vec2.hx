@@ -2,83 +2,78 @@ package vault;
 
 import flash.geom.Matrix;
 
-typedef Vec2_ = {
-  var x: Float;
-  var y: Float;
-}
+class Vec2 {
+  public var x: Float;
+  public var y: Float;
+  public var length(get, set): Float;
+  public var angle(get, set): Float;
 
-typedef VecDir = {>Vec2_,
-  var angle: Float;
-}
-
-abstract Vec2(Vec2_) from Vec2_ to Vec2_ {
-  public inline function new (x: Float, y:Float) {
-    this = {x: x, y: y};
+  public function new (x:Float = 0, y:Float = 0) {
+    this.x = x;
+    this.y = y;
   }
-
-  public var x(get,set):Float;
-  inline function get_x() return this.x;
-  inline function set_x(x:Float) return this.x = x;
-
-  public var y(get,set):Float;
-  inline function get_y() return this.y;
-  inline function set_y(y:Float) return this.y = y;
 
   public inline static function make(x: Float, y: Float) {
     return new Vec2(x, y);
   }
 
-  public inline function copy(): Vec2 {
-    return new Vec2(x, y);
+  public inline function set(x:Float, y:Float) {
+    this.x = x;
+    this.y = y;
   }
 
-  public inline function toString() {
-    return 'Vec2($x,$y)';
+  public inline function get_length(): Float {
+    return Math.sqrt(x*x + y*y);
   }
 
-  public inline function unit(): Vec2 {
-    var p = copy();
-    p.normalize();
-    return p;
+  public inline function set_length(v: Float): Float {
+    mul(v/length);
+    return v;
   }
 
-  public inline function length(): Float {
-    return Math.sqrt((x*x + y*y));
-  }
-
-  public function angle(): Float {
+  public function get_angle(): Float {
     if (x == 0 && y == 0) {
       return 0.0;
     }
     return Math.atan2(y, x);
   }
 
-  public inline function lsq(): Float {
-    return x*x + y*y;
-  }
-
-  public inline function set(o: Vec2) {
-    x = o.x;
-    y = o.y;
-  }
-
-  public inline function setxy(x:Float, y:Float) {
-    this.x = x;
-    this.y = y;
-  }
-
-  public inline function setangle(angle:Float) {
-    var l = length();
-    x = l*Math.cos(angle);
-    y = l*Math.sin(angle);
+  public function set_angle(v: Float): Float {
+    var l = this.length;
+    x = l*Math.cos(v);
+    y = l*Math.sin(v);
+    return v;
   }
 
   public inline function normalize() {
-    var d = length();
-    if (d != 0 && d != 1) {
-      x /= d;
-      y /= d;
-    }
+    var d = length;
+    x /= d;
+    y /= d;
+  }
+
+  public inline function mul(scalar: Float) {
+    x *= scalar;
+    y *= scalar;
+  }
+
+  public inline function dot(b: Vec2): Float {
+    return x*b.x + y*b.y;
+  }
+
+  public inline function copy(): Vec2 {
+    return new Vec2(x, y);
+  }
+
+  public inline function equals(o: Vec2): Bool {
+    return x == o.x && y == o.y;
+  }
+
+  public inline function toString(): String {
+    return "Vec2(" + x + "," + y + ")";
+  }
+
+  public inline function lsq(): Float {
+    return x*x + y*y;
   }
 
   public inline function rotate(angle: Float) {
@@ -89,11 +84,6 @@ abstract Vec2(Vec2_) from Vec2_ to Vec2_ {
     x = temp;
   }
 
-  public inline function mul(scalar: Float) {
-    x *= scalar;
-    y *= scalar;
-  }
-
   public inline function add(b: Vec2) {
     x += b.x;
     y += b.y;
@@ -102,10 +92,6 @@ abstract Vec2(Vec2_) from Vec2_ to Vec2_ {
   public inline function sub(b: Vec2) {
     x -= b.x;
     y -= b.y;
-  }
-
-  public inline function dot(b: Vec2) {
-    return x*b.x + y*b.y;
   }
 
   public inline function cross(b: Vec2): Float {
@@ -119,12 +105,13 @@ abstract Vec2(Vec2_) from Vec2_ to Vec2_ {
   }
 
   public inline function anglebetween(b: Vec2): Float {
-    return Math.acos(dot(b)/(length()*b.length()));
+    return Math.acos(dot(b)/(this.length*b.length));
   }
 
   // Reflect @v in plane whose normal is @plane.
   public inline function reflect(plane: Vec2) {
-    var normal = unit();
+    var normal = copy();
+    normal.normalize();
     normal.mul(2*normal.dot(plane));
     sub(normal);
   }
@@ -135,7 +122,7 @@ abstract Vec2(Vec2_) from Vec2_ to Vec2_ {
   }
 
   public inline function clamp(v: Float) {
-    var s = length();
+    var s = this.length;
     if (s > v) {
       mul(v/s);
     }
@@ -144,11 +131,10 @@ abstract Vec2(Vec2_) from Vec2_ to Vec2_ {
   public inline function project(a: Vec2): Vec2 {
     var dp = dot(a);
     var l = lsq();
-    return Vec2.make(dp / l * x, dp / l * y);
+    return new Vec2(dp / l * x, dp / l * y);
   }
 
   public inline function normal(): Vec2 {
-    return Vec2.make(-y, x);
+    return new Vec2(-y, x);
   }
-
 }

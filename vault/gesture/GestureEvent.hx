@@ -138,8 +138,8 @@ class GestureEvent extends Event {
       var e = new Vec2(fullTouches[1].x - fullTouches[0].x, fullTouches[1].y - fullTouches[0].y);
       var s = new Vec2(initial.fullTouches[1].x - initial.fullTouches[0].x, initial.fullTouches[1].y - initial.touches[0].y);
 
-      this.scale = e.length()/s.length();
-      this.rotation = e.angle() - s.angle();
+      this.scale = e.length/s.length;
+      this.rotation = e.angle - s.angle;
     } else {
       this.scale = 1;
       this.rotation = 0;
@@ -148,7 +148,7 @@ class GestureEvent extends Event {
 
   override public function toString(): String {
     return ("<" + type + " : " + fullTouches + "  C: " + center +
-            "  dt: " + deltaTime + "  dC: " + delta.length() +
+            "  dt: " + deltaTime + "  dC: " + delta.length +
             "  dir: " + direction + "  s: " + scale +
             "  r: " + rotation*180/Math.PI + ">");
   }

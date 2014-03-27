@@ -3,7 +3,6 @@ package vault.ugl;
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import vault.EMath;
-import vault.Vec2;
 
 enum TextAlign {
   TOP_LEFT;

@@ -53,10 +53,10 @@ class Entity {
     sprite = new Sprite();
     base_sprite.addChild(sprite);
     art = new PixelArt();
-    pos = Vec2.make(0, 0);
-    vel = Vec2.make(0, 0);
-    acc = Vec2.make(0, 0);
-    deltasprite = Vec2.make(0, 0);
+    pos = new Vec2(0, 0);
+    vel = new Vec2(0, 0);
+    acc = new Vec2(0, 0);
+    deltasprite = new Vec2(0, 0);
     ticks = 0;
     angle = 0.0;
 
@@ -74,25 +74,25 @@ class Entity {
 
   function rectToArray(x, y, w, h): Array<Vec2> {
     var o = new Array<Vec2>();
-    o.push(Vec2.make(x, y));
-    o.push(Vec2.make(x, y + h));
-    o.push(Vec2.make(x + w, y + h));
-    o.push(Vec2.make(x + w, y));
+    o.push(new Vec2(x, y));
+    o.push(new Vec2(x, y + h));
+    o.push(new Vec2(x + w, y + h));
+    o.push(new Vec2(x + w, y));
     return o;
   }
 
   function hitCircleCircle(xa:Float, ya:Float, ra:Float, xb:Float, yb:Float, rb:Float): Bool {
-    var v = Vec2.make(xb - xa, yb - ya);
-    return v.length() <= (rb + ra);
+    var v = new Vec2(xb - xa, yb - ya);
+    return v.length <= (rb + ra);
   }
 
   function hitPolygonAxis(points: Array<Vec2>, ret: Array<Float>) {
     for (i in 0...points.length) {
       var a = points[i];
       var b = points[(i+1) % points.length];
-      var v = Vec2.make(b.x - a.x, b.y - a.y).normal();
+      var v = new Vec2(b.x - a.x, b.y - a.y).normal();
       // we should be able to only use half circunference.
-      ret.push(v.angle());
+      ret.push(v.angle);
     }
   }
 
