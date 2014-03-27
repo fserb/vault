@@ -1,5 +1,11 @@
 package vault;
 
+#if macro
+import haxe.macro.Expr;
+import haxe.macro.Context;
+import haxe.macro.Type;
+#end
+
 class Utils {
 
   public static function initArray<T>(num: Int, def:T): Array<T> {
@@ -65,4 +71,10 @@ class Utils {
     return array;
   }
 
+  /**
+   * Date at compile time.
+   */
+  macro public static function builddate() :Expr {
+    return Context.makeExpr(Date.now().toString(), Context.currentPos());
+  }
 }
