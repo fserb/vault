@@ -1,0 +1,35 @@
+TODO
+====
+
+- Color utils
+- is our Heap implementation better than the 3rdp one?
+- PathFinding: works for graph and map
+- Check around Vec2 implementations
+
+
+ugl : µ game libary
+===================
+
+ugl TODO
+--------
+
+- Sound: simple sounds
+
+- Game: make default layers positions, allow class to decide layer order?
+- PixelArt add puzzlescript like Pixelart: http://www.puzzlescript.net/documentation/objects.html
+- PixelArt: colors: https://github.com/increpare/PuzzleScript/blob/master/js/colors.js
+- PixelArt: colors: http://androidarts.com/palette/16pal.htm
+- PixelArt: convert all input to be pixel size independent
+
+- Entity: Circle Polygon SAT hit
+- Entity: factor hit out?
+- Key: support for controllers
+
+- Add visual effects (blur, tv screen?)
+- Experiment with other window sizes
+
+- Test games in HTML5
+- Publish games with source
+- Track high scores
+
+

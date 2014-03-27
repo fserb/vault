@@ -1,0 +1,7 @@
+-lib openfl
+-lib openfl-native
+--macro allowPackage("flash")
+-cp ..
+-neko run.n
+-main Run
+

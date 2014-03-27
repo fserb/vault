@@ -1,0 +1,10 @@
+<project name="vault" url="" license="MIT">
+    <user name="fserb"/>
+    <tag v="games"/>
+    <description>Library for quick game development</description>
+    <version name="1.0">Initial release, everything is working correctly</version>
+
+    <depends name="openfl" />
+    <depends name="openfl-native" unless="flash" />
+
+</project>
