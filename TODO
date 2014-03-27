@@ -2,12 +2,10 @@ TODO
 ====
 
 - Clean up EMath
-- add Assert: https://github.com/aduros/flambe/blob/master/src/flambe/util/Assert.hx
 - add Pool: https://github.com/aduros/flambe/blob/master/src/flambe/util/Pool.hx
 - Rand: from https://github.com/aduros/flambe/blob/master/src/flambe/util/Random.hx
 - Point: refactor into a class
 - Sfxr: move as a separate library
-
 
 
 - Color utils
