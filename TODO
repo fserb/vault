@@ -1,16 +1,17 @@
-TODO
+﻿TODO
 ====
 
+- Launch sfxr
 - Clean up EMath
 - add Pool: https://github.com/aduros/flambe/blob/master/src/flambe/util/Pool.hx
 - Rand: from https://github.com/aduros/flambe/blob/master/src/flambe/util/Random.hx
 - Point: refactor into a class
-- Sfxr: move as a separate library
 
-
-- Color utils
+- Add more algo: A*
+- Color utils: lerp, hsl, natural.
 - is our Heap implementation better than the 3rdp one?
 - PathFinding: works for graph and map
+- Music library?
 
 
 ugl : µ game libary
@@ -20,16 +21,11 @@ ugl TODO
 --------
 
 - Sound: simple sounds
-
 - Game: make default layers positions, allow class to decide layer order?
-- PixelArt add puzzlescript like Pixelart: http://www.puzzlescript.net/documentation/objects.html
-- PixelArt: colors: https://github.com/increpare/PuzzleScript/blob/master/js/colors.js
-- PixelArt: colors: http://androidarts.com/palette/16pal.htm
-- PixelArt: convert all input to be pixel size independent
-
-- Entity: Circle Polygon SAT hit
 - Entity: factor hit out?
 - Key: support for controllers
+- Particle: limit number of particles per frame
+- FPS not showing up, prob due to global clear()
 
 - Add visual effects (blur, tv screen?)
 - Experiment with other window sizes
@@ -37,5 +33,4 @@ ugl TODO
 - Test games in HTML5
 - Publish games with source
 - Track high scores
-
 
