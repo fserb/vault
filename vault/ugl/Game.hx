@@ -78,6 +78,9 @@ class Game {
 
   static public function endGame() {
     main.end();
+    // clear input.
+    mouse.update();
+    key.update();
     main.makeTitle();
   }
 
@@ -165,6 +168,9 @@ class Game {
           Game.key.right_pressed || debug) {
         inTitle = false;
         Game.clear();
+        // clear input updates
+        mouse.update();
+        key.update();
         begin();
       }
     } else {
