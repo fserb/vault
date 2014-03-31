@@ -1,0 +1,14 @@
+{
+  "name": "vault",
+  "license": "MIT",
+  "tags": ["games"],
+  "description": "Library for game development",
+  "contributors": ["fserb"],
+  "releasenote": "Initial release",
+  "version": "0.1.0",
+  "url": "",
+  "dependencies": {
+    "sfxr": "",
+    "openfl": ""
+  }
+}

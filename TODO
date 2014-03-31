@@ -18,11 +18,10 @@ ugl : µ game libary
 
 ugl TODO
 --------
-
-- Sound: simple sounds
 - Game: make default layers positions, allow class to decide layer order?
 - Entity: factor hit out?
 - Key: support for controllers
+- Key: initial key press should be cleared
 - Particle: limit number of particles per frame
 - FPS not showing up, prob due to global clear()
 
