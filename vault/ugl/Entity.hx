@@ -23,11 +23,15 @@ class Entity {
 
   public var sprite(default, set): Sprite;
   public var base_sprite(default, null): Sprite;
-  public var art(default, set): PixelArt;
+  @:isVar public var art(get, set): PixelArt;
   public var deltasprite: Vec2;
 
   public function update() {}
   public function begin() {}
+
+  function get_art(): PixelArt {
+    return art.clear();
+  }
 
   function set_art(p: PixelArt): PixelArt {
     art = p;
