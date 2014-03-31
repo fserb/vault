@@ -18,12 +18,14 @@ ugl : µ game libary
 
 ugl TODO
 --------
+- Game: show final screen, wait before restarting
+
+- Particle: limit number of particles per frame
+- Add visual effects (blur, tv screen?)
+
 - Game: make default layers positions, allow class to decide layer order?
 - Entity: factor hit out?
 - Key: support for controllers
-- Particle: limit number of particles per frame
-
-- Add visual effects (blur, tv screen?)
 - Experiment with other window sizes
 
 - Test games in HTML5

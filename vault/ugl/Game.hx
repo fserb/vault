@@ -96,8 +96,8 @@ class Game {
         Lib.trace(posInfos.className + "#" +
                   posInfos.methodName + "(" +
                   posInfos.lineNumber + "):" + v);
+        haxe.Log.clear();
       #end
-      haxe.Log.clear();
       oldtrace(v, posInfos);
     }
 
