@@ -13,6 +13,7 @@ class Key {
   var right_: Button;
   var b1_: Button;
   var b2_: Button;
+  var esc_: Button;
 
   public var up(get, null): Bool;
   public var up_pressed(get, null): Bool;
@@ -38,6 +39,10 @@ class Key {
   public var b2_pressed(get, null): Bool;
   function get_b2(): Bool { return b2_.value; }
   function get_b2_pressed(): Bool { return b2_.just; }
+  public var esc(get, null): Bool;
+  public var esc_pressed(get, null): Bool;
+  function get_esc(): Bool { return esc_.value; }
+  function get_esc_pressed(): Bool { return esc_.just; }
 
   public function new() {
     state = Utils.initArray(256, false);
@@ -46,14 +51,16 @@ class Key {
     down_ = new Button(function() { return state[0x28] || state[0x53]; });
     left_ = new Button(function() { return state[0x25] || state[0x41]; });
     right_ = new Button(function() { return state[0x27] || state[0x44]; });
-    b1_ = new Button(function() { return state[0x5a] || state[0xbe] || state[0x20] || state[0x0d]; });
-    b2_ = new Button(function() { return state[0x58] || state[0xbf]; });
+    b1_ = new Button(function() { return state[0x58] || state[0xbe] || state[0x20] || state[0x0d]; });
+    b2_ = new Button(function() { return state[0x5a] || state[0xbf]; });
+    esc_ = new Button(function() { return state[0x1b]; });
 
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onPress);
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, onRelease);
   }
 
   function onPress(ev:KeyboardEvent) {
+
     state[ev.keyCode] = true;
   }
 
@@ -68,6 +75,7 @@ class Key {
     right_.update();
     b1_.update();
     b2_.update();
+    esc_.update();
   }
 
 }

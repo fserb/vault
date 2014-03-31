@@ -37,7 +37,6 @@ class Game {
     var g = groups.get(groupname);
     if (g != null) return g;
 
-    trace("new group: " + groupname);
     var g = new EntityGroup();
     groups.set(groupname, g);
     sprite.addChild(g);
@@ -45,7 +44,24 @@ class Game {
     return g;
   }
 
-  static public function get(groupname: String): List<Dynamic> {
+  static public function clear(?groupname: Array<String>=null) {
+    if (groupname == null) {
+      for (gn in groups.keys()) {
+        for (g in Game.get(gn)) {
+          g.remove();
+        }
+      }
+      return;
+    }
+
+    for (gn in groupname) {
+      for (g in Game.get(gn)) {
+        g.remove();
+      }
+    }
+  }
+
+  static public function get(groupname: String): List<Entity> {
     return group(groupname).entities;
   }
 
@@ -78,7 +94,8 @@ class Game {
                   posInfos.methodName + "(" +
                   posInfos.lineNumber + "):" + v);
       #end
-      // oldtrace(v, posInfos);
+      haxe.Log.clear();
+      oldtrace(v, posInfos);
     }
 
     _title = title;
@@ -125,7 +142,7 @@ class Game {
 
   function makeTitle() {
     title = new List<Entity>();
-    title.add(new Text().text(_title).xy(240, 240).size(5));
+    title.add(new Text().text(_title).xy(240, 240).size(_title.length <= 15 ? 5 : 4));
     title.add(new Text().text(_version).xy(240, 300).size(2));
     title.add(new Text().text("click to begin").align(BOTTOM_CENTER).xy(240, 470).size(1).color(0xFF999999));
     inTitle = true;
@@ -147,9 +164,7 @@ class Game {
           Game.key.up_pressed || Game.key.down_pressed || Game.key.left_pressed ||
           Game.key.right_pressed || debug) {
         inTitle = false;
-        for (t in title) {
-          t.remove();
-        }
+        Game.clear();
         begin();
       }
     } else {
@@ -167,9 +182,18 @@ class Game {
     }
 
     if (debug) {
+      debugsprite.x = debugsprite.y = 0;
       sprite.setChildIndex(debugsprite, sprite.numChildren - 1);
+      debugsprite.graphics.clear();
+      debugsprite.graphics.beginFill(0x000000, 0.0);
+      debugsprite.graphics.lineStyle(null);
+      debugsprite.graphics.drawRect(0,0,480,480);
       average_fps = (59.0*average_fps + 1.0/Game.time)/60.0;
       fps.text("FPS: " + Std.int(average_fps));
+    }
+
+    if (key.esc_pressed) {
+      endGame();
     }
   }
 }

@@ -111,17 +111,23 @@ class Entity {
     return ret;
   }
 
-  function hitCirclePolygon(xa, ya, ra, pb): Bool {
-    // TODO
-    return false;
-  }
+  function hitCirclePolygon(xa:Float, ya:Float, ra:Float, pb:Array<Vec2>): Bool {
+    var pa = new Array<Vec2>();
+    var c = Math.ceil(Math.max(10, 2*Math.PI*ra/32));
+    for (i in 0...c) {
+      pa.push(new Vec2(xa + ra*Math.cos(2*Math.PI*i/c),
+                       ya + ra*Math.sin(2*Math.PI*i/c)));
+    }
+    return hitPolygonPolygon(pa, pb);
+}
 
-  var debugHit = false;
+  public var debugHit = false;
   function hitPolygonPolygon(pa: Array<Vec2>, pb: Array<Vec2>): Bool {
     // Calculate all interesting axis.
     var axis = new Array<Float>();
     hitPolygonAxis(pa, axis);
     hitPolygonAxis(pb, axis);
+
     axis.sort(function (x, y) { return x > y ? 1 : x < y ? -1 : 0; });
 
     if (debugHit) {
@@ -189,7 +195,7 @@ class Entity {
       case Circle(xa, ya, ra):
         switch(b) {
           case Circle(xb, yb, rb):
-            return hitCircleCircle(xa, ya, rb, xb, yb, rb);
+            return hitCircleCircle(xa, ya, ra, xb, yb, rb);
           case Polygon(pointsb):
             return hitCirclePolygon(xa, ya, ra, pointsb);
           case Rect(xb, yb, wb, hb):
@@ -250,6 +256,7 @@ class Entity {
   }
 
   public function hit(e: Entity): Bool {
+    if (ticks <= 0.1) return false;
     for (a in hits) {
       for (b in e.hits) {
         if (isHit(transformHit(base_sprite.transform.matrix, a),
@@ -271,6 +278,7 @@ class Entity {
 
   public function _update() {
     ticks += Game.time;
+
     update();
 
     pos.x += Game.time*(vel.x + acc.x/2);
