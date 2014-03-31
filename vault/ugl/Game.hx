@@ -117,7 +117,6 @@ class Game {
     main = this;
 
     if (debug) {
-      fps = new Text().xy(0, 480).align(BOTTOM_LEFT).size(1).color(0xFF666666);
       average_fps = 0.0;
     }
 
@@ -195,7 +194,9 @@ class Game {
       debugsprite.graphics.lineStyle(null);
       debugsprite.graphics.drawRect(0,0,480,480);
       average_fps = (59.0*average_fps + 1.0/Game.time)/60.0;
-      fps.text("FPS: " + Std.int(average_fps));
+      if (fps != null) fps.remove();
+      fps = new Text().xy(5, 480).align(BOTTOM_LEFT)
+        .size(1).color(0xFFFFFFFF).text("FPS: " + Std.int(average_fps));
     }
 
     if (key.esc_pressed) {

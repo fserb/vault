@@ -99,15 +99,15 @@ class Text extends Entity {
     }
 
     deltasprite.x = switch (_align) {
-      case TOP_LEFT | MIDDLE_LEFT | BOTTOM_LEFT: sprite.width/2;
+      case TOP_LEFT | MIDDLE_LEFT | BOTTOM_LEFT: Math.ceil(sprite.width/2);
       case TOP_CENTER | MIDDLE_CENTER | BOTTOM_CENTER: 0;
-      case TOP_RIGHT | MIDDLE_RIGHT | BOTTOM_RIGHT: -sprite.width/2;
+      case TOP_RIGHT | MIDDLE_RIGHT | BOTTOM_RIGHT: -Math.floor(sprite.width/2);
     }
 
     deltasprite.y = switch (_align) {
-      case TOP_LEFT | TOP_CENTER | TOP_RIGHT: sprite.height/2;
+      case TOP_LEFT | TOP_CENTER | TOP_RIGHT: Math.ceil(sprite.height/2);
       case MIDDLE_LEFT | MIDDLE_CENTER | MIDDLE_RIGHT: 0;
-      case BOTTOM_LEFT | BOTTOM_CENTER | BOTTOM_RIGHT: -sprite.height/2;
+      case BOTTOM_LEFT | BOTTOM_CENTER | BOTTOM_RIGHT: -Math.floor(sprite.height/2);
     }
   }
 

@@ -22,7 +22,6 @@ ugl TODO
 - Entity: factor hit out?
 - Key: support for controllers
 - Particle: limit number of particles per frame
-- FPS not showing up, prob due to global clear()
 
 - Add visual effects (blur, tv screen?)
 - Experiment with other window sizes
