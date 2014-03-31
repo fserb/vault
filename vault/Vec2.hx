@@ -27,7 +27,12 @@ class Vec2 {
   }
 
   public inline function set_length(v: Float): Float {
-    mul(v/length);
+    var l = length;
+    if (l == 0) {
+      x = v;
+    } else {
+      mul(v/l);
+    }
     return v;
   }
 
