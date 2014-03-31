@@ -1,7 +1,6 @@
 ﻿TODO
 ====
 
-- Launch sfxr
 - Clean up EMath
 - add Pool: https://github.com/aduros/flambe/blob/master/src/flambe/util/Pool.hx
 - Rand: from https://github.com/aduros/flambe/blob/master/src/flambe/util/Random.hx
