@@ -19,6 +19,7 @@ ugl : µ game libary
 ugl TODO
 --------
 - Game: show final screen, wait before restarting
+- Entity: better support for parameters
 
 - Particle: limit number of particles per frame
 - Add visual effects (blur, tv screen?)
@@ -28,7 +29,6 @@ ugl TODO
 - Key: support for controllers
 - Experiment with other window sizes
 
-- Test games in HTML5
 - Publish games with source
 - Track high scores
 

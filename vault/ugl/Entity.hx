@@ -11,6 +11,11 @@ enum HitType {
   Polygon(p:Array<Vec2>);
 }
 
+enum Align {
+  TOPLEFT;
+  MIDDLE;
+}
+
 class Entity {
   public var pos: Vec2;
   public var angle: Float;
@@ -18,6 +23,7 @@ class Entity {
   public var ticks: Float;
   var acc: Vec2;
   var className: String;
+  var alignment: Align;
   var hits: List<HitType>;
   public var dead: Bool = false;
 
@@ -60,6 +66,7 @@ class Entity {
     pos = new Vec2(0, 0);
     vel = new Vec2(0, 0);
     acc = new Vec2(0, 0);
+    alignment = MIDDLE;
     deltasprite = new Vec2(0, 0);
     ticks = 0;
     angle = 0.0;
@@ -295,6 +302,9 @@ class Entity {
     m.translate(-sprite.width/2.0, -sprite.height/2.0);
     m.rotate(angle);
     m.translate(pos.x + deltasprite.x, pos.y + deltasprite.y);
+    if (alignment == TOPLEFT) {
+      m.translate(sprite.width/2.0, sprite.height/2.0);
+    }
     base_sprite.transform.matrix = m;
   }
 }
