@@ -30,8 +30,10 @@ class PixelArt extends Sprite {
 
   public function size(px: Int = 1, ?w: Int = 0, ?h: Int = 0): PixelArt {
     this.px = px;
-    _width = w; _height = h;
-    clear();
+    if (w > 0 || h > 0) {
+      _width = w; _height = h;
+      clear();
+    }
     return this;
   }
 
