@@ -40,7 +40,7 @@ class Vec2 {
     if (x == 0 && y == 0) {
       return 0.0;
     }
-    return Math.atan2(y, x);
+    return (2*Math.PI + Math.atan2(y, x)) % (2*Math.PI);
   }
 
   public function set_angle(v: Float): Float {
