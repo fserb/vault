@@ -28,4 +28,8 @@ class EMath {
   static public inline function PowerOf2(n: Float): Int {
     return Math.round(Math.pow(2, Math.ceil(Math.log(n)/Math.log(2))));
   }
+
+  static public inline function sign(f: Float): Int {
+    return f >= 0 ? 1 : -1;
+  }
 }
