@@ -158,6 +158,19 @@ class Game {
     totalTime += time;
     currentTime = t;
 
+    if (debug) {
+      debugsprite.x = debugsprite.y = 0;
+      sprite.setChildIndex(debugsprite, sprite.numChildren - 1);
+      debugsprite.graphics.clear();
+      debugsprite.graphics.beginFill(0x000000, 0.0);
+      debugsprite.graphics.lineStyle(null);
+      debugsprite.graphics.drawRect(0,0,480,480);
+      average_fps = (59.0*average_fps + 1.0/Game.time)/60.0;
+      if (fps != null) fps.remove();
+      fps = new Text().xy(5, 480).align(BOTTOM_LEFT)
+        .size(1).color(0xFFFFFFFF).text("FPS: " + Std.int(average_fps));
+    }
+
     key.update();
     mouse.update();
 
@@ -184,19 +197,6 @@ class Game {
           e._update();
         }
       }
-    }
-
-    if (debug) {
-      debugsprite.x = debugsprite.y = 0;
-      sprite.setChildIndex(debugsprite, sprite.numChildren - 1);
-      debugsprite.graphics.clear();
-      debugsprite.graphics.beginFill(0x000000, 0.0);
-      debugsprite.graphics.lineStyle(null);
-      debugsprite.graphics.drawRect(0,0,480,480);
-      average_fps = (59.0*average_fps + 1.0/Game.time)/60.0;
-      if (fps != null) fps.remove();
-      fps = new Text().xy(5, 480).align(BOTTOM_LEFT)
-        .size(1).color(0xFFFFFFFF).text("FPS: " + Std.int(average_fps));
     }
 
     if (key.esc_pressed) {
