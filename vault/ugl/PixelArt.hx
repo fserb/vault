@@ -15,8 +15,8 @@ class PixelArt extends Sprite {
     _alternate_color = 0xFFFFFF;
     px = 1;
     _xpat = _ypat = _xypat = 0;
-    _width = 40;
-    _height = 40;
+    _width = 0;
+    _height = 0;
   }
 
   var _color: UInt;

@@ -13,8 +13,8 @@
 - Music library?
 
 
-ugl : µ game libary
-===================
+ugl : µ game library
+====================
 
 ugl TODO
 --------
@@ -29,6 +29,5 @@ ugl TODO
 - Key: support for controllers
 - Experiment with other window sizes
 
-- Publish games with source
 - Track high scores
 
