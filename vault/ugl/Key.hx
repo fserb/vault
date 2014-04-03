@@ -14,6 +14,7 @@ class Key {
   var b1_: Button;
   var b2_: Button;
   var esc_: Button;
+  var any_: Button;
 
   public var up(get, null): Bool;
   public var up_pressed(get, null): Bool;
@@ -43,6 +44,10 @@ class Key {
   public var esc_pressed(get, null): Bool;
   function get_esc(): Bool { return esc_.value; }
   function get_esc_pressed(): Bool { return esc_.just; }
+  public var any(get, null): Bool;
+  public var any_pressed(get, null): Bool;
+  function get_any(): Bool { return any_.value; }
+  function get_any_pressed(): Bool { return any_.just; }
 
   public function new() {
     state = Utils.initArray(256, false);
@@ -54,6 +59,10 @@ class Key {
     b1_ = new Button(function() { return state[0x58] || state[0xbe] || state[0x20] || state[0x0d]; });
     b2_ = new Button(function() { return state[0x5a] || state[0xbf]; });
     esc_ = new Button(function() { return state[0x1b]; });
+    any_ = new Button(function() {
+      return up_.value || down_.value || left_.value || right_.value ||
+             b1_.value || b2_.value || esc_.value || Game.mouse.button;
+     });
 
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onPress);
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, onRelease);
@@ -76,6 +85,7 @@ class Key {
     b1_.update();
     b2_.update();
     esc_.update();
+    any_.update();
   }
 
 }
