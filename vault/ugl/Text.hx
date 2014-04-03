@@ -138,6 +138,7 @@ class Text extends Entity {
 
   static var FONTWIDTH = 6;
   static var FONTHEIGHT = 8;
+  // Based on Minecraftia.ttf
   static var FONTDATA = [
     0x00000000, 0x00000000, 0x82082080, 0x08000000, 0x514a0000, 0x00000000,
     0x514f94f9, 0x45000000, 0x21e81c0b, 0xc2000000, 0x8a410841, 0x28800000,
