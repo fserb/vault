@@ -47,6 +47,8 @@ class Game {
   var _title: String;
   var _version: String;
 
+  var holdback: Float;
+
   static public function group(groupname: String): EntityGroup {
     var g = groups.get(groupname);
     if (g != null) return g;
@@ -105,6 +107,7 @@ class Game {
     key.update();
 
     main.state = FINAL;
+    main.holdback = 1.0;
     main.final();
   }
 
@@ -212,7 +215,8 @@ class Game {
       case GAME:
         update();
       case FINAL:
-      if (Game.key.any_pressed) {
+      holdback = Math.max(0.0, holdback - time);
+      if (holdback == 0.0 && Game.key.any_pressed) {
         Game.clear();
         makeTitle();
         state = TITLE;
