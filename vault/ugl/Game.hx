@@ -8,6 +8,12 @@ import flash.events.Event;
 import flash.Lib;
 import haxe.Timer;
 
+enum GameState {
+  TITLE;
+  GAME;
+  FINAL;
+}
+
 class Game {
   static public var time(default, null): Float;
   static public var currentTime(default, null): Float;
@@ -19,6 +25,9 @@ class Game {
   function begin() {}
   function update() {}
   function end() {}
+  function final() {
+    makeTitle();
+  }
 
   static var groups: Map<String, EntityGroup>;
   static var sprite: Sprite;
@@ -28,7 +37,8 @@ class Game {
   var fps: Text;
   var average_fps: Float;
 
-  var inTitle = true;
+  var state: GameState;
+
   var title: List<Entity>;
   var _title: String;
   var _version: String;
@@ -81,7 +91,9 @@ class Game {
     // clear input.
     mouse.update();
     key.update();
-    main.makeTitle();
+
+    main.state = FINAL;
+    main.final();
   }
 
   public function new(title: String, version: String) {
@@ -114,10 +126,12 @@ class Game {
     totalTime = 0;
     currentTime = Timer.stamp();
 
+    state = TITLE;
     main = this;
 
     if (debug) {
       average_fps = 0.0;
+      state = GAME;
     }
 
     sprite.addEventListener(Event.ADDED_TO_STAGE, onAdded);
@@ -147,7 +161,6 @@ class Game {
     title.add(new Text().text(_title).xy(240, 240).size(_title.length <= 15 ? 5 : 4));
     title.add(new Text().text(_version).xy(240, 300).size(2));
     title.add(new Text().text("click to begin").align(BOTTOM_CENTER).xy(240, 470).size(1).color(0xFF999999));
-    inTitle = true;
   }
 
   function onFrame(ev) {
@@ -174,19 +187,26 @@ class Game {
     key.update();
     mouse.update();
 
-    if (inTitle) {
-      if (Game.mouse.button_pressed || Game.key.b1_pressed || Game.key.b2_pressed ||
-          Game.key.up_pressed || Game.key.down_pressed || Game.key.left_pressed ||
-          Game.key.right_pressed || debug) {
-        inTitle = false;
+    switch (state) {
+      case TITLE:
+        if (Game.key.any_pressed) {
+          state = GAME;
+          Game.clear();
+          // clear input updates
+          mouse.update();
+          key.update();
+          begin();
+        }
+      case GAME:
+        update();
+      case FINAL:
+      if (Game.key.any_pressed) {
         Game.clear();
-        // clear input updates
+        makeTitle();
+        state = TITLE;
         mouse.update();
         key.update();
-        begin();
       }
-    } else {
-      update();
     }
 
     for (g in groups) {

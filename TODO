@@ -18,15 +18,12 @@ ugl : µ game library
 
 ugl TODO
 --------
-- Game: show final screen, wait before restarting
 - Entity: better support for parameters
 
-- Particle: limit number of particles per frame
 - Add visual effects (blur, tv screen?)
 
 - Game: make default layers positions, allow class to decide layer order?
-- Entity: factor hit out?
-- Key: support for controllers
+- Key: support for game controllers
 - Experiment with other window sizes
 
 - Track high scores
