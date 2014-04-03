@@ -119,19 +119,18 @@ class Game {
 
     sprite = new Sprite();
     debugsprite = new Sprite();
-    if (debug) {
+    if (Game.debug) {
       sprite.addChild(debugsprite);
     }
     time = 0;
     totalTime = 0;
     currentTime = Timer.stamp();
 
-    state = TITLE;
+    state = Game.debug ? GAME : TITLE;
     main = this;
 
-    if (debug) {
+    if (Game.debug) {
       average_fps = 0.0;
-      state = GAME;
     }
 
     sprite.addEventListener(Event.ADDED_TO_STAGE, onAdded);
@@ -151,7 +150,11 @@ class Game {
     mouse = new Mouse();
 
     initialize();
-    makeTitle();
+    if (state == TITLE) {
+      makeTitle();
+    } else {
+      begin();
+    }
 
     Lib.current.addEventListener(Event.ENTER_FRAME, onFrame);
   }
@@ -171,7 +174,7 @@ class Game {
     totalTime += time;
     currentTime = t;
 
-    if (debug) {
+    if (Game.debug) {
       debugsprite.x = debugsprite.y = 0;
       sprite.setChildIndex(debugsprite, sprite.numChildren - 1);
       debugsprite.graphics.clear();
