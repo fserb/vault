@@ -102,6 +102,12 @@ class PixelArt extends Sprite {
   }
 
   public function rect(x: Float, y: Float, w: Float, h: Float): PixelArt {
+    if (px == 1) {
+      graphics.beginFill(_color, 1.0);
+      graphics.drawRect(x, y, w, h);
+      return this;
+    }
+
     for (j in 0...Math.round(h)) {
       for (i in 0...Math.round(w)) {
         dot(x+i, y+j);
@@ -145,6 +151,11 @@ class PixelArt extends Sprite {
   }
 
   public function circle(x0: Float, y0: Float, r: Float): PixelArt {
+    if (px == 1) {
+      graphics.beginFill(_color, 1.0);
+      graphics.drawCircle(x0, y0, r);
+      return this;
+    }
     var x = Math.round(r);
     var y = 0;
     var err = 1 - x;
