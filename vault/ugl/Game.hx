@@ -156,6 +156,7 @@ class Game {
     sprite.removeEventListener(Event.ADDED_TO_STAGE, onAdded);
 
     #if flash
+    Lib.current.stage.quality = flash.display.StageQuality.BEST;
     Lib.current.stage.stageFocusRect = false;
     #end
     Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -199,7 +200,7 @@ class Game {
       average_fps = (59.0*average_fps + 1.0/Game.time)/60.0;
       if (fps != null) fps.remove();
       fps = new Text().xy(5, 480).align(BOTTOM_LEFT)
-        .size(1).color(0xFFFFFFFF).text("FPS: " + Std.int(average_fps));
+        .size(1).color(0xFF999999).text("FPS: " + Std.int(average_fps));
     }
 
     key.update();
