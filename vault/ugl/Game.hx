@@ -26,7 +26,11 @@ class Game {
   function update() {}
   function end() {}
   function final() {
+    Game.clear();
     makeTitle();
+    state = TITLE;
+    mouse.update();
+    key.update();
   }
 
   static var groups: Map<String, EntityGroup>;
@@ -84,6 +88,14 @@ class Game {
     for (i in 0...names.length) {
       sprite.setChildIndex(groups.get(names[i]), i);
     }
+  }
+
+  static function beginGame() {
+    mouse.update();
+    key.update();
+
+    totalTime = 0;
+    main.begin();
   }
 
   static public function endGame() {
@@ -153,7 +165,7 @@ class Game {
     if (state == TITLE) {
       makeTitle();
     } else {
-      begin();
+      beginGame();
     }
 
     Lib.current.addEventListener(Event.ENTER_FRAME, onFrame);
@@ -195,10 +207,7 @@ class Game {
         if (Game.key.any_pressed) {
           state = GAME;
           Game.clear();
-          // clear input updates
-          mouse.update();
-          key.update();
-          begin();
+          beginGame();
         }
       case GAME:
         update();
