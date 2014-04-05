@@ -32,7 +32,7 @@ class Particle extends Entity {
     _count = Const(100);
     _speed = Const(50);
     _angle = Rand(0, 2*Math.PI);
-    _delay = Rand(0.1, 0.1);
+    _delay = Const(0);
     _duration = Rand(1.0, 0.2);
   }
 
