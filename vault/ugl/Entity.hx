@@ -26,10 +26,11 @@ class Entity {
   var alignment: Align;
   var hits: List<HitType>;
   public var dead: Bool = false;
+  public var art(get, null): PixelArt;
+  public var gfx(get, null): GraphicArt;
 
   public var sprite(default, set): Sprite;
   public var base_sprite(default, null): Sprite;
-  @:isVar public var art(get, set): PixelArt;
   public var deltasprite: Vec2;
 
   public function update() {}
@@ -39,10 +40,8 @@ class Entity {
     return art.clear();
   }
 
-  function set_art(p: PixelArt): PixelArt {
-    art = p;
-    set_sprite(p);
-    return art;
+  function get_gfx(): GraphicArt {
+    return gfx.clear();
   }
 
   function set_sprite(s: Sprite): Sprite {
@@ -62,7 +61,8 @@ class Entity {
     base_sprite = new Sprite();
     sprite = new Sprite();
     base_sprite.addChild(sprite);
-    art = new PixelArt();
+    art = new PixelArt(sprite);
+    gfx = new GraphicArt(sprite);
     pos = new Vec2(0, 0);
     vel = new Vec2(0, 0);
     acc = new Vec2(0, 0);

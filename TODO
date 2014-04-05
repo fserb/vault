@@ -19,10 +19,6 @@ ugl : µ game library
 ugl TODO
 --------
 - Entity: better support for parameters
-- PixelArt: split with CanvasArt for px=1 graphics
-- CanvasArt: implement and add mono icon library upport
-
-- HTML5
 
 - Add visual effects (blur, tv screen?)
 

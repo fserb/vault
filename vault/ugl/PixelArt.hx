@@ -7,9 +7,10 @@ import vault.Utils;
 
 typedef C = ColorMap;
 
-class PixelArt extends Sprite {
-  public function new() {
-    super();
+class PixelArt {
+  var sprite: Sprite;
+  public function new(base: Sprite) {
+    sprite = base;
     clear();
     _color = 0xFFFFFF;
     _alternate_color = 0xFFFFFF;
@@ -65,9 +66,9 @@ class PixelArt extends Sprite {
   }
 
   public function clear(): PixelArt {
-    graphics.clear();
-    graphics.beginFill(0x000000, 0.0);
-    graphics.drawRect(0, 0, _width*px, _height*px);
+    sprite.graphics.clear();
+    sprite.graphics.beginFill(0x000000, 0.0);
+    sprite.graphics.drawRect(0, 0, _width*px, _height*px);
     return this;
   }
 
@@ -76,8 +77,8 @@ class PixelArt extends Sprite {
     if (_xpat > 0) v += Std.int(x) % _xpat;
     if (_ypat > 0) v += Std.int(y) % _ypat;
     if (_xypat > 0) v += Std.int(x + y) % _xypat;
-    graphics.beginFill(v%2 == 0 ? _color : _alternate_color, 1.0);
-    graphics.drawRect(x*px, y*px, px, px);
+    sprite.graphics.beginFill(v%2 == 0 ? _color : _alternate_color, 1.0);
+    sprite.graphics.drawRect(x*px, y*px, px, px);
     return this;
   }
 
@@ -102,12 +103,6 @@ class PixelArt extends Sprite {
   }
 
   public function rect(x: Float, y: Float, w: Float, h: Float): PixelArt {
-    if (px == 1) {
-      graphics.beginFill(_color, 1.0);
-      graphics.drawRect(x, y, w, h);
-      return this;
-    }
-
     for (j in 0...Math.round(h)) {
       for (i in 0...Math.round(w)) {
         dot(x+i, y+j);
@@ -151,11 +146,6 @@ class PixelArt extends Sprite {
   }
 
   public function circle(x0: Float, y0: Float, r: Float): PixelArt {
-    if (px == 1) {
-      graphics.beginFill(_color, 1.0);
-      graphics.drawCircle(x0, y0, r);
-      return this;
-    }
     var x = Math.round(r);
     var y = 0;
     var err = 1 - x;
@@ -199,14 +189,15 @@ class PixelArt extends Sprite {
     return this;
   }
 
-  public function text(x: Float, y: Float, text: String, ?size: Int = 1) {
+  public function text(x: Float, y: Float, text: String, ?size: Int = 1): PixelArt {
     x += 0.5;
     y += 0.5;
     var bmpd = Text.drawText(text, 0xFF000000 | _color, size);
     var m = new Matrix();
     m.translate((x*px - bmpd.width/2), (y*px - bmpd.height/2));
-    graphics.beginBitmapFill(bmpd, m, false, false);
-    graphics.drawRect(x*px - bmpd.width/2, y*px - bmpd.height/2, bmpd.width, bmpd.height);
+    sprite.graphics.beginBitmapFill(bmpd, m, false, false);
+    sprite.graphics.drawRect(x*px - bmpd.width/2, y*px - bmpd.height/2, bmpd.width, bmpd.height);
+    return this;
   }
 }
 
