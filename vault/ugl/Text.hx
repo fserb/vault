@@ -112,6 +112,7 @@ class Text extends Entity {
   }
 
   static public function drawText(text: String, color: Int, size: Int): BitmapData {
+    color |= 0xFF000000;
     var bmpd = new BitmapData(size*text.length*FONTWIDTH, size*FONTHEIGHT, true, 0);
 
     var curx = 0;
