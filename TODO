@@ -19,12 +19,15 @@ ugl : µ game library
 ugl TODO
 --------
 - Entity: better support for parameters
+- PixelArt: split with CanvasArt for px=1 graphics
+- CanvasArt: implement and add mono icon library upport
+
+- HTML5
 
 - Add visual effects (blur, tv screen?)
 
 - Game: make default layers positions, allow class to decide layer order?
 - Key: support for game controllers
-- Experiment with other window sizes
 
 - Track high scores
 

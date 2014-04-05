@@ -32,6 +32,7 @@ class Game {
     mouse.update();
     key.update();
   }
+  function finalupdate() {}
 
   static var groups: Map<String, EntityGroup>;
   static var sprite: Sprite;
@@ -41,7 +42,7 @@ class Game {
   var fps: Text;
   var average_fps: Float;
 
-  var state: GameState;
+  var state(default, set): GameState;
 
   var title: List<Entity>;
   var _title: String;
@@ -81,6 +82,10 @@ class Game {
     return group(groupname).entities;
   }
 
+  static public function one(groupname: String): Dynamic {
+    return group(groupname).entities.first();
+  }
+
   static public function orderGroups(names: Array<String>) {
     // make sure we have all groups.
     for (n in names) {
@@ -100,14 +105,19 @@ class Game {
     main.begin();
   }
 
-  static public function endGame() {
-    main.end();
+  function set_state(s: GameState): GameState {
+    state = s;
     // clear input.
-    mouse.update();
-    key.update();
+    Game.mouse.update();
+    Game.key.update();
+    return s;
+  }
+
+  static public function endGame() {
+    main.holdback = 1.0;
+    main.end();
 
     main.state = FINAL;
-    main.holdback = 1.0;
     main.final();
   }
 
@@ -141,7 +151,6 @@ class Game {
     totalTime = 0;
     currentTime = Timer.stamp();
 
-    state = Game.debug ? GAME : TITLE;
     main = this;
 
     if (Game.debug) {
@@ -164,6 +173,7 @@ class Game {
 
     key = new Key();
     mouse = new Mouse();
+    state = Game.debug ? GAME : TITLE;
 
     initialize();
     if (state == TITLE) {
@@ -216,14 +226,13 @@ class Game {
       case GAME:
         update();
       case FINAL:
-      holdback = Math.max(0.0, holdback - time);
-      if (holdback == 0.0 && Game.key.any_pressed) {
-        Game.clear();
-        makeTitle();
-        state = TITLE;
-        mouse.update();
-        key.update();
-      }
+        finalupdate();
+        holdback = Math.max(0.0, holdback - time);
+        if (holdback == 0.0 && Game.key.any_pressed) {
+          Game.clear();
+          makeTitle();
+          state = TITLE;
+        }
     }
 
     for (g in groups) {
