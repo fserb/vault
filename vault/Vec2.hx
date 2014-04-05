@@ -103,10 +103,8 @@ class Vec2 {
     return b.y*x - b.x*y;
   }
 
-  public inline function distance(b: Vec2): Float {
-    var xx = x - b.x;
-    var yy = y - b.y;
-    return Math.sqrt(xx*xx + yy*yy);
+  public inline function distance(b: Vec2): Vec2 {
+    return new Vec2(x - b.x, y - b.y);
   }
 
   public inline function anglebetween(b: Vec2): Float {
