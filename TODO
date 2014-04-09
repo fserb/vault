@@ -1,12 +1,13 @@
 ﻿TODO
 ====
 
+- Convert SVG to canvas code
 - Clean up EMath
 - add Pool: https://github.com/aduros/flambe/blob/master/src/flambe/util/Pool.hx
 - Rand: from https://github.com/aduros/flambe/blob/master/src/flambe/util/Random.hx
 - Point: refactor into a class
 
-- Add more algo: A*
+- Add more algo: A*, maze generator
 - Color utils: lerp, hsl, natural.
 - is our Heap implementation better than the 3rdp one?
 - PathFinding: works for graph and map
@@ -16,10 +17,12 @@
 ugl : µ game library
 ====================
 
+ugl is like "Basic Computer Games"
+
 ugl TODO
 --------
 - Entity: better support for parameters
-
+- Graphic/PixelArt caching: gfx.save(0).color(0xff).rect(); ... ; gfx.load(0);
 - Add visual effects (blur, tv screen?)
 
 - Game: make default layers positions, allow class to decide layer order?
@@ -27,3 +30,7 @@ ugl TODO
 
 - Track high scores
 
+- html5: add sfxr support
+- html5: fix outstanding bugs (calling dead object on final)
+- html5: better game page
+- html5: offer flash|html5 page per game

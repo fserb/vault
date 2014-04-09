@@ -187,7 +187,11 @@ class Game {
 
   function makeTitle() {
     title = new List<Entity>();
-    title.add(new Text().text(_title).xy(240, 240).size(_title.length <= 15 ? 5 : 4));
+    var s = 3;
+    if (_title.length <= 20) s = 4;
+    if (_title.length <= 15) s = 5;
+
+    title.add(new Text().text(_title).xy(240, 240).size(s));
     title.add(new Text().text(_version).xy(240, 300).size(2));
     title.add(new Text().text("click to begin").align(BOTTOM_CENTER).xy(240, 470).size(1));
   }
