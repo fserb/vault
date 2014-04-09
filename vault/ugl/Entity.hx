@@ -38,11 +38,13 @@ class Entity {
   public function begin() {}
 
   function get_art(): PixelArt {
-    return art.clear();
+    art.disabled = false;
+    return art;
   }
 
   function get_gfx(): GraphicArt {
-    return gfx.clear();
+    gfx.disabled = false;
+    return gfx;
   }
 
   function set_sprite(s: Sprite): Sprite {

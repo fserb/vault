@@ -9,6 +9,9 @@ typedef C = ColorMap;
 
 class PixelArt {
   var sprite: Sprite;
+  public var disabled: Bool = false;
+  var cacheIndex: Int = -1;
+
   public function new(base: Sprite) {
     sprite = base;
     clear();
@@ -30,6 +33,7 @@ class PixelArt {
   var _height: Int;
 
   public function size(px: Int = 1, ?w: Int = 0, ?h: Int = 0): PixelArt {
+    if (disabled) return this;
     this.px = px;
     if (w > 0 || h > 0) {
       _width = w; _height = h;
@@ -45,6 +49,7 @@ class PixelArt {
    *        where B is for both X and Y.
    */
   public function color(c: UInt, ?c2: Int = -1, ?pat: Int = 0): PixelArt {
+    if (disabled) return this;
     _color = c;
     _alternate_color = c2 != -1 ? c2 : c;
     var a = pat % 10;
@@ -66,9 +71,21 @@ class PixelArt {
   }
 
   public function clear(): PixelArt {
+    if (disabled) return this;
     sprite.graphics.clear();
     sprite.graphics.beginFill(0x000000, 0.0);
     sprite.graphics.drawRect(0, 0, _width*px, _height*px);
+    return this;
+  }
+
+  public function cache(idx: Int): PixelArt {
+    if (idx == cacheIndex) {
+      disabled = true;
+    } else {
+      cacheIndex = idx;
+      disabled = false;
+      clear();
+    }
     return this;
   }
 
@@ -83,6 +100,8 @@ class PixelArt {
   }
 
   public inline function obj(colors: Array<Int>, data: String): PixelArt {
+    if (disabled) return this;
+
     _alternate_color = _xpat = _ypat = _xypat = 0;
     var x = 0;
     var y = 0;
@@ -103,6 +122,7 @@ class PixelArt {
   }
 
   public function rect(x: Float, y: Float, w: Float, h: Float): PixelArt {
+    if (disabled) return this;
     for (j in 0...Math.round(h)) {
       for (i in 0...Math.round(w)) {
         dot(x+i, y+j);
@@ -112,6 +132,7 @@ class PixelArt {
   }
 
   public function lrect(x: Float, y: Float, w: Float, h: Float): PixelArt {
+    if (disabled) return this;
     vline(x, y, y + h);
     vline(x + w, y, y + h);
     hline(x, x + w, y);
@@ -120,6 +141,7 @@ class PixelArt {
   }
 
   public function vline(x: Float, y0: Float, y1: Float): PixelArt {
+    if (disabled) return this;
     if (y1 < y0) {
       var t = y1;
       y1 = y0;
@@ -133,6 +155,7 @@ class PixelArt {
   }
 
   public function hline(x0: Float, x1: Float, y: Float): PixelArt {
+    if (disabled) return this;
     if (x1 < x0) {
       var t = x1;
       x1 = x0;
@@ -146,6 +169,7 @@ class PixelArt {
   }
 
   public function circle(x0: Float, y0: Float, r: Float): PixelArt {
+    if (disabled) return this;
     var x = Math.round(r);
     var y = 0;
     var err = 1 - x;
@@ -166,6 +190,7 @@ class PixelArt {
   }
 
   public function lcircle(x0: Float, y0: Float, r: Float): PixelArt {
+    if (disabled) return this;
     var x = Math.round(r);
     var y = 0;
     var err = 1 - x;
@@ -190,6 +215,7 @@ class PixelArt {
   }
 
   public function text(x: Float, y: Float, text: String, ?size: Int = 1): PixelArt {
+    if (disabled) return this;
     x += 0.5;
     y += 0.5;
     var bmpd = Text.drawText(text, 0xFF000000 | _color, size);

@@ -21,7 +21,6 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- Graphic/PixelArt caching: gfx.save(0).color(0xff).rect(); ... ; gfx.load(0);
 - Add visual effects (blur, tv screen?)
 
 - Game: make default layers positions, allow class to decide layer order?
