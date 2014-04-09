@@ -34,6 +34,7 @@ class Entity {
   public var deltasprite: Vec2;
 
   public function update() {}
+  public var args: Array<Dynamic>;
   public function begin() {}
 
   function get_art(): PixelArt {
@@ -57,7 +58,14 @@ class Entity {
     return sprite;
   }
 
-  public function new() {
+  public function new(?a: Dynamic, ?b: Dynamic, ?c: Dynamic, ?d: Dynamic, ?e: Dynamic) {
+    args = [];
+    if (a != null) args.push(a);
+    if (b != null) args.push(b);
+    if (c != null) args.push(c);
+    if (d != null) args.push(d);
+    if (e != null) args.push(d);
+
     base_sprite = new Sprite();
     sprite = new Sprite();
     base_sprite.addChild(sprite);
