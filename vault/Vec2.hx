@@ -112,11 +112,13 @@ class Vec2 {
   }
 
   // Reflect @v in plane whose normal is @plane.
+  // Both V and V' are pointing outwards: V' = 2N.(V.N) - V
+  // For in/out: V' = V - 2N(VN)
   public inline function reflect(plane: Vec2) {
-    var normal = copy();
-    normal.normalize();
-    normal.mul(2*normal.dot(plane));
-    sub(normal);
+    var nn = plane.copy();
+    nn.mul(2*dot(plane));
+    x = nn.x - x;
+    y = nn.y - y;
   }
 
   public inline function transform(m: Matrix) {

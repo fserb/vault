@@ -32,4 +32,11 @@ class EMath {
   static public inline function sign(f: Float): Int {
     return f >= 0 ? 1 : -1;
   }
+
+  static public inline function angledistance(x: Float, y: Float): Float {
+    var delta = (y - x) % (2*Math.PI);
+    if (delta < 0) delta += 2*Math.PI;
+    if (delta > Math.PI) delta -= 2*Math.PI;
+    return -delta;
+  }
 }
