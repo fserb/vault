@@ -17,6 +17,8 @@ enum TextAlign {
 }
 
 class Text extends Entity {
+  static var layer = 1000;
+
   var _text: String;
   var _align: TextAlign;
   var _redraw: Bool;

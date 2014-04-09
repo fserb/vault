@@ -16,6 +16,7 @@ typedef Part = {
 }
 
 class Particle extends Entity {
+  static var layer = 10;
   var _color: UInt;
   var _size: Value;
   var _speed: Value;

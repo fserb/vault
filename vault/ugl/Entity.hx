@@ -17,6 +17,7 @@ enum Align {
 }
 
 class Entity {
+  static var layer = 10;
   public var pos: Vec2;
   public var angle: Float;
   public var vel: Vec2;
@@ -83,9 +84,11 @@ class Entity {
 
     hits = new List<HitType>();
 
+
     var cn = Type.getClassName(Type.getClass(this)).split(".");
     className = cn[cn.length - 1];
-    Game.group(className).add(this);
+    var layer: Null<Int> = Reflect.field(Type.getClass(this), "layer");
+    Game.group(className, layer == null ? 10 : layer).add(this);
     begin();
   }
 

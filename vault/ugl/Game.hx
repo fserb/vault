@@ -50,13 +50,17 @@ class Game {
 
   var holdback: Float;
 
-  static public function group(groupname: String): EntityGroup {
+  static public function group(groupname: String, layer: Int): EntityGroup {
     var g = groups.get(groupname);
     if (g != null) return g;
 
-    var g = new EntityGroup();
+    var g = new EntityGroup(layer);
     groups.set(groupname, g);
     sprite.addChild(g);
+
+    if (layer != -1) {
+      sortLayers();
+    }
 
     return g;
   }
@@ -79,21 +83,34 @@ class Game {
   }
 
   static public function get(groupname: String): List<Entity> {
-    return group(groupname).entities;
+    return group(groupname, -1).entities;
   }
 
   static public function one(groupname: String): Dynamic {
-    return group(groupname).entities.first();
+    return group(groupname, -1).entities.first();
   }
 
   static public function orderGroups(names: Array<String>) {
-    // make sure we have all groups.
-    for (n in names) {
-      get(n);
-    }
-
     for (i in 0...names.length) {
-      sprite.setChildIndex(groups.get(names[i]), i);
+      group(names[i], -1).layer = 20 + i;
+    }
+    sortLayers();
+  }
+
+  static function sortLayers() {
+    var layers = new Array<String>();
+    for (k in groups.keys()) {
+      layers.push(k);
+    }
+    layers.sort(function(a, b) {
+      var la = groups.get(a).layer;
+      var lb = groups.get(b).layer;
+      if (la > lb) return 1;
+      if (la < lb) return -1;
+      return 0;
+    });
+    for (i in 0...layers.length) {
+      sprite.setChildIndex(groups.get(layers[i]), i);
     }
   }
 
@@ -258,9 +275,11 @@ class Game {
 
 class EntityGroup extends Sprite {
   public var entities: List<Entity>;
+  public var layer: Int = 10;
 
-  public function new() {
+  public function new(layer: Int) {
     super();
+    this.layer = layer;
     entities = new List<Entity>();
   }
 

@@ -21,14 +21,14 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
+- Support for UI like games
+
 - Add visual effects (blur, tv screen?)
-
-- Game: make default layers positions, allow class to decide layer order?
 - Key: support for game controllers
-
-- Track high scores
 
 - html5: add sfxr support
 - html5: fix outstanding bugs (calling dead object on final)
 - html5: better game page
 - html5: offer flash|html5 page per game
+
+- Track high scores
