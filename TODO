@@ -27,8 +27,6 @@ ugl TODO
 - Key: support for game controllers
 
 - html5: add sfxr support
-- html5: fix outstanding bugs (calling dead object on final)
-- html5: better game page
-- html5: offer flash|html5 page per game
+- www: better game page
 
 - Track high scores

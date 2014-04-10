@@ -30,7 +30,7 @@ class Entity {
   public var art(get, null): PixelArt;
   public var gfx(get, null): GraphicArt;
 
-  public var sprite(default, set): Sprite;
+  public var sprite: Sprite;
   public var base_sprite(default, null): Sprite;
   public var deltasprite: Vec2;
 
@@ -46,19 +46,6 @@ class Entity {
   function get_gfx(): GraphicArt {
     gfx.disabled = false;
     return gfx;
-  }
-
-  function set_sprite(s: Sprite): Sprite {
-    if (sprite == null) {
-      sprite = s;
-      return sprite;
-    }
-    sprite.graphics.clear();
-    if (sprite.numChildren > 0) {
-      sprite.removeChildren(0, sprite.numChildren - 1);
-    }
-    sprite.addChild(s);
-    return sprite;
   }
 
   public function new(?a: Dynamic, ?b: Dynamic, ?c: Dynamic, ?d: Dynamic, ?e: Dynamic) {

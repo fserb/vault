@@ -28,6 +28,7 @@ class Text extends Entity {
 
   public function new() {
     super();
+
     _align = MIDDLE_CENTER;
     _text = "";
     _redraw = true;
