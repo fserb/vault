@@ -30,9 +30,11 @@ class Sound {
   public function mutate(?r:Float = 0.05): Sound { params.mutate(r); return this; }
 
   public function play() {
+    #if !html5
     if (sfxr == null) {
       sfxr = new Sfxr(params);
     }
     sfxr.play();
+    #end
   }
 }

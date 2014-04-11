@@ -38,8 +38,10 @@ class Text extends Entity {
   }
 
   public function text(s: String): Text {
-    _text = s;
-    _redraw = true;
+    if (_text != s) {
+      _text = s;
+      _redraw = true;
+    }
     return this;
   }
 

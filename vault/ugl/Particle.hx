@@ -95,7 +95,6 @@ class Particle extends Entity {
       p.pos.y += p.vel.y*Game.time*t;
       sprite.graphics.beginFill(_color, t);
       sprite.graphics.drawRect(p.pos.x - p.size/2.0, p.pos.y - p.size/2.0, p.size, p.size);
-
     }
     if (particles.length == 0) {
       remove();

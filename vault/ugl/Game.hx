@@ -218,6 +218,9 @@ class Game {
 
     var t = Timer.stamp();
     time = t - currentTime;
+    if (Game.debug && time >= 0.1) {
+      trace("slow frame: " + time);
+    }
     totalTime += time;
     currentTime = t;
 
