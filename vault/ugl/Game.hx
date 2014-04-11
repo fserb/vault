@@ -16,6 +16,7 @@ enum GameState {
 
 class Game {
   static public var time(default, null): Float;
+  static var _time: Float;
   static public var currentTime(default, null): Float;
   static public var totalTime(default, null): Float;
   static public var key: Key;
@@ -138,6 +139,23 @@ class Game {
     main.final();
   }
 
+  static var shaking = 0.0;
+  static public function shake(?t: Float = 0.4) {
+    shaking = Math.max(shaking, t);
+  }
+
+  static function updateShake() {
+    shaking = Math.max(0.0, shaking - _time);
+    if (shaking <= 0) {
+      sprite.x = sprite.y = 0;
+      return;
+    }
+
+    var mag = 5 + 10*shaking;
+    sprite.x = -mag + 2*mag*Math.random();
+    sprite.y = -mag + 2*mag*Math.random();
+  }
+
   public function new(title: String, version: String) {
     #if flash
     haxe.Log.setColor(0xEEEEEE);
@@ -164,7 +182,7 @@ class Game {
     if (Game.debug) {
       sprite.addChild(debugsprite);
     }
-    time = 0;
+    time = _time = 0;
     totalTime = 0;
     currentTime = Timer.stamp();
 
@@ -217,11 +235,11 @@ class Game {
     Lib.current.stage.focus = sprite;
 
     var t = Timer.stamp();
-    time = t - currentTime;
-    if (Game.debug && time >= 0.1) {
-      trace("slow frame: " + time);
+    time = _time = t - currentTime;
+    if (Game.debug && _time >= 0.1) {
+      trace("slow frame: " + _time);
     }
-    totalTime += time;
+    totalTime += _time;
     currentTime = t;
 
     if (Game.debug) {
@@ -231,7 +249,7 @@ class Game {
       debugsprite.graphics.beginFill(0x000000, 0.0);
       debugsprite.graphics.lineStyle(null);
       debugsprite.graphics.drawRect(0,0,480,480);
-      average_fps = (59.0*average_fps + 1.0/Game.time)/60.0;
+      average_fps = (59.0*average_fps + 1.0/Game._time)/60.0;
       if (fps != null) fps.remove();
       fps = new Text().xy(5, 480).align(BOTTOM_LEFT)
         .size(1).color(0xFF999999).text("FPS: " + Std.int(average_fps));
@@ -251,7 +269,7 @@ class Game {
         update();
       case FINAL:
         finalupdate();
-        holdback = Math.max(0.0, holdback - time);
+        holdback = Math.max(0.0, holdback - _time);
         if (holdback == 0.0 && Game.key.any_pressed) {
           Game.clear();
           makeTitle();
@@ -268,6 +286,8 @@ class Game {
         }
       }
     }
+
+    Game.updateShake();
 
     if (key.esc_pressed) {
       endGame();

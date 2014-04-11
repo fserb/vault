@@ -21,9 +21,6 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- Game: move shake() from Asteroid to Game
-- Entity: maybe we don't need the transform.matrix, if we translate sprite inside base_sprite.
-
 - Support for UI like games
 
 - Add visual effects (blur, tv screen?)
