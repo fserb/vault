@@ -5,7 +5,7 @@ import flash.Lib;
 import vault.Utils;
 
 class Key {
-  var state: Array<Bool>;
+  public var state: Array<Bool>;
 
   var up_: Button;
   var down_: Button;
