@@ -16,6 +16,7 @@ enum GameState {
 
 class Game {
   static public var time(default, null): Float;
+  static var _delay: Float;
   static var _time: Float;
   static public var currentTime(default, null): Float;
   static public var totalTime(default, null): Float;
@@ -156,6 +157,10 @@ class Game {
     sprite.y = -mag + 2*mag*Math.random();
   }
 
+  static public function delay(t: Float) {
+    _delay = Math.max(t, _delay);
+  }
+
   public function new(title: String, version: String) {
     #if flash
     haxe.Log.setColor(0xEEEEEE);
@@ -182,7 +187,7 @@ class Game {
     if (Game.debug) {
       sprite.addChild(debugsprite);
     }
-    time = _time = 0;
+    time = _time = _delay = 0;
     totalTime = 0;
     currentTime = Timer.stamp();
 
@@ -239,7 +244,11 @@ class Game {
     if (Game.debug && _time >= 0.1) {
       trace("slow frame: " + _time);
     }
-    totalTime += _time;
+    if (_delay > 0) {
+      _delay -= _time;
+      time = 0;
+    }
+    totalTime += time;
     currentTime = t;
 
     if (Game.debug) {
