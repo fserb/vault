@@ -54,7 +54,7 @@ class Entity {
     if (b != null) args.push(b);
     if (c != null) args.push(c);
     if (d != null) args.push(d);
-    if (e != null) args.push(d);
+    if (e != null) args.push(e);
 
     base_sprite = new Sprite();
     sprite = new Sprite();
@@ -267,6 +267,7 @@ class Entity {
   }
 
   public function hit(e: Entity): Bool {
+    if (e == null) return false;
     if (ticks <= 0.1) return false;
     for (a in hits) {
       for (b in e.hits) {
