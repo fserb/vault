@@ -15,6 +15,7 @@ enum GameState {
 }
 
 class Game {
+  static public var name: String;
   static public var time(default, null): Float;
   static var _delay: Float;
   static var _time: Float;
@@ -162,6 +163,9 @@ class Game {
   }
 
   public function new(title: String, version: String) {
+    var cn = Type.getClassName(Type.getClass(this)).split(".");
+    Game.name = cn[cn.length - 1];
+
     #if flash
     haxe.Log.setColor(0xEEEEEE);
     #end
