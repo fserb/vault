@@ -259,7 +259,9 @@ class Game {
       debugsprite.graphics.beginFill(0x000000, 0.0);
       debugsprite.graphics.lineStyle(null);
       debugsprite.graphics.drawRect(0,0,480,480);
-      average_fps = (59.0*average_fps + 1.0/Game._time)/60.0;
+      if (_time > 0) {
+        average_fps = (59.0*average_fps + 1.0/_time)/60.0;
+      }
       if (fps != null) fps.remove();
       fps = new Text().xy(5, 480).align(BOTTOM_LEFT)
         .size(1).color(0xFF999999).text("FPS: " + Std.int(average_fps));
