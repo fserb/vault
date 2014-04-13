@@ -77,6 +77,7 @@ class Entity {
     var layer: Null<Int> = Reflect.field(Type.getClass(this), "layer");
     Game.group(className, layer == null ? 10 : layer).add(this);
     begin();
+    _update_location();
   }
 
   public function addHitBox(h: HitType) {
@@ -298,6 +299,10 @@ class Entity {
     vel.add(acc);
     acc.x = acc.y = 0;
 
+    _update_location();
+  }
+
+  inline function _update_location() {
     var m = base_sprite.transform.matrix;
     m.identity();
     m.translate(-sprite.width/2.0, -sprite.height/2.0);
