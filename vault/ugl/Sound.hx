@@ -6,6 +6,7 @@ import vault.SfxrParams;
 class Sound {
   var sfxr: Sfxr = null;
   var params: SfxrParams;
+  static var soundbank = new Map<String, Sfxr>();
 
   public function new(?seed: Null<Int> = null) {
     params = new SfxrParams(seed);
@@ -14,6 +15,15 @@ class Sound {
 
   public function str(s: String): Sound {
     params = SfxrParams.fromString(s);
+    return this;
+  }
+
+  public function cache(name: String): Sound {
+    if (soundbank.exists(name)) {
+      sfxr = soundbank[name];
+    } else {
+      soundbank[name] = sfxr = new Sfxr(params);
+    }
     return this;
   }
 
