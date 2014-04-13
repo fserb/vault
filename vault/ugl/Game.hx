@@ -241,15 +241,16 @@ class Game {
 
     var t = Timer.stamp();
     time = _time = t - currentTime;
+    currentTime = t;
     if (Game.debug && _time >= 0.1) {
       trace("slow frame: " + _time);
     }
     if (_delay > 0) {
       _delay -= _time;
       time = 0;
+      return;
     }
     totalTime += time;
-    currentTime = t;
 
     if (Game.debug) {
       debugsprite.x = debugsprite.y = 0;
