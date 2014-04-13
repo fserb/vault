@@ -77,6 +77,13 @@ class Key {
     state[ev.keyCode] = false;
   }
 
+  public function clear() {
+    for (i in 0...state.length) {
+      state[i] = false;
+    }
+    update();
+  }
+
   public function update() {
     up_.update();
     down_.update();

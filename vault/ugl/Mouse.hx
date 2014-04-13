@@ -41,6 +41,11 @@ class Mouse {
     onMove(ev);
   }
 
+  public function clear() {
+    lmb = false;
+    update();
+  }
+
   public function update() {
     button_.update();
   }

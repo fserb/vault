@@ -127,8 +127,8 @@ class Game {
   function set_state(s: GameState): GameState {
     state = s;
     // clear input.
-    Game.mouse.update();
-    Game.key.update();
+    Game.mouse.clear();
+    Game.key.clear();
     return s;
   }
 
