@@ -71,10 +71,11 @@ class PixelArt {
   }
 
   public function clear(): PixelArt {
-    if (disabled) return this;
     sprite.graphics.clear();
     sprite.graphics.beginFill(0x000000, 0.0);
     sprite.graphics.drawRect(0, 0, _width*px, _height*px);
+    disabled = false;
+    cacheIndex = -1;
     return this;
   }
 

@@ -20,8 +20,9 @@ class GraphicArt {
   }
 
   public function clear(): GraphicArt {
-    if (disabled) return this;
     sprite.graphics.clear();
+    disabled = false;
+    cacheIndex = -1;
     return this;
   }
 
