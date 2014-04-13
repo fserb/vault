@@ -24,6 +24,7 @@ class Particle extends Entity {
   var _count: Value;
   var _duration: Value;
   var _delay: Value;
+  var _spread: Value;
 
   public function new() {
     super();
@@ -34,6 +35,7 @@ class Particle extends Entity {
     _speed = Const(50);
     _angle = Rand(0, 2*Math.PI);
     _delay = Const(0);
+    _spread = Const(0);
     _duration = Rand(1.0, 0.2);
   }
 
@@ -49,6 +51,7 @@ class Particle extends Entity {
   public function direction(v: Value): Particle { _angle = v; return this; }
   public function delay(v: Value): Particle { _delay = v; return this; }
   public function duration(v: Value): Particle { _duration = v; return this; }
+  public function spread(v: Value): Particle { _spread = v; return this; }
 
   var particles : List<Part> = null;
   function create() {
@@ -57,8 +60,13 @@ class Particle extends Entity {
     for (i in 0...c) {
       var v = new Vec2(getValue(_speed), 0);
       v.rotate(getValue(_angle));
+      var po = pos.copy();
+      var va = v.copy();
+      va.normalize();
+      va.mul(getValue(_spread));
+      po.add(va);
       var p: Part = {
-        pos: pos.copy(),
+        pos: po,
         vel: v,
         size: getValue(_size),
         delay: getValue(_delay),
