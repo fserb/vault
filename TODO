@@ -21,7 +21,6 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- Particle: change input to (val: Float, ?rand: Float)
 - html5: add sfxr support
 
 - Support for UI like games

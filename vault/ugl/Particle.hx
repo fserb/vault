@@ -45,13 +45,13 @@ class Particle extends Entity {
     return this;
   }
   public function color(c:UInt): Particle { _color = c; return this; }
-  public function count(v: Value): Particle { _count = v; return this; }
-  public function size(v: Value): Particle { _size = v; return this; }
-  public function speed(v: Value): Particle { _speed = v; return this; }
-  public function direction(v: Value): Particle { _angle = v; return this; }
-  public function delay(v: Value): Particle { _delay = v; return this; }
-  public function duration(v: Value): Particle { _duration = v; return this; }
-  public function spread(v: Value): Particle { _spread = v; return this; }
+  public function count(v: Float, ?r: Float = 0.0): Particle { _count = (r == 0) ? Const(v) : Rand(v, r); return this; }
+  public function size(v: Float, ?r: Float = 0.0): Particle { _size = (r == 0) ? Const(v) : Rand(v, r); return this; }
+  public function speed(v: Float, ?r: Float = 0.0): Particle { _speed = (r == 0) ? Const(v) : Rand(v, r); return this; }
+  public function direction(v: Float, ?r: Float = 0.0): Particle { _angle = (r == 0) ? Const(v) : Rand(v, r); return this; }
+  public function delay(v: Float, ?r: Float = 0.0): Particle { _delay = (r == 0) ? Const(v) : Rand(v, r); return this; }
+  public function duration(v: Float, ?r: Float = 0.0): Particle { _duration = (r == 0) ? Const(v) : Rand(v, r); return this; }
+  public function spread(v: Float, ?r: Float = 0.0): Particle { _spread = (r == 0) ? Const(v) : Rand(v, r); return this; }
 
   var particles : List<Part> = null;
   function create() {
