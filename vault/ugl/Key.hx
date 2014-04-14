@@ -15,6 +15,7 @@ class Key {
   var b2_: Button;
   var esc_: Button;
   var any_: Button;
+  var mute_: Button;
 
   public var up(get, null): Bool;
   public var up_pressed(get, null): Bool;
@@ -48,6 +49,10 @@ class Key {
   public var any_pressed(get, null): Bool;
   function get_any(): Bool { return any_.value; }
   function get_any_pressed(): Bool { return any_.just; }
+  public var mute(get, null): Bool;
+  public var mute_pressed(get, null): Bool;
+  function get_mute(): Bool { return mute_.value; }
+  function get_mute_pressed(): Bool { return mute_.just; }
 
   public function new() {
     state = Utils.initArray(256, false);
@@ -63,13 +68,13 @@ class Key {
       return up_.value || down_.value || left_.value || right_.value ||
              b1_.value || b2_.value || esc_.value || Game.mouse.button;
      });
+    mute_ = new Button(function() { return state[0x4d]; });
 
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onPress);
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, onRelease);
   }
 
   function onPress(ev:KeyboardEvent) {
-
     state[ev.keyCode] = true;
   }
 
@@ -93,6 +98,7 @@ class Key {
     b2_.update();
     esc_.update();
     any_.update();
+    mute_.update();
   }
 
 }

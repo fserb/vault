@@ -274,6 +274,11 @@ class Game {
     key.update();
     mouse.update();
 
+    // M key for mute.
+    if (Game.key.mute_pressed) {
+      Sound.mute = !Sound.mute;
+    }
+
     switch (state) {
       case TITLE:
         if (Game.key.any_pressed) {

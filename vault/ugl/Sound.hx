@@ -4,6 +4,8 @@ import vault.Sfxr;
 import vault.SfxrParams;
 
 class Sound {
+  static public var mute = false;
+
   var sfxr: Sfxr = null;
   var params: SfxrParams;
   static var soundbank = new Map<String, Sfxr>();
@@ -44,7 +46,9 @@ class Sound {
     if (sfxr == null) {
       sfxr = new Sfxr(params);
     }
-    sfxr.play();
+    if (!Sound.mute) {
+      sfxr.play();
+    }
     #end
   }
 }

@@ -22,14 +22,11 @@ ugl is like "Basic Computer Games"
 ugl TODO
 --------
 - Particle: change input to (val: Float, ?rand: Float)
-
-- Track high scores
+- html5: add sfxr support
 
 - Support for UI like games
 
 - Add visual effects (blur, tv screen?)
 - Key: support for game controllers
 
-- html5: add sfxr support
-- www: better game page
 
