@@ -52,8 +52,10 @@ class Vec2 {
 
   public inline function normalize() {
     var d = length;
-    x /= d;
-    y /= d;
+    if (d > 0) {
+      x /= d;
+      y /= d;
+    }
   }
 
   public inline function mul(scalar: Float) {
