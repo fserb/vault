@@ -30,25 +30,25 @@ class GraphicArt {
     if (idx == cacheIndex) {
       disabled = true;
     } else {
+      clear();
       cacheIndex = idx;
-      disabled = false;
     }
     return this;
   }
 
-  public function fill(c: Null<UInt> = null): GraphicArt {
+  public function fill(c: Null<UInt> = null, ?alpha: Float = 1.0): GraphicArt {
     if (disabled) return this;
     if (c == null) {
       sprite.graphics.endFill();
     } else {
-      sprite.graphics.beginFill(c, 1.0);
+      sprite.graphics.beginFill(c, alpha);
     }
     return this;
   }
 
-  public function line(thickness: Null<Float> = null, c: UInt): GraphicArt {
+  public function line(thickness: Null<Float> = null, ?c: UInt = 0, ?alpha: Float = 1.0): GraphicArt {
     if (disabled) return this;
-    sprite.graphics.lineStyle(thickness, c, 1.0);
+    sprite.graphics.lineStyle(thickness, c, alpha);
     return this;
   }
 

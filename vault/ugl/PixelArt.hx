@@ -84,7 +84,6 @@ class PixelArt {
       disabled = true;
     } else {
       cacheIndex = idx;
-      disabled = false;
       clear();
     }
     return this;
