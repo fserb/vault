@@ -14,6 +14,7 @@ enum HitType {
 enum Align {
   TOPLEFT;
   MIDDLE;
+  MIDDLELEFT;
 }
 
 class Entity {
@@ -310,6 +311,8 @@ class Entity {
     m.translate(pos.x + deltasprite.x, pos.y + deltasprite.y);
     if (alignment == TOPLEFT) {
       m.translate(sprite.width/2.0, sprite.height/2.0);
+    } else if (alignment == MIDDLELEFT) {
+      m.translate(sprite.width/2.0, 0);
     }
     base_sprite.transform.matrix = m;
   }
