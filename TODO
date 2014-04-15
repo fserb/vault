@@ -23,6 +23,9 @@ ugl TODO
 --------
 - html5: add sfxr support
 
+- Timer: make chainable with delays
+- add text instructions on all game beginning
+
 - Support for UI like games
 
 - Add visual effects (blur, tv screen?)

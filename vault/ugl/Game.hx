@@ -15,6 +15,7 @@ enum GameState {
 }
 
 class Game {
+  static var baseColor: Int = 0xFFFFFF;
   static public var name: String;
   static public var time(default, null): Float;
   static var _delay: Float;
@@ -32,8 +33,8 @@ class Game {
     Game.clear();
     makeTitle();
     state = TITLE;
-    mouse.update();
-    key.update();
+    mouse.clear();
+    key.clear();
   }
   function finalupdate() {}
 
@@ -134,6 +135,8 @@ class Game {
   }
 
   static public function endGame() {
+    if (main.state != GAME) return;
+
     main.holdback = 1.0;
     main.end();
 
@@ -167,7 +170,7 @@ class Game {
     Game.name = cn[cn.length - 1];
 
     #if flash
-    haxe.Log.setColor(0xEEEEEE);
+    haxe.Log.setColor(baseColor);
     #end
 
     var oldtrace = haxe.Log.trace;
@@ -235,9 +238,9 @@ class Game {
     if (_title.length <= 20) s = 4;
     if (_title.length <= 15) s = 5;
 
-    title.add(new Text().text(_title).xy(240, 240).size(s));
-    title.add(new Text().text(_version).xy(240, 300).size(2));
-    title.add(new Text().text("click to begin").align(BOTTOM_CENTER).xy(240, 470).size(1));
+    title.add(new Text().color(baseColor).text(_title).xy(240, 240).size(s));
+    title.add(new Text().color(baseColor).text(_version).xy(240, 300).size(2));
+    title.add(new Text().color(baseColor).text("click to begin").align(BOTTOM_CENTER).xy(240, 470).size(1));
   }
 
   function onFrame(ev) {
