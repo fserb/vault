@@ -22,5 +22,10 @@ class Score {
   }
 #end
 
+#if (!flash && !html5)
+  function post(score: Float, ?final = false) {
+  }
+#end
+
 }
 

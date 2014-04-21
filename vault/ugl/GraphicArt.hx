@@ -36,7 +36,7 @@ class GraphicArt {
     return this;
   }
 
-  public function fill(c: Null<UInt> = null, ?alpha: Float = 1.0): GraphicArt {
+  public function fill(c: Null<Int> = null, ?alpha: Float = 1.0): GraphicArt {
     if (disabled) return this;
     if (c == null) {
       sprite.graphics.endFill();
