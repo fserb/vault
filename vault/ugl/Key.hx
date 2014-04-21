@@ -3,6 +3,7 @@ package vault.ugl;
 import flash.events.KeyboardEvent;
 import flash.Lib;
 import vault.Utils;
+import flash.external.ExternalInterface;
 
 class Key {
   var state: Array<Bool>;
@@ -16,6 +17,12 @@ class Key {
   var esc_: Button;
   var any_: Button;
   var mute_: Button;
+
+  var joyEps = 0.5;
+  var joyX = 0.0;
+  var joyY = 0.0;
+  var joyB1 = false;
+  var joyB2 = false;
 
   public var up(get, null): Bool;
   public var up_pressed(get, null): Bool;
@@ -57,12 +64,12 @@ class Key {
   public function new() {
     state = Utils.initArray(256, false);
 
-    up_ = new Button(function() { return state[0x26] || state[0x57]; });
-    down_ = new Button(function() { return state[0x28] || state[0x53]; });
-    left_ = new Button(function() { return state[0x25] || state[0x41]; });
-    right_ = new Button(function() { return state[0x27] || state[0x44]; });
-    b1_ = new Button(function() { return state[0x58] || state[0xbe] || state[0x20] || state[0x0d]; });
-    b2_ = new Button(function() { return state[0x5a] || state[0xbf]; });
+    up_ = new Button(function() { return state[0x26] || state[0x57] || joyY < 0; });
+    down_ = new Button(function() { return state[0x28] || state[0x53] || joyY > 0; });
+    left_ = new Button(function() { return state[0x25] || state[0x41] || joyX < 0; });
+    right_ = new Button(function() { return state[0x27] || state[0x44] || joyX > 0; });
+    b1_ = new Button(function() { return joyB1 || state[0x58] || state[0xbe] || state[0x20] || state[0x0d]; });
+    b2_ = new Button(function() { return joyB2 || state[0x5a] || state[0xbf]; });
     esc_ = new Button(function() { return state[0x1b]; });
     any_ = new Button(function() {
       return up_.value || down_.value || left_.value || right_.value ||
@@ -72,6 +79,17 @@ class Key {
 
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onPress);
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, onRelease);
+
+    if (ExternalInterface.available) {
+      ExternalInterface.addCallback("uglJoystick", onJoystick);
+    }
+  }
+
+  function onJoystick(x: Float, y: Float, b1: Bool, b2: Bool) {
+    joyX = Math.abs(x) > joyEps ? x : 0;
+    joyY = Math.abs(y) > joyEps ? y : 0;
+    joyB1 = b1;
+    joyB2 = b2;
   }
 
   function onPress(ev:KeyboardEvent) {

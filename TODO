@@ -7,7 +7,7 @@
 - Rand: from https://github.com/aduros/flambe/blob/master/src/flambe/util/Random.hx
 - Point: refactor into a class
 
-- Add more algo: A*, maze generator, voronoi
+- Add more algo: A*, maze generator
 - Color utils: lerp, hsl, natural.
 - is our Heap implementation better than the 3rdp one?
 - PathFinding: works for graph and map
@@ -21,17 +21,15 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- move M key to ugl.js
 
 - html5: add sfxr support
 - html5: develop directly on html5 using live.js
 
 - Timer: make chainable with delays
-- add text instructions on all game beginning
 
 - Support for UI like games
 
 - Add visual effects (blur, tv screen?)
-- Key: support for game controllers
+- move M key instruction to ugl.js
 - Fullscreen support?
 
