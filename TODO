@@ -21,7 +21,9 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- html5: develop directly on html5 using live.js
+- New sound interface: new Sound("name").explosion(4).cache();
+- Soundbank: { "name": Explosion(4) } on Game
+- Gamepad on html5 test
 
 - Fullscreen support
 
