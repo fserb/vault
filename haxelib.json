@@ -6,7 +6,7 @@
   "contributors": ["fserb"],
   "releasenote": "Initial release",
   "version": "0.1.0",
-  "url": "",
+  "url": "https://github.com/fserb/vault",
   "dependencies": {
     "sfxr": "",
     "openfl": ""
