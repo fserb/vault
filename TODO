@@ -23,12 +23,11 @@ ugl TODO
 --------
 - html5: develop directly on html5 using live.js
 
-- move M key instruction to ugl.js
+- Fullscreen support
 
 - Timer: make chainable with delays
 
 - Support for UI like games
 
 - Add visual effects (blur, tv screen?)
-- Fullscreen support?
 
