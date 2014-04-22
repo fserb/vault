@@ -21,7 +21,6 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- New sound interface: new Sound("name").explosion(4).cache();
 - Soundbank: { "name": Explosion(4) } on Game
 - Gamepad on html5 test
 

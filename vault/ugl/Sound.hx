@@ -7,11 +7,18 @@ class Sound {
   static public var mute = false;
 
   var sfxr: Sfxr = null;
+  var name: String = null;
   var params: SfxrParams;
   static var soundbank = new Map<String, Sfxr>();
 
-  public function new(?seed: Null<Int> = null) {
-    params = new SfxrParams(seed);
+  public function new(name: String) {
+    this.name = name;
+    if (soundbank.exists(name)) {
+      sfxr = soundbank[name];
+    } else {
+      sfxr = null;
+    }
+    params = new SfxrParams();
     vol(0.2);
   }
 
@@ -20,31 +27,25 @@ class Sound {
     return this;
   }
 
-  public function cache(name: String): Sound {
-    if (soundbank.exists(name)) {
-      sfxr = soundbank[name];
-    } else {
-      soundbank[name] = sfxr = new Sfxr(params);
-    }
+  function load(): Sound {
+    if (sfxr != null) return this;
+    sfxr = new Sfxr(params);
+    if (name != null) soundbank[name] = sfxr;
     return this;
   }
 
-  public function coin(): Sound { params.generatePickupCoin(); return this; }
-  public function laser(): Sound { params.generateLaserShoot(); return this; }
-  public function explosion(): Sound { params.generateExplosion(); return this; }
-  public function powerup(): Sound { params.generatePowerup(); return this; }
-  public function hit(): Sound { params.generateHitHurt(); return this; }
-  public function jump(): Sound { params.generateJump(); return this; }
-  public function blip(): Sound { params.generateBlipSelect(); return this; }
+  public function coin(?seed: Null<Int> = null): Sound { params.seed(seed); params.generatePickupCoin(); load(); return this; }
+  public function laser(?seed: Null<Int> = null): Sound { params.seed(seed); params.generateLaserShoot(); load(); return this; }
+  public function explosion(?seed: Null<Int> = null): Sound { params.seed(seed); params.generateExplosion(); load(); return this; }
+  public function powerup(?seed: Null<Int> = null): Sound { params.seed(seed); params.generatePowerup(); load(); return this; }
+  public function hit(?seed: Null<Int> = null): Sound { params.seed(seed); params.generateHitHurt(); load(); return this; }
+  public function jump(?seed: Null<Int> = null): Sound { params.seed(seed); params.generateJump(); load(); return this; }
+  public function blip(?seed: Null<Int> = null): Sound { params.seed(seed); params.generateBlipSelect(); load(); return this; }
 
   public function vol(v: Float): Sound { params.masterVolume = v; return this; }
 
-  public function mutate(?r:Float = 0.05): Sound { params.mutate(r); return this; }
-
   public function play() {
-    if (sfxr == null) {
-      sfxr = new Sfxr(params);
-    }
+    load();
     if (!Sound.mute) {
       sfxr.play();
     }
