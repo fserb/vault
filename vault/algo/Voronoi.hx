@@ -3,9 +3,11 @@
 // Portby Nicolas Cannasse
 // Original JS implementation by Raymond Hill - Copyright (c) 2010-2013
 
-package vault;
+package vault.algo;
 
+import flash.geom.Point;
 import Math;
+import flash.geom.Rectangle;
 
 // ---------------------------------------------------------------------------
 // Red-Black tree code (based on C version of "rbtree" by Franck Bui-Huu
@@ -21,9 +23,9 @@ private class RBNode<T:RBNode<T>> {
 }
 
 @:generic private class RBTree<T:RBNode<T>> {
-  
+
   public var root : T;
-  
+
   public function new() {
     this.root = null;
     }
@@ -309,36 +311,38 @@ private class RBNode<T:RBNode<T>> {
 }
 
 class Cell {
-  
+
   public var id : Int;
   public var point : Point;
   public var halfedges : Array<Halfedge>;
-  
+
   public function new(id, point) {
     this.id = id;
     this.point = point;
     this.halfedges = [];
     }
-  
-  public function getCircle() {
-    // still not the best enclosing circle
-    // would require implementing http://www.personal.kent.edu/~rmuhamma/Compgeometry/MyCG/CG-Applets/Center/centercli.htm for complete solution
-    var p = new Point(), ec = 0;
-    for( e in halfedges ) {
-      var ep = e.getStartpoint();
-      p.x += ep.x;
-      p.y += ep.y;
-      ec++;
-    }
-    p.x /= ec;
-    p.y /= ec;
-    var r = 0.;
-    for( e in halfedges ) {
-      var d = p.distanceSq(e.getStartpoint());
-      if( d > r ) r = d;
-    }
-    return new Circle(p.x, p.y, Math.sqrt(r));
-  }
+
+  // public function getCircle() {
+  //   // still not the best enclosing circle
+  //   // would require implementing http://www.personal.kent.edu/~rmuhamma/Compgeometry/MyCG/CG-Applets/Center/centercli.htm for complete solution
+  //   var p = new Point(), ec = 0;
+  //   for( e in halfedges ) {
+  //     var ep = e.getStartpoint();
+  //     p.x += ep.x;
+  //     p.y += ep.y;
+  //     ec++;
+  //   }
+  //   p.x /= ec;
+  //   p.y /= ec;
+  //   var r = 0.;
+  //   for( e in halfedges ) {
+  //     var dx = p.x - e.getStartpoint().x;
+  //     var dy = p.y - e.getStartpoint().y;
+  //     var d = dx * dx + dy * dy;
+  //     if( d > r ) r = d;
+  //   }
+  //   return new Circle(p.x, p.y, Math.sqrt(r));
+  // }
 
   public function prepare() {
     var halfedges = this.halfedges, iHalfedge = halfedges.length, edge;
@@ -360,7 +364,7 @@ class Cell {
     halfedges.sort(sortByAngle);
     return halfedges.length;
   }
-  
+
   static function sortByAngle(a:Halfedge, b:Halfedge) {
     return b.angle > a.angle ? 1 : (b.angle < a.angle ? -1 : 0);
   }
@@ -444,7 +448,7 @@ class Cell {
       }
     return 1;
   }
-  
+
 }
 
 class Edge {
@@ -456,7 +460,7 @@ class Edge {
   public var rCell : Null<Cell>;
   public var va : Null<Point>;
   public var vb : Null<Point>;
-  
+
   public function new(lPoint, rPoint) {
     this.lPoint = lPoint;
     this.rPoint = rPoint;
@@ -466,11 +470,11 @@ class Edge {
 
 
 class Halfedge {
-  
+
   public var point : Point;
   public var edge : Edge;
   public var angle : Float;
-  
+
   public function new(edge, lPoint:Point, rPoint:Point) {
     this.point = lPoint;
     this.edge = edge;
@@ -493,7 +497,7 @@ class Halfedge {
         : Math.atan2(va.x-vb.x, vb.y-va.y);
     }
   }
-  
+
   public inline function getStartpoint() {
     return this.edge.lPoint == this.point ? this.edge.va : this.edge.vb;
     }
@@ -501,7 +505,7 @@ class Halfedge {
   public inline function getEndpoint() {
     return this.edge.lPoint == this.point ? this.edge.vb : this.edge.va;
     }
-  
+
   public inline function getTarget() {
     return this.edge.lCell != null && this.edge.lCell.point != point ? this.edge.lCell : this.edge.rCell;
   }
@@ -536,7 +540,7 @@ private class CircleEvent extends RBNode<CircleEvent> {
 }
 
 class Voronoi {
-  
+
   var epsilon : Float;
   var beachline : RBTree<Beachsection>;
   var vertices : Array<Point>;
@@ -635,7 +639,7 @@ class Voronoi {
   function setEdgeEndpoint(edge, lPoint, rPoint, vertex) {
     this.setEdgeStartpoint(edge, rPoint, lPoint, vertex);
     }
-  
+
 
   // rhill 2011-06-02: A lot of Beachsection instanciations
   // occur during the computation of the Voronoi diagram,
@@ -1095,17 +1099,17 @@ class Voronoi {
   // return value:
   //   false: the dangling endpoint couldn't be connected
   //   true: the dangling endpoint could be connected
-  function connectEdge(edge:Edge, bbox:Bounds) {
+  function connectEdge(edge:Edge, bbox:Rectangle) {
     // skip if end point already connected
     var vb = edge.vb;
     if (vb != null) {return true;}
 
     // make local copy for performance purpose
     var va = edge.va,
-      xl = bbox.xMin,
-      xr = bbox.xMax,
-      yt = bbox.yMin,
-      yb = bbox.yMax,
+      xl = bbox.left,
+      xr = bbox.right,
+      yt = bbox.top,
+      yb = bbox.bottom,
       lPoint = edge.lPoint,
       rPoint = edge.rPoint,
       lx = lPoint.x,
@@ -1217,7 +1221,7 @@ class Voronoi {
   //   http://www.skytopia.com/project/articles/compsci/clipping.html
   // Thanks!
   // A bit modified to minimize code paths
-  function clipEdge(edge:Edge, bbox:Bounds) {
+  function clipEdge(edge:Edge, bbox:Rectangle) {
     var ax = edge.va.x,
       ay = edge.va.y,
       bx = edge.vb.x,
@@ -1227,7 +1231,7 @@ class Voronoi {
       dx = bx-ax,
       dy = by-ay;
     // left
-    var q = ax-bbox.xMin;
+    var q = ax-bbox.left;
     if (dx==0 && q<0) {return false;}
     var r = -q/dx;
     if (dx<0) {
@@ -1239,7 +1243,7 @@ class Voronoi {
       else if (r>t0) {t0=r;}
       }
     // right
-    q = bbox.xMax-ax;
+    q = bbox.right-ax;
     if (dx==0 && q<0) {return false;}
     r = q/dx;
     if (dx<0) {
@@ -1251,7 +1255,7 @@ class Voronoi {
       else if (r<t1) {t1=r;}
       }
     // top
-    q = ay-bbox.yMin;
+    q = ay-bbox.top;
     if (dy==0 && q<0) {return false;}
     r = -q/dy;
     if (dy<0) {
@@ -1263,7 +1267,7 @@ class Voronoi {
       else if (r>t0) {t0=r;}
       }
     // bottom
-    q = bbox.yMax-ay;
+    q = bbox.bottom-ay;
     if (dy==0 && q<0) {return false;}
     r = q/dy;
     if (dy<0) {
@@ -1297,7 +1301,7 @@ class Voronoi {
   }
 
   // Connect/cut edges at bounding box
-  function clipEdges(bbox:Bounds) {
+  function clipEdges(bbox:Rectangle) {
     // connect all dangling edges to bounding box
     // or get rid of them if it can't be done
     var edges = this.edges,
@@ -1321,13 +1325,13 @@ class Voronoi {
   // The cells are bound by the supplied bounding box.
   // Each cell refers to its associated point, and a list
   // of halfedges ordered counterclockwise.
-  function closeCells(bbox:Bounds) {
+  function closeCells(bbox:Rectangle) {
     // prune, order halfedges, then add missing ones
     // required to close cells
-    var xl = bbox.xMin,
-      xr = bbox.xMax,
-      yt = bbox.yMin,
-      yb = bbox.yMax,
+    var xl = bbox.left,
+      xr = bbox.right,
+      yt = bbox.top,
+      yb = bbox.bottom,
       cells = this.cells,
       iCell = cells.length,
       cell,
@@ -1395,12 +1399,12 @@ class Voronoi {
     var r = b.y - a.y;
     return r < 0 ? -1 : (r > 0 ? 1 : (b.x > a.x ? 1 : b.x < a.x ? -1 : 0));
   }
-  
+
   // rhill 2011-05-19:
   //   Voronoi points are kept client-side now, to allow
   //   user to freely modify content. At compute time,
   //   *references* to points are copied locally.
-  public function compute(points:Array<Point>, bbox:Bounds) {
+  public function compute(points:Array<Point>, bbox:Rectangle) {
     // to measure execution time
     var startTime = haxe.Timer.stamp();
 
@@ -1452,7 +1456,7 @@ class Voronoi {
       // all done, quit
       else
         break;
-        
+
     }
 
     // wrapping-up:
@@ -1464,7 +1468,7 @@ class Voronoi {
 
     //   add missing edges in order to close opened cells
     this.closeCells(bbox);
-    
+
     var eid = 0;
     for( e in edges ) {
       e.id = eid++;
