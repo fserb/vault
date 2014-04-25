@@ -2,9 +2,6 @@
 ====
 
 - Convert SVG to canvas code
-- Clean up EMath
-- add Pool: https://github.com/aduros/flambe/blob/master/src/flambe/util/Pool.hx
-- Rand: from https://github.com/aduros/flambe/blob/master/src/flambe/util/Random.hx
 - Point: refactor into a class
 
 - Add more algo: A*, maze generator

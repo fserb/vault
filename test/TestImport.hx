@@ -26,6 +26,7 @@ import vault.qrcode.QRSpec;
 import vault.qrcode.QRSplit;
 import vault.qrcode.QRTools;
 import vault.Rand;
+import vault.Random;
 import vault.Range;
 // import vault.Utils;
 import vault.Vec2;
