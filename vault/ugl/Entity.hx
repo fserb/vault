@@ -72,7 +72,6 @@ class Entity {
 
     hits = new List<HitType>();
 
-
     var cn = Type.getClassName(Type.getClass(this)).split(".");
     className = cn[cn.length - 1];
     var layer: Null<Int> = Reflect.field(Type.getClass(this), "layer");

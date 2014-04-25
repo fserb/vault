@@ -56,7 +56,13 @@ class Game {
 
   static public function group(groupname: String, layer: Int): EntityGroup {
     var g = groups.get(groupname);
-    if (g != null) return g;
+    if (g != null) {
+      if (g.layer == -1) {
+        g.layer = layer;
+        sortLayers();
+      }
+      return g;
+    }
 
     var g = new EntityGroup(layer);
     groups.set(groupname, g);
