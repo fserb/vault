@@ -43,7 +43,7 @@ class TestVec2 extends haxe.unit.TestCase {
         r.rotate(a);
 
         var d = Vec2.make(r.x - v.x, r.y - v.y);
-        assertTrue(d.length < 1e-15);
+        assertTrue(d.length < 1e-10);
       }
     }
   }

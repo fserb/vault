@@ -1,7 +1,11 @@
+-main Run
+-neko run.n
 -lib openfl
 -lib openfl-native
 --macro allowPackage("flash")
 -cp ..
--neko run.n
--main Run
-
+-D tools=1.4.0
+-D lime_native
+-D no-compilation
+-D mac
+-D desktop
