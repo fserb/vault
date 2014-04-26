@@ -40,11 +40,14 @@ class Game {
 
   static var groups: Map<String, EntityGroup>;
   static var sprite: Sprite;
-  static public var debugsprite: Sprite;
+  #if debug
+    static public var debugsprite: Sprite;
+  #end
 
-  static public var debug = false;
+  #if debugfps
   var fps: Text;
   var average_fps: Float;
+  #end
 
   var state(default, set): GameState;
 
@@ -196,19 +199,19 @@ class Game {
     groups = new Map<String, EntityGroup>();
 
     sprite = new Sprite();
-    debugsprite = new Sprite();
-    if (Game.debug) {
+    #if debug
+      debugsprite = new Sprite();
       sprite.addChild(debugsprite);
-    }
+    #end
     time = _time = _delay = 0;
     totalTime = 0;
     currentTime = Timer.stamp();
 
     main = this;
 
-    if (Game.debug) {
+    #if debugfps
       average_fps = 0.0;
-    }
+    #end
 
     sprite.addEventListener(Event.ADDED_TO_STAGE, onAdded);
     Lib.current.addChild(sprite);
@@ -226,7 +229,11 @@ class Game {
 
     key = new Key();
     mouse = new Mouse();
-    state = Game.debug ? GAME : TITLE;
+    #if debug
+      state = GAME;
+    #else
+      state = TITLE;
+    #end
 
     initialize();
     if (state == TITLE) {
@@ -255,9 +262,11 @@ class Game {
     var t = Timer.stamp();
     time = _time = t - currentTime;
     currentTime = t;
-    if (Game.debug && _time >= 0.1) {
-      trace("slow frame: " + _time);
-    }
+    #if debug
+      if (_time >= 0.1) {
+        trace("slow frame: " + _time);
+      }
+    #end
     if (_delay > 0) {
       _delay -= _time;
       time = 0;
@@ -265,20 +274,22 @@ class Game {
     }
     totalTime += time;
 
-    if (Game.debug) {
+    #if debug
       debugsprite.x = debugsprite.y = 0;
       sprite.setChildIndex(debugsprite, sprite.numChildren - 1);
       debugsprite.graphics.clear();
       debugsprite.graphics.beginFill(0x000000, 0.0);
       debugsprite.graphics.lineStyle(null);
       debugsprite.graphics.drawRect(0,0,480,480);
-      if (_time > 0) {
-        average_fps = (59.0*average_fps + 1.0/_time)/60.0;
-      }
-      if (fps != null) fps.remove();
-      fps = new Text().xy(5, 480).align(BOTTOM_LEFT)
-        .size(1).color(0xFF999999).text("FPS: " + Std.int(average_fps));
-    }
+      #if debugfps
+        if (_time > 0) {
+          average_fps = (59.0*average_fps + 1.0/_time)/60.0;
+        }
+        if (fps != null) fps.remove();
+        fps = new Text().xy(5, 480).align(BOTTOM_LEFT)
+          .size(1).color(0xFF999999).text("FPS: " + Std.int(average_fps));
+      #end
+    #end
 
     key.update();
     mouse.update();
