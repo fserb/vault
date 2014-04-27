@@ -142,6 +142,7 @@ class Entity {
 
     axis.sort(function (x, y) { return x > y ? 1 : x < y ? -1 : 0; });
 
+    #if ugldebug
     if (debugHit) {
       var g = Game.debugsprite.graphics;
       g.clear();
@@ -165,6 +166,7 @@ class Entity {
         g.lineTo(240 + v.x, 240 + v.y);
       }
     }
+    #end
 
     var lastangle = axis[0] - 1;
     for (angle in axis) {
@@ -174,6 +176,7 @@ class Entity {
       var a = hitMinMaxProjectPolygon(pa, angle);
       var b = hitMinMaxProjectPolygon(pb, angle);
 
+      #if ugldebug
       if (debugHit) {
         var g = Game.debugsprite.graphics;
 
@@ -188,6 +191,7 @@ class Entity {
         g.moveTo(240 + v.x*b.x, 240 + v.y*b.x);
         g.lineTo(240 + v.x*b.y, 240 + v.y*b.y);
       }
+      #end
 
       // we found a non intersecting axis. There is no collision, we can leave.
       if (a.y < b.x || b.y < a.x) {

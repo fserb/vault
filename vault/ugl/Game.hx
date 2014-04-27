@@ -40,11 +40,11 @@ class Game {
 
   static var groups: Map<String, EntityGroup>;
   static var sprite: Sprite;
-  #if debug
+  #if ugldebug
     static public var debugsprite: Sprite;
   #end
 
-  #if debugfps
+  #if ugldebugfps
   var fps: Text;
   var average_fps: Float;
   #end
@@ -199,7 +199,7 @@ class Game {
     groups = new Map<String, EntityGroup>();
 
     sprite = new Sprite();
-    #if debug
+    #if ugldebug
       debugsprite = new Sprite();
       sprite.addChild(debugsprite);
     #end
@@ -209,7 +209,7 @@ class Game {
 
     main = this;
 
-    #if debugfps
+    #if ugldebugfps
       average_fps = 0.0;
     #end
 
@@ -229,7 +229,7 @@ class Game {
 
     key = new Key();
     mouse = new Mouse();
-    #if debug
+    #if ugldebug
       state = GAME;
     #else
       state = TITLE;
@@ -262,7 +262,7 @@ class Game {
     var t = Timer.stamp();
     time = _time = t - currentTime;
     currentTime = t;
-    #if debug
+    #if ugldebug
       if (_time >= 0.1) {
         trace("slow frame: " + _time);
       }
@@ -274,14 +274,14 @@ class Game {
     }
     totalTime += time;
 
-    #if debug
+    #if ugldebug
       debugsprite.x = debugsprite.y = 0;
       sprite.setChildIndex(debugsprite, sprite.numChildren - 1);
       debugsprite.graphics.clear();
       debugsprite.graphics.beginFill(0x000000, 0.0);
       debugsprite.graphics.lineStyle(null);
       debugsprite.graphics.drawRect(0,0,480,480);
-      #if debugfps
+      #if ugldebugfps
         if (_time > 0) {
           average_fps = (59.0*average_fps + 1.0/_time)/60.0;
         }

@@ -48,7 +48,11 @@ class GraphicArt {
 
   public function line(thickness: Null<Float> = null, ?c: UInt = 0, ?alpha: Float = 1.0): GraphicArt {
     if (disabled) return this;
-    sprite.graphics.lineStyle(thickness, c, alpha);
+    if (thickness == null) {
+      sprite.graphics.lineStyle();
+    } else {
+      sprite.graphics.lineStyle(thickness, c, alpha);
+    }
     return this;
   }
 
