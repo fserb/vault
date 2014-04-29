@@ -307,7 +307,7 @@ class Entity {
   }
 
   inline function _update_location() {
-    var m = base_sprite.transform.matrix;
+    var m = new Matrix();
     m.identity();
     m.translate(-sprite.width/2.0, -sprite.height/2.0);
     m.rotate(angle);

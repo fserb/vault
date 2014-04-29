@@ -4,6 +4,7 @@
 - Convert SVG to canvas code
 - Point: refactor into a class
 
+- Bresenham: line, circle points. Ray casting.
 - Add more algo: A*, maze generator
 - Color utils: lerp, hsl, natural.
 - is our Heap implementation better than the 3rdp one?
@@ -18,6 +19,7 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
+- Make publish write minifed js
 - Soundbank: { "name": Explosion(4) } on Game
 
 - Fullscreen support

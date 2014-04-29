@@ -14,6 +14,15 @@ enum GameState {
   FINAL;
 }
 
+#if uglprof
+class GroupProf {
+  public var frames: Int = 0;
+  public var count: Int = 0;
+  public var max: Float = 0.0;
+  public var sum: Float = 0.0;
+}
+#end
+
 class Game {
   static var baseColor: Int = 0xFFFFFF;
   static public var name: String;
@@ -49,6 +58,10 @@ class Game {
   var average_fps: Float;
   #end
 
+  #if uglprof
+  static var profcounts: Map<String, GroupProf>;
+  #end
+
   var state(default, set): GameState;
 
   var title: List<Entity>;
@@ -67,9 +80,12 @@ class Game {
       return g;
     }
 
-    var g = new EntityGroup(layer);
+    var g = new EntityGroup(groupname, layer);
     groups.set(groupname, g);
     sprite.addChild(g);
+    #if uglprof
+      profcounts.set(groupname, new GroupProf());
+    #end
 
     if (layer != -1) {
       sortLayers();
@@ -197,6 +213,9 @@ class Game {
     _title = title;
     _version = version;
     groups = new Map<String, EntityGroup>();
+    #if uglprof
+    profcounts = new Map<String, GroupProf>();
+    #end
 
     sprite = new Sprite();
     #if ugldebug
@@ -319,12 +338,25 @@ class Game {
     }
 
     for (g in groups) {
+      #if uglprof
+      var gp:GroupProf = profcounts.get(g.name);
+      gp.frames++;
+      #end
       for (e in g.entities) {
+        #if uglprof
+          var start = Timer.stamp();
+        #end
         if (e.dead) {
           g.remove(e);
         } else {
           e._update();
         }
+        #if uglprof
+          var d = Timer.stamp() - start;
+          gp.count++;
+          gp.sum += d;
+          gp.max = Math.max(gp.max, d);
+        #end
       }
     }
 
@@ -332,6 +364,18 @@ class Game {
 
     if (key.esc_pressed) {
       endGame();
+      #if uglprof
+      for (k in profcounts.keys()) {
+        var g = profcounts.get(k);
+        var c = g.count > 0 ? g.count : 1;
+        trace(
+          k + ": " +
+          g.count + " updates (" + Std.int(g.count/g.frames) + " upf) - " +
+          Std.int(g.sum*1000) + "ms total - " +
+          Std.int(1000000*g.sum/g.count) + "us - " +
+          "max: " + Std.int(100000*g.max) + "us");
+      }
+      #end
     }
   }
 }
@@ -341,8 +385,9 @@ class EntityGroup extends Sprite {
   public var entities: List<Entity>;
   public var layer: Int = 10;
 
-  public function new(layer: Int) {
+  public function new(name: String, layer: Int) {
     super();
+    this.name = name;
     this.layer = layer;
     entities = new List<Entity>();
   }
