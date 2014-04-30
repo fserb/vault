@@ -72,6 +72,12 @@ class GraphicArt {
     return this;
   }
 
+  public function arc(x:Float, y:Float, r1:Float, r2:Float, b:Float, e:Float): GraphicArt {
+    at(x, y, r1, b, e, true);
+    at(x, y, r2, e, b, false);
+    return this;
+  }  
+
   public function text(x: Float, y: Float, text: String, color: UInt, ?size: Int = 1): GraphicArt {
     if (disabled) return this;
     x += 0.5;
@@ -95,6 +101,30 @@ class GraphicArt {
     sprite.graphics.lineTo(x, y);
     return this;
   }
+
+  public function at(x:Float, y:Float, r:Float, b:Float, e:Float, ?jump:Bool = false): GraphicArt {
+    var segments = Math.ceil(Math.abs(e-b)/(Math.PI/4));
+    var theta = -(e-b)/segments;
+    var angle = -b;
+    var ctrlRadius = r/Math.cos(theta/2);
+    if (jump) {
+      sprite.graphics.moveTo(x+Math.cos(angle)*r, y+Math.sin(angle)*r);
+    } else {
+      sprite.graphics.lineTo(x+Math.cos(angle)*r, y+Math.sin(angle)*r);
+    }
+    for (i in 0...segments) {
+      angle += theta;
+      var angleMid = angle-(theta/2);
+      var cx = x+Math.cos(angleMid)*(ctrlRadius);
+      var cy = y+Math.sin(angleMid)*(ctrlRadius);
+      // calculate our end point
+      var px = x+Math.cos(angle)*r;
+      var py = y+Math.sin(angle)*r;
+      // draw the circle segment
+      sprite.graphics.curveTo(cx, cy, px, py);
+    }
+    return this;
+  }  
 }
 
 
