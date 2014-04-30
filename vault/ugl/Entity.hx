@@ -80,6 +80,10 @@ class Entity {
     _update_location();
   }
 
+  public function clearHitBox() {
+    hits.clear();
+  }
+
   public function addHitBox(h: HitType) {
     hits.add(h);
   }
@@ -271,8 +275,18 @@ class Entity {
     };
   }
 
+  public function hitGroup(g: String): Dynamic {
+    for (e in Game.get(g)) {
+      if (hit(e)) {
+        return e;
+      }
+    }
+    return null;
+  }
+
   public function hit(e: Entity): Bool {
     if (e == null) return false;
+    if (dead || e.dead) return false;
     if (ticks <= 0.1) return false;
     for (a in hits) {
       for (b in e.hits) {
