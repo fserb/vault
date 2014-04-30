@@ -297,9 +297,6 @@ class Game {
       debugsprite.x = debugsprite.y = 0;
       sprite.setChildIndex(debugsprite, sprite.numChildren - 1);
       debugsprite.graphics.clear();
-      debugsprite.graphics.beginFill(0x000000, 0.0);
-      debugsprite.graphics.lineStyle(null);
-      debugsprite.graphics.drawRect(0,0,480,480);
       #if ugldebugfps
         if (_time > 0) {
           average_fps = (59.0*average_fps + 1.0/_time)/60.0;
