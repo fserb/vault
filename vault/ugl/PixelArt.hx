@@ -14,7 +14,8 @@ class PixelArt {
 
   public function new(base: Sprite) {
     sprite = base;
-    clear();
+    disabled = false;
+    cacheIndex = -1;    
     _color = 0xFFFFFF;
     _alternate_color = 0xFFFFFF;
     px = 1;
