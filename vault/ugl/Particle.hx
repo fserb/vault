@@ -59,7 +59,7 @@ class Particle extends Entity {
     particles = new List<Part>();
     for (i in 0...c) {
       var v = new Vec2(getValue(_speed), 0);
-      v.rotate(getValue(_angle));
+      v.angle = getValue(_angle);
       var po = pos.copy();
       var va = v.copy();
       va.normalize();

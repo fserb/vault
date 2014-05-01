@@ -24,6 +24,8 @@ ugl TODO
 - Make publish write minifed js
 - Fullscreen support
 
+- Entity utils file (Message)
+
 - Soundbank: { "name": Explosion(4) } on Game
 
 - Timer: make chainable with delays
