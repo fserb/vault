@@ -84,11 +84,11 @@ class Vec2 {
   }
 
   public inline function rotate(angle: Float) {
-    var ax = Math.sin(angle);
-    var ay = Math.cos(angle);
-    var temp = (ay*x - ax*y);
-    y = x*ax + y*ay;
-    x = temp;
+    var cs = Math.cos(angle);
+    var sn = Math.sin(angle);
+    var tmp = (x*cs - y*sn);
+    y = (x*sn + y*cs);
+    x = tmp;
   }
 
   public inline function add(b: Vec2) {

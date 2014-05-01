@@ -22,7 +22,7 @@ class EMath {
   }
 
   static public inline function clamp(f:Float, a:Float, b:Float):Float {
-    return f < a ? a : ( f > b ? b : f);
+    return f <= a ? a : ( f >= b ? b : f);
   }
 
   static public inline function PowerOf2(n: Float): Int {
