@@ -19,10 +19,12 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
+- Pause
+- Auto pause when off screen
 - Make publish write minifed js
-- Soundbank: { "name": Explosion(4) } on Game
-
 - Fullscreen support
+
+- Soundbank: { "name": Explosion(4) } on Game
 
 - Timer: make chainable with delays
 

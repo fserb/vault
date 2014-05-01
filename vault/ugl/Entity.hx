@@ -34,6 +34,7 @@ class Entity {
   public var sprite: Sprite;
   public var base_sprite(default, null): Sprite;
   public var deltasprite: Vec2;
+  public var rotationcenter: Vec2;
 
   public function update() {}
   public var args: Array<Dynamic>;
@@ -69,6 +70,7 @@ class Entity {
     deltasprite = new Vec2(0, 0);
     ticks = 0;
     angle = 0.0;
+    rotationcenter = null;
 
     hits = new List<HitType>();
 
@@ -322,14 +324,24 @@ class Entity {
 
   inline function _update_location() {
     var m = new Matrix();
+
     m.identity();
-    m.translate(-sprite.width/2.0, -sprite.height/2.0);
+    if (rotationcenter == null) {
+      m.translate(-sprite.width/2.0, -sprite.height/2.0);
+    } else {
+      m.translate(-rotationcenter.x, -rotationcenter.y);
+    }
     m.rotate(angle);
     m.translate(pos.x + deltasprite.x, pos.y + deltasprite.y);
-    if (alignment == TOPLEFT) {
+    if (rotationcenter == null) {
       m.translate(sprite.width/2.0, sprite.height/2.0);
-    } else if (alignment == MIDDLELEFT) {
-      m.translate(sprite.width/2.0, 0);
+    } else {
+      m.translate(rotationcenter.x, rotationcenter.y);
+    }
+    switch(alignment) {
+      case TOPLEFT: 
+      case MIDDLE: m.translate(-sprite.width/2.0, -sprite.height/2.0);
+      case MIDDLELEFT: m.translate(0, -sprite.height/2.0);
     }
     base_sprite.transform.matrix = m;
   }
