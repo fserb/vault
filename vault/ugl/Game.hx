@@ -3,6 +3,7 @@ package vault.ugl;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.display.StageAlign;
+import flash.display.StageQuality;
 import flash.display.StageScaleMode;
 import flash.events.Event;
 import flash.Lib;
@@ -148,6 +149,7 @@ class Game {
     key.update();
 
     totalTime = 0;
+    Game.clear();
     main.begin();
   }
 
@@ -188,6 +190,10 @@ class Game {
 
   static public function delay(t: Float) {
     _delay = Math.max(t, _delay);
+  }
+
+  static public function flash(color: UInt, ?t: Float = 0.01) {
+    new Flasher(color, t);
   }
 
   public function new(title: String, version: String) {
@@ -240,7 +246,7 @@ class Game {
     sprite.removeEventListener(Event.ADDED_TO_STAGE, onAdded);
 
     #if flash
-    Lib.current.stage.quality = flash.display.StageQuality.BEST;
+    Lib.current.stage.quality = StageQuality.BEST;
     Lib.current.stage.stageFocusRect = false;
     #end
     Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -377,6 +383,20 @@ class Game {
   }
 }
 
+class Flasher extends Entity {
+  static var layer = 99999;
+  var duration = 0.0;
+  override public function begin() {
+    duration = args[1];
+    alignment = TOPLEFT;
+    pos.x = pos.y = 0;
+    gfx.fill(args[0]).rect(0, 0, 480, 480);
+  }
+
+  override public function update() {
+    if (ticks >= duration) remove();
+  }
+}
 
 class EntityGroup extends Sprite {
   public var entities: List<Entity>;
