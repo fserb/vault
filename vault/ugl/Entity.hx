@@ -15,6 +15,7 @@ enum Align {
   TOPLEFT;
   MIDDLE;
   MIDDLELEFT;
+  BOTTOMRIGHT;
 }
 
 class Entity {
@@ -342,6 +343,7 @@ class Entity {
       case TOPLEFT: 
       case MIDDLE: m.translate(-sprite.width/2.0, -sprite.height/2.0);
       case MIDDLELEFT: m.translate(0, -sprite.height/2.0);
+      case BOTTOMRIGHT: m.translate(-sprite.width, -sprite.height);
     }
     base_sprite.transform.matrix = m;
   }
