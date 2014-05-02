@@ -15,6 +15,7 @@ class Key {
   var b1_: Button;
   var b2_: Button;
   var esc_: Button;
+  var pause_: Button;
   var any_: Button;
   var mute_: Button;
 
@@ -60,6 +61,10 @@ class Key {
   public var mute_pressed(get, null): Bool;
   function get_mute(): Bool { return mute_.value; }
   function get_mute_pressed(): Bool { return mute_.just; }
+  public var pause(get, null): Bool;
+  public var pause_pressed(get, null): Bool;
+  function get_pause(): Bool { return pause_.value; }
+  function get_pause_pressed(): Bool { return pause_.just; }
 
   public function new() {
     state = Utils.initArray(256, false);
@@ -71,9 +76,11 @@ class Key {
     b1_ = new Button(function() { return joyB1 || state[0x58] || state[0xbe] || state[0x20] || state[0x0d]; });
     b2_ = new Button(function() { return joyB2 || state[0x5a] || state[0xbf]; });
     esc_ = new Button(function() { return state[0x1b]; });
+    pause_ = new Button(function() { return state[0x50]; });
     any_ = new Button(function() {
       return up_.value || down_.value || left_.value || right_.value ||
-             b1_.value || b2_.value || esc_.value || Game.mouse.button;
+             pause_.value || b1_.value || b2_.value || esc_.value ||
+             Game.mouse.button;
      });
     mute_ = new Button(function() { return state[0x4d]; });
 
@@ -117,6 +124,7 @@ class Key {
     esc_.update();
     any_.update();
     mute_.update();
+    pause_.update();
   }
 
 }

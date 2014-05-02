@@ -12,6 +12,7 @@ import haxe.Timer;
 enum GameState {
   TITLE;
   GAME;
+  PAUSE;
   FINAL;
 }
 
@@ -64,6 +65,7 @@ class Game {
   #end
 
   var state(default, set): GameState;
+  var paused(default, set): Bool;
 
   var title: List<Entity>;
   var _title: String;
@@ -281,6 +283,23 @@ class Game {
     title.add(new Text().color(baseColor).text("click to begin").align(BOTTOM_CENTER).xy(240, 470).size(1));
   }
 
+  function set_paused(value: Bool): Bool {
+    if (value) {
+      if (!state.match(PAUSE)) {
+        state = PAUSE;
+        title = new List<Entity>();
+        title.add(new Text().color(baseColor).text("paused").xy(240, 240).size(3));
+      }
+    } else {
+      if (state.match(PAUSE)) {
+        state = GAME;
+        title.pop().remove();
+      }
+    }
+    paused = value;
+    return value;
+  }
+
   function onFrame(ev) {
     Lib.current.stage.focus = sprite;
 
@@ -330,6 +349,15 @@ class Game {
         }
       case GAME:
         update();
+        if (Game.key.pause_pressed) {
+          paused = true;
+        }
+      case PAUSE:
+        if (Game.key.pause_pressed || Game.key.esc_pressed) {
+          paused = false;
+        }
+        totalTime -= time;
+        return;
       case FINAL:
         finalupdate();
         holdback = Math.max(0.0, holdback - _time);
