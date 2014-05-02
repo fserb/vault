@@ -28,7 +28,8 @@ class Particle extends Entity {
 
   public function new() {
     super();
-    pos.x = pos.y = 240;
+    pos.x = Game.width/2;
+    pos.y = Game.height/2;
     _color = 0xFFFFFF;
     _size = Const(1);
     _count = Const(100);

@@ -169,8 +169,8 @@ class Entity {
         var v = Vec2.make(100, 0);
         v.rotate(a);
         g.lineStyle(2, 0x0000FF, 1.0);
-        g.moveTo(240, 240);
-        g.lineTo(240 + v.x, 240 + v.y);
+        g.moveTo(Game.width/2, Game.height/2);
+        g.lineTo(Game.width/2 + v.x, Game.height/2 + v.y);
       }
     }
     #end
@@ -190,13 +190,13 @@ class Entity {
         g.lineStyle(5, 0x00FFFF, 1.0);
         var v = Vec2.make(1, 0);
         v.rotate(angle);
-        g.moveTo(240 + v.x*a.x, 240 + v.y*a.x);
-        g.lineTo(240 + v.x*a.y, 240 + v.y*a.y);
+        g.moveTo(Game.width/2 + v.x*a.x, Game.height/2 + v.y*a.x);
+        g.lineTo(Game.width/2 + v.x*a.y, Game.height/2 + v.y*a.y);
         g.lineStyle(5, 0xFF00FF, 1.0);
         var v = Vec2.make(1, 0);
         v.rotate(angle);
-        g.moveTo(240 + v.x*b.x, 240 + v.y*b.x);
-        g.lineTo(240 + v.x*b.y, 240 + v.y*b.y);
+        g.moveTo(Game.width/2 + v.x*b.x, Game.height/2 + v.y*b.x);
+        g.lineTo(Game.width/2 + v.x*b.y, Game.height/2 + v.y*b.y);
       }
       #end
 
@@ -340,7 +340,7 @@ class Entity {
       m.translate(rotationcenter.x, rotationcenter.y);
     }
     switch(alignment) {
-      case TOPLEFT: 
+      case TOPLEFT:
       case MIDDLE: m.translate(-sprite.width/2.0, -sprite.height/2.0);
       case MIDDLELEFT: m.translate(0, -sprite.height/2.0);
       case BOTTOMRIGHT: m.translate(-sprite.width, -sprite.height);

@@ -32,6 +32,8 @@ class GroupProf {
 class Game {
   static var baseColor: Int = 0xFFFFFF;
   static public var name: String;
+  static public var width: Int;
+  static public var height: Int;
   static public var time(default, null): Float;
   static var _delay: Float;
   static var _time: Float;
@@ -252,10 +254,14 @@ class Game {
   function onAdded(ev) {
     sprite.removeEventListener(Event.ADDED_TO_STAGE, onAdded);
 
+    Game.width = Lib.current.stage.stageWidth;
+    Game.height = Lib.current.stage.stageHeight;
+
     #if flash
     Lib.current.stage.quality = StageQuality.BEST;
     Lib.current.stage.stageFocusRect = false;
-    Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, 480, 480);
+    Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0,
+      width, height);
     #end
     Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
     Lib.current.stage.align = StageAlign.TOP;
@@ -286,9 +292,9 @@ class Game {
     if (_title.length <= 20) s = 4;
     if (_title.length <= 15) s = 5;
 
-    title.add(new Text().color(baseColor).text(_title).xy(240, 240).size(s));
-    title.add(new Text().color(baseColor).text(_version).xy(240, 300).size(2));
-    title.add(new Text().color(baseColor).text("click to begin").align(BOTTOM_CENTER).xy(240, 470).size(1));
+    title.add(new Text().color(baseColor).xy(Game.width/2, Game.height/2).text(_title).size(s));
+    title.add(new Text().color(baseColor).xy(Game.width/2, Game.height/1.6).text(_version).size(2));
+    title.add(new Text().color(baseColor).xy(Game.width/2, Game.height-10).text("click to begin").align(BOTTOM_CENTER).size(1));
   }
 
   function set_paused(value: Bool): Bool {
@@ -296,7 +302,7 @@ class Game {
       if (!state.match(PAUSE)) {
         state = PAUSE;
         title = new List<Entity>();
-        var txt = new Text().color(baseColor).text("paused").xy(240, 240).size(3);
+        var txt = new Text().color(baseColor).text("paused").xy(Game.width/2, Game.height/2).size(3);
         title.add(txt);
         txt._update();
       }
@@ -360,7 +366,7 @@ class Game {
           average_fps = (59.0*average_fps + 1.0/_time)/60.0;
         }
         if (fps != null) fps.remove();
-        fps = new Text().xy(5, 480).align(BOTTOM_LEFT)
+        fps = new Text().xy(5, Game.height).align(BOTTOM_LEFT)
           .size(1).color(0xFF999999).text("FPS: " + Std.int(average_fps));
       #end
     #end
@@ -451,7 +457,7 @@ class Flasher extends Entity {
     duration = args[1];
     alignment = TOPLEFT;
     pos.x = pos.y = 0;
-    gfx.fill(args[0]).rect(0, 0, 480, 480);
+    gfx.fill(args[0]).rect(0, 0, Game.width, Game.height);
   }
 
   override public function update() {

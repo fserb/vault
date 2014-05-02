@@ -19,11 +19,11 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- Release 1 game on Android/IOS
 - Soundbank: { "name": Explosion(4) } on Game
 
 - Timer: make chainable with delays
 
 - Support for UI like games
+- Release 1 game on Android/IOS
 
 - Add visual effects (blur, tv screen?)
