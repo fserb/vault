@@ -6,6 +6,7 @@ import flash.display.StageAlign;
 import flash.display.StageQuality;
 import flash.display.StageScaleMode;
 import flash.events.Event;
+import flash.events.FocusEvent;
 import flash.Lib;
 import haxe.Timer;
 
@@ -270,6 +271,7 @@ class Game {
     }
 
     Lib.current.addEventListener(Event.ENTER_FRAME, onFrame);
+    Lib.current.addEventListener(Event.DEACTIVATE, onDeactivate);
   }
 
   function makeTitle() {
@@ -288,7 +290,9 @@ class Game {
       if (!state.match(PAUSE)) {
         state = PAUSE;
         title = new List<Entity>();
-        title.add(new Text().color(baseColor).text("paused").xy(240, 240).size(3));
+        var txt = new Text().color(baseColor).text("paused").xy(240, 240).size(3);
+        title.add(txt);
+        txt._update();
       }
     } else {
       if (state.match(PAUSE)) {
@@ -298,6 +302,12 @@ class Game {
     }
     paused = value;
     return value;
+  }
+
+  function onDeactivate(ev) {
+    if (state.match(GAME)) {
+      paused = true;
+    }
   }
 
   function onFrame(ev) {
@@ -353,7 +363,7 @@ class Game {
           paused = true;
         }
       case PAUSE:
-        if (Game.key.pause_pressed || Game.key.esc_pressed) {
+        if (Game.key.any_pressed) {
           paused = false;
         }
         totalTime -= time;
