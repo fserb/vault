@@ -16,8 +16,8 @@ class Key {
   var b2_: Button;
   var esc_: Button;
   var pause_: Button;
-  var any_: Button;
   var mute_: Button;
+  var any_: Button;
 
   var joyEps = 0.5;
   var joyX = 0.0;

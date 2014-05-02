@@ -3,10 +3,13 @@ package vault.ugl;
 import flash.display.DisplayObjectContainer;
 import flash.display.Sprite;
 import flash.display.StageAlign;
+import flash.display.StageDisplayState;
 import flash.display.StageQuality;
 import flash.display.StageScaleMode;
 import flash.events.Event;
 import flash.events.FocusEvent;
+import flash.events.KeyboardEvent;
+import flash.geom.Rectangle;
 import flash.Lib;
 import haxe.Timer;
 
@@ -67,6 +70,7 @@ class Game {
 
   var state(default, set): GameState;
   var paused(default, set): Bool;
+  var fullscreen(default, set): Bool;
 
   var title: List<Entity>;
   var _title: String;
@@ -251,9 +255,10 @@ class Game {
     #if flash
     Lib.current.stage.quality = StageQuality.BEST;
     Lib.current.stage.stageFocusRect = false;
+    Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, 480, 480);
     #end
-    Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-    Lib.current.stage.align = StageAlign.TOP_LEFT;
+    Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
+    Lib.current.stage.align = StageAlign.TOP;
 
     key = new Key();
     mouse = new Mouse();
@@ -272,6 +277,7 @@ class Game {
 
     Lib.current.addEventListener(Event.ENTER_FRAME, onFrame);
     Lib.current.addEventListener(Event.DEACTIVATE, onDeactivate);
+    Lib.current.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
   }
 
   function makeTitle() {
@@ -302,6 +308,23 @@ class Game {
     }
     paused = value;
     return value;
+  }
+
+  function set_fullscreen(value: Bool): Bool {
+    if (fullscreen && !value) {
+      Lib.current.stage.displayState = StageDisplayState.NORMAL;
+    } else if (!fullscreen && value) {
+      Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN;
+    }
+
+    fullscreen = value;
+    return value;
+  }
+
+  function onKeyUp(ev) {
+    if (ev.keyCode == 0x46) {
+      fullscreen = !fullscreen;
+    }
   }
 
   function onDeactivate(ev) {

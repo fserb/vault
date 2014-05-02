@@ -19,8 +19,6 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- Fullscreen support
-
 - Release 1 game on Android/IOS
 - Soundbank: { "name": Explosion(4) } on Game
 
