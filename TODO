@@ -19,16 +19,12 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- site: add "Games" button or menu on smaller screen
-
 - mobile: joystick interface send mouse commands
 - mobile: 1 and 2 buttons
 - mobile: limit game screen size
 - mobile: screen resize
 - mobile: game not restoring size ios
 
-
-- Sound: increase base volume
 - Soundbank: { "name": Explosion(4) } on Game
 
 - Timer: make chainable with delays

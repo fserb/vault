@@ -42,7 +42,7 @@ class Sound {
   public function jump(?seed: Null<Int> = null): Sound { params.seed(seed); params.generateJump(); load(); return this; }
   public function blip(?seed: Null<Int> = null): Sound { params.seed(seed); params.generateBlipSelect(); load(); return this; }
 
-  public function vol(v: Float): Sound { params.masterVolume = v; return this; }
+  public function vol(v: Float): Sound { params.masterVolume = v*2.0; return this; }
 
   public function play() {
     load();
