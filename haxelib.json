@@ -9,6 +9,7 @@
   "url": "https://github.com/fserb/vault",
   "dependencies": {
     "sfxr": "",
-    "openfl": ""
+    "openfl": "",
+    "traits": ""
   }
 }

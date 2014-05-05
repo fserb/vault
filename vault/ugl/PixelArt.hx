@@ -5,8 +5,6 @@ import flash.display.BitmapData;
 import flash.geom.Matrix;
 import vault.Utils;
 
-typedef C = ColorMap;
-
 class PixelArt {
   var sprite: Sprite;
   public var disabled: Bool = false;
@@ -15,7 +13,7 @@ class PixelArt {
   public function new(base: Sprite) {
     sprite = base;
     disabled = false;
-    cacheIndex = -1;    
+    cacheIndex = -1;
     _color = 0xFFFFFF;
     _alternate_color = 0xFFFFFF;
     px = 1;
@@ -227,33 +225,3 @@ class PixelArt {
     return this;
   }
 }
-
-class ColorMap {
-  static public var black = 0x000000;
-  static public var white = 0xFFFFFF;
-  static public var grey = 0x9d9d9d;
-  static public var darkgrey = 0x697175;
-  static public var lightgrey = 0xcccccc;
-  static public var red = 0xbe2633;
-  static public var darkred = 0x732930;
-  static public var lightred = 0xe06f8b;
-  static public var brown = 0xa46422;
-  static public var darkbrown = 0x493c2b;
-  static public var lightbrown = 0xeeb62f;
-  static public var orange = 0xeb8931;
-  static public var yellow = 0xf7e26b;
-  static public var green = 0x44891a;
-  static public var darkgreen = 0x2f484e;
-  static public var lightgreen = 0xa3ce27;
-  static public var blue = 0x1d57f7;
-  static public var lightblue = 0xB2DCEF;
-  static public var darkblue = 0x1B2632;
-  static public var purple = 0x342a97;
-  static public var pink = 0xde65e2;
-
-  static public function lerp(ca: Int, cb: Int, t: Float): Int {
-    return Utils.colorLerp(ca, cb, t);
-  }
-}
-
-
