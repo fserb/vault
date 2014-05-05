@@ -4,7 +4,7 @@
 - Convert SVG to canvas code
 - Point: refactor into a class
 
-- Bresenham: line, circle points. Ray casting.
+- Add wu line algorithm iterator
 - Add more algo: A*, maze generator
 - is our Heap implementation better than the 3rdp one?
 - PathFinding: works for graph and map

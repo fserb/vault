@@ -8,6 +8,7 @@ class Run {
     r.add(new TestHeap());
     r.add(new TestPriorityQueue());
     r.add(new TestVec2());
+    r.add(new TestBresenham());
     // r.add(new TestDLite());
 
     r.run();
