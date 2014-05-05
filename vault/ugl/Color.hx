@@ -1,7 +1,9 @@
 package vault.ugl;
 
+import hxColorToolkit.spaces.*;
+
 class Color implements traits.IStatics {
-  static public function lerp(fromColor: Int, toColor: Int, ratio: Float) {
+  static public function lerp(fromColor: UInt, toColor: UInt, ratio: Float) {
     if (ratio <= 0) { return fromColor; }
     if (ratio >= 1) { return toColor; }
 
@@ -10,7 +12,37 @@ class Color implements traits.IStatics {
 
     return ((((( fromColor & 0xFF00FF ) * f1 ) + ( ( toColor & 0xFF00FF ) * f2 )) >> 8 ) & 0xFF00FF ) |
            ((((( fromColor & 0x00FF00 ) * f1 ) + ( ( toColor & 0x00FF00 ) * f2 )) >> 8 ) & 0x00FF00 );
-   }
+  }
+
+  /**
+   * Lerp from @fromColor to @toColor, keeping @fromColor luminosity.
+  */
+  static public function lerpValue(fromColor: UInt, toColor: UInt, ratio: Float) {
+    if (ratio <= 0) { return fromColor; }
+    if (ratio >= 1) { return toColor; }
+
+    var c1 = new Lab().setColor(fromColor);
+    var c2 = new Lab().setColor(toColor);
+
+    var r = new Lab(c1.lightness, c1.a + (c2.a - c1.a)*ratio,
+                                  c1.b + (c2.b - c1.b)*ratio);
+    return r.getColor();
+  }
+
+
+  static public function LAB(l: Float, a: Float, b: Float): UInt {
+    var col = new Lab(l, a, b);
+    return col.getColor();
+  }
+
+  /**
+   * Returns a Color from a HSV value (0-360, 0-1, 0-1)
+   */
+  static public function HSV(hue: Float, saturation: Float, value: Float): UInt {
+    var col = new HSB(hue, saturation*100, value*100);
+    return col.getColor();
+  }
+
 }
 
 class ColorsArne extends Color {

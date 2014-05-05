@@ -18,10 +18,6 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- Color: add hsl support
-- Color: add natural change support
-- Color: add Col() chain transforms
-
 - Soundbank: { "name": Explosion(4) } on Game
 
 - Timer: make chainable with delays

@@ -10,6 +10,7 @@
   "dependencies": {
     "sfxr": "",
     "openfl": "",
-    "traits": ""
+    "traits": "",
+    "hxColorToolkit": ""
   }
 }
