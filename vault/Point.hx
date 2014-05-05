@@ -26,6 +26,10 @@ abstract Point(Point_) from Point_ to Point_ {
     return new Point(x, y);
   }
 
+  public inline function copy(): Point {
+    return new Point(x, y);
+  }
+
   public inline function vec2(): Vec2 {
     return new Vec2(x, y);
   }
