@@ -9,6 +9,7 @@ import flash.display.StageScaleMode;
 import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
+import flash.external.ExternalInterface;
 import flash.geom.Rectangle;
 import flash.Lib;
 import haxe.Timer;
@@ -249,6 +250,11 @@ class Game {
 
     sprite.addEventListener(Event.ADDED_TO_STAGE, onAdded);
     Lib.current.addChild(sprite);
+
+    if (ExternalInterface.available) {
+      ExternalInterface.addCallback("uglGameInfo", onGameInfo);
+      ExternalInterface.addCallback("pause", onDeactivate);
+    }
   }
 
   function onAdded(ev) {
@@ -447,6 +453,13 @@ class Game {
       }
       #end
     }
+  }
+
+  function onGameInfo() {
+    return { "bgcolor": "#" + StringTools.hex(Lib.current.stage.color, 6),
+             "name": Game.name,
+             "width": Game.width,
+             "height": Game.height };
   }
 }
 
