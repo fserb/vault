@@ -1,9 +1,7 @@
 import vault.Point;
-import vault.Bresenham;
+import vault.Line.Bresenham;
 import vault.EMath;
 import vault.Vec2;
-
-
 
 class TestBresenham extends haxe.unit.TestCase {
   function P(x, y) { return new Point(x, y); }
