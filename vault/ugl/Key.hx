@@ -5,25 +5,12 @@ import flash.Lib;
 import vault.Utils;
 import flash.external.ExternalInterface;
 
-class Key {
-  var state: Array<Bool>;
-
+class KeyGroup {
   var up_: Button;
   var down_: Button;
   var left_: Button;
   var right_: Button;
   var b1_: Button;
-  var b2_: Button;
-  var esc_: Button;
-  var pause_: Button;
-  var mute_: Button;
-  var any_: Button;
-
-  var joyEps = 0.5;
-  var joyX = 0.0;
-  var joyY = 0.0;
-  var joyB1 = false;
-  var joyB2 = false;
 
   public var up(get, null): Bool;
   public var up_pressed(get, null): Bool;
@@ -45,6 +32,54 @@ class Key {
   public var b1_pressed(get, null): Bool;
   function get_b1(): Bool { return b1_.value; }
   function get_b1_pressed(): Bool { return b1_.just; }
+
+  public function update() {
+    up_.update();
+    down_.update();
+    left_.update();
+    right_.update();
+    b1_.update();
+  }
+}
+
+class Player1 extends KeyGroup {
+  public function new() {
+    up_ = new Button(function() { return Game.key.state[0x26] || Game.key.joyY < 0; });
+    down_ = new Button(function() { return Game.key.state[0x28] || Game.key.joyY > 0; });
+    left_ = new Button(function() { return Game.key.state[0x25] || Game.key.joyX < 0; });
+    right_ = new Button(function() { return Game.key.state[0x27] || Game.key.joyX > 0; });
+    b1_ = new Button(function() { return Game.key.joyB1 || Game.key.state[0xBE]; });
+  }
+}
+
+class Player2 extends KeyGroup {
+  public function new() {
+    up_ = new Button(function() { return Game.key.state[0x57]; });
+    down_ = new Button(function() { return Game.key.state[0x53]; });
+    left_ = new Button(function() { return Game.key.state[0x41]; });
+    right_ = new Button(function() { return Game.key.state[0x44]; });
+    b1_ = new Button(function() { return Game.key.state[0xC0]; });
+  }
+}
+
+class Key extends KeyGroup {
+  public var state: Array<Bool>;
+
+  var b2_: Button;
+  var esc_: Button;
+  var pause_: Button;
+  var mute_: Button;
+  var any_: Button;
+
+  var joyEps = 0.5;
+  public var joyX = 0.0;
+  public var joyY = 0.0;
+  public var joyB1 = false;
+  var joyB2 = false;
+
+  public var p1: KeyGroup;
+  public var p2: KeyGroup;
+
   public var b2(get, null): Bool;
   public var b2_pressed(get, null): Bool;
   function get_b2(): Bool { return b2_.value; }
@@ -84,6 +119,9 @@ class Key {
      });
     mute_ = new Button(function() { return state[0x4d]; });
 
+    p1 = new Player1();
+    p2 = new Player2();
+
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onPress);
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, onRelease);
 
@@ -101,6 +139,7 @@ class Key {
 
   function onPress(ev:KeyboardEvent) {
     state[ev.keyCode] = true;
+    trace(ev.keyCode);
   }
 
   function onRelease(ev:KeyboardEvent) {
@@ -114,17 +153,15 @@ class Key {
     update();
   }
 
-  public function update() {
-    up_.update();
-    down_.update();
-    left_.update();
-    right_.update();
-    b1_.update();
+  override public function update() {
+    super.update();
     b2_.update();
     esc_.update();
     any_.update();
     mute_.update();
     pause_.update();
+    p1.update();
+    p2.update();
   }
 
 }
