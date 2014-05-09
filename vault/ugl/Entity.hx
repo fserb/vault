@@ -31,6 +31,7 @@ class Entity {
   public var dead: Bool = false;
   public var art(get, null): PixelArt;
   public var gfx(get, null): GraphicArt;
+  public var pattern(get, null): PatternArt;
 
   public var sprite: Sprite;
   public var base_sprite(default, null): Sprite;
@@ -51,6 +52,10 @@ class Entity {
     return gfx;
   }
 
+  function get_pattern(): PatternArt {
+    return pattern;
+  }
+
   public function new(?a: Dynamic, ?b: Dynamic, ?c: Dynamic, ?d: Dynamic, ?e: Dynamic) {
     args = [];
     if (a != null) args.push(a);
@@ -64,6 +69,7 @@ class Entity {
     base_sprite.addChild(sprite);
     art = new PixelArt(sprite);
     gfx = new GraphicArt(sprite);
+    pattern = new PatternArt(sprite);
     pos = new Vec2(0, 0);
     vel = new Vec2(0, 0);
     acc = new Vec2(0, 0);

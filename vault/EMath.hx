@@ -1,6 +1,8 @@
 package vault;
 
 class EMath {
+  static public inline var SQRT2 = 1.4142135623730950;
+
   static public inline function min(a, b):Int {
     return a < b ? a : b;
   }
