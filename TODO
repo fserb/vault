@@ -17,7 +17,7 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
-- Drawing patterns
+- svg2graphics
 
 - Soundbank: { "name": Explosion(4) } on Game
 
