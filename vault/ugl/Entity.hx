@@ -315,6 +315,7 @@ class Entity {
 
     update();
 
+    acc.mul(Game.time);
     pos.x += Game.time*(vel.x + acc.x/2);
     pos.y += Game.time*(vel.y + acc.y/2);
     vel.add(acc);
