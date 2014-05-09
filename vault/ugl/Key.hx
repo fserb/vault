@@ -139,7 +139,6 @@ class Key extends KeyGroup {
 
   function onPress(ev:KeyboardEvent) {
     state[ev.keyCode] = true;
-    trace(ev.keyCode);
   }
 
   function onRelease(ev:KeyboardEvent) {
