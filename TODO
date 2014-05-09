@@ -17,6 +17,8 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
+- Drawing patterns
+
 - Soundbank: { "name": Explosion(4) } on Game
 
 - Timer: make chainable with delays
