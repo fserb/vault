@@ -12,7 +12,17 @@ class Timer extends Entity {
   }
 
   public function every(v: Float): Timer { _every = v; return this; }
-  public function delay(v: Float): Timer { _delay = v; return this; }
+  public function delay(v: Float): Timer {
+    if (_delay > 0.0)
+      run(function () {
+        ticks = 0;
+        _delay = v;
+        return false;
+      });
+    else
+      _delay = v;
+    return this;
+  }
 
   public function run(f: Void->Bool): Timer {
     _func.add(f);
@@ -22,7 +32,7 @@ class Timer extends Entity {
   override public function update() {
     if (_delay > 0.0) {
       if (ticks >= _delay) {
-        ticks = 0;
+        //ticks = 0;
         _func.pop()();
       }
     } else {
