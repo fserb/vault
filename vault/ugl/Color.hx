@@ -2,7 +2,7 @@ package vault.ugl;
 
 import hxColorToolkit.spaces.*;
 
-class Color implements traits.IStatics {
+class Color {
   static public function lerp(fromColor: UInt, toColor: UInt, ratio: Float) {
     if (ratio <= 0) { return fromColor; }
     if (ratio >= 1) { return toColor; }
