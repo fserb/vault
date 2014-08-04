@@ -50,8 +50,8 @@ class PatternArt {
     var vx = new Vec2(swidth, 0);
     vx.rotate(angle);
 
-    var x0 = (-sheight/2.0)*vy.x - vx.x/2.0 + 240;
-    var y0 = (-sheight/2.0)*vy.y - vx.y/2.0 + 240;
+    var x0 = (-sheight/2.0)*vy.x - vx.x/2.0 + Game.width/2;
+    var y0 = (-sheight/2.0)*vy.y - vx.y/2.0 + Game.height/2;
 
     for (i in 0...sheight) {
       var b = new Vec2(x0 + vy.x*i, y0 + vy.y*i);
@@ -100,8 +100,8 @@ class PatternArt {
     var vy = new Vec2(0, 1);
     vy.rotate(angle);
 
-    var x0 = 240 - swidth/2.0*vx.x - sheight/2.0*vy.x;
-    var y0 = 240 - swidth/2.0*vx.y - sheight/2.0*vy.y;
+    var x0 = Game.width/2 - swidth/2.0*vx.x - sheight/2.0*vy.x;
+    var y0 = Game.height/2 - swidth/2.0*vx.y - sheight/2.0*vy.y;
 
     var bx = Math.ceil(swidth/xspace);
     var by = Math.ceil(sheight/yspace);
@@ -130,8 +130,8 @@ class PatternArt {
     var vy = new Vec2(0, sheight);
     vy.rotate(angle);
 
-    var x0 = (-swidth/2.0 + offset)*vx.x - vy.x/2.0 + 240;
-    var y0 = (-swidth/2.0 + offset)*vx.y - vy.y/2.0 + 240;
+    var x0 = (-swidth/2.0 + offset)*vx.x - vy.x/2.0 + Game.width/2;
+    var y0 = (-swidth/2.0 + offset)*vx.y - vy.y/2.0 + Game.height/2;
 
     for (i in 0...bars) {
       var p = new Vec2(x0 + vx.x*i*(width + gap),
@@ -161,5 +161,3 @@ class PatternArt {
     return this;
   }
 }
-
-
