@@ -14,13 +14,6 @@ import flash.geom.Rectangle;
 import flash.Lib;
 import haxe.Timer;
 
-enum GameState {
-  TITLE;
-  GAME;
-  PAUSE;
-  FINAL;
-}
-
 #if uglprof
 class GroupProf {
   public var frames: Int = 0;
@@ -31,30 +24,17 @@ class GroupProf {
 #end
 
 class Game {
-  static var baseColor: Int = 0xFFFFFF;
   static public var name: String;
   static public var width: Int;
   static public var height: Int;
-  static public var time(default, null): Float;
+  static public var time: Float;
   static var _delay: Float;
-  static var _time: Float;
+  static public var _time(default, null): Float;
   static public var currentTime(default, null): Float;
-  static public var totalTime(default, null): Float;
+  static public var totalTime: Float;
   static public var key: Key;
   static public var mouse: Mouse;
-  static public var main: Dynamic;
-  function initialize() {}
-  function begin() {}
-  function update() {}
-  function end() {}
-  function final() {
-    Game.clear();
-    makeTitle();
-    state = TITLE;
-    mouse.clear();
-    key.clear();
-  }
-  function finalupdate() {}
+  static public var scene(default, set): Dynamic;
 
   static var groups: Map<String, EntityGroup>;
   static var sprite: Sprite;
@@ -71,15 +51,27 @@ class Game {
   static var profcounts: Map<String, GroupProf>;
   #end
 
-  var state(default, set): GameState;
-  var paused(default, set): Bool;
   var fullscreen(default, set): Bool;
 
-  var title: List<Entity>;
-  var _title: String;
-  var _version: String;
-
-  var holdback: Float;
+  static public function set_scene(s: Scene): Scene {
+    if (Game.scene != null) {
+      Game.scene.onEnd();
+    }
+    Game.scene = s;
+    #if uglprof
+    for (k in profcounts.keys()) {
+      var g = profcounts.get(k);
+      var c = g.count > 0 ? g.count : 1;
+      trace(
+        k + ": " +
+        g.count + " updates (" + Std.int(g.count/g.frames) + " upf) - " +
+        Std.int(g.sum*1000) + "ms total - " +
+        Std.int(1000000*g.sum/g.count) + "us - " +
+        "max: " + Std.int(100000*g.max) + "us");
+    }
+    #end
+    return s;
+  }
 
   static public function group(groupname: String, layer: Int): EntityGroup {
     var g = groups.get(groupname);
@@ -154,33 +146,6 @@ class Game {
     }
   }
 
-  static function beginGame() {
-    mouse.update();
-    key.update();
-
-    totalTime = 0;
-    Game.clear();
-    main.begin();
-  }
-
-  function set_state(s: GameState): GameState {
-    state = s;
-    // clear input.
-    Game.mouse.clear();
-    Game.key.clear();
-    return s;
-  }
-
-  static public function endGame() {
-    if (main.state != GAME) return;
-
-    main.holdback = 1.0;
-    main.end();
-
-    main.state = FINAL;
-    main.final();
-  }
-
   static var shaking = 0.0;
   static public function shake(?t: Float = 0.4) {
     shaking = Math.max(shaking, t);
@@ -202,17 +167,9 @@ class Game {
     _delay = Math.max(t, _delay);
   }
 
-  static public function flash(color: UInt, ?t: Float = 0.01) {
-    new Flasher(color, t);
-  }
-
-  public function new(title: String, version: String) {
+  public function new(scene:Scene) {
     var cn = Type.getClassName(Type.getClass(this)).split(".");
     Game.name = cn[cn.length - 1];
-
-    #if flash
-    haxe.Log.setColor(baseColor);
-    #end
 
     var oldtrace = haxe.Log.trace;
     haxe.Log.trace = function(v, ?posInfos) {
@@ -226,8 +183,6 @@ class Game {
       oldtrace(v, posInfos);
     }
 
-    _title = title;
-    _version = version;
     groups = new Map<String, EntityGroup>();
     #if uglprof
     profcounts = new Map<String, GroupProf>();
@@ -242,7 +197,11 @@ class Game {
     totalTime = 0;
     currentTime = Timer.stamp();
 
-    main = this;
+    if (scene != null) {
+      Game.scene = scene;
+    } else {
+      Game.scene = new Scene();
+    }
 
     #if ugldebugfps
       average_fps = 0.0;
@@ -274,52 +233,12 @@ class Game {
 
     key = new Key();
     mouse = new Mouse();
-    #if ugldebug
-      state = GAME;
-    #else
-      state = TITLE;
-    #end
 
-    initialize();
-    if (state == TITLE) {
-      makeTitle();
-    } else {
-      beginGame();
-    }
+    scene.onBegin();
 
     Lib.current.addEventListener(Event.ENTER_FRAME, onFrame);
     Lib.current.addEventListener(Event.DEACTIVATE, onDeactivate);
     Lib.current.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-  }
-
-  function makeTitle() {
-    title = new List<Entity>();
-    var s = 3;
-    if (_title.length <= 20) s = 4;
-    if (_title.length <= 15) s = 5;
-
-    title.add(new Text().color(baseColor).xy(Game.width/2, Game.height/2).text(_title).size(s));
-    title.add(new Text().color(baseColor).xy(Game.width/2, Game.height/1.6).text(_version).size(2));
-    title.add(new Text().color(baseColor).xy(Game.width/2, Game.height-10).text("click to begin").align(BOTTOM_CENTER).size(1));
-  }
-
-  function set_paused(value: Bool): Bool {
-    if (value) {
-      if (!state.match(PAUSE)) {
-        state = PAUSE;
-        title = new List<Entity>();
-        var txt = new Text().color(baseColor).text("paused").xy(Game.width/2, Game.height/2).size(3);
-        title.add(txt);
-        txt._update();
-      }
-    } else {
-      if (state.match(PAUSE)) {
-        state = GAME;
-        title.pop().remove();
-      }
-    }
-    paused = value;
-    return value;
   }
 
   function set_fullscreen(value: Bool): Bool {
@@ -340,9 +259,7 @@ class Game {
   }
 
   function onDeactivate(ev) {
-    if (state.match(GAME)) {
-      paused = true;
-    }
+    scene.onBackground();
   }
 
   function onFrame(ev) {
@@ -379,39 +296,7 @@ class Game {
 
     key.update();
     mouse.update();
-
-    // M key for mute.
-    if (Game.key.mute_pressed) {
-      Sound.mute = !Sound.mute;
-    }
-
-    switch (state) {
-      case TITLE:
-        if (Game.key.any_pressed) {
-          state = GAME;
-          Game.clear();
-          beginGame();
-        }
-      case GAME:
-        update();
-        if (Game.key.pause_pressed) {
-          paused = true;
-        }
-      case PAUSE:
-        if (Game.key.any_pressed) {
-          paused = false;
-        }
-        totalTime -= time;
-        return;
-      case FINAL:
-        finalupdate();
-        holdback = Math.max(0.0, holdback - _time);
-        if (holdback == 0.0 && Game.key.any_pressed) {
-          Game.clear();
-          makeTitle();
-          state = TITLE;
-        }
-    }
+    scene.onFrame();
 
     for (g in groups) {
       #if uglprof
@@ -437,22 +322,6 @@ class Game {
     }
 
     Game.updateShake();
-
-    if (key.esc_pressed) {
-      endGame();
-      #if uglprof
-      for (k in profcounts.keys()) {
-        var g = profcounts.get(k);
-        var c = g.count > 0 ? g.count : 1;
-        trace(
-          k + ": " +
-          g.count + " updates (" + Std.int(g.count/g.frames) + " upf) - " +
-          Std.int(g.sum*1000) + "ms total - " +
-          Std.int(1000000*g.sum/g.count) + "us - " +
-          "max: " + Std.int(100000*g.max) + "us");
-      }
-      #end
-    }
   }
 
   function onGameInfo() {
@@ -460,21 +329,6 @@ class Game {
              "name": Game.name,
              "width": Game.width,
              "height": Game.height };
-  }
-}
-
-class Flasher extends Entity {
-  static var layer = 99999;
-  var duration = 0.0;
-  override public function begin() {
-    duration = args[1];
-    alignment = TOPLEFT;
-    pos.x = pos.y = 0;
-    gfx.fill(args[0]).rect(0, 0, Game.width, Game.height);
-  }
-
-  override public function update() {
-    if (ticks >= duration) remove();
   }
 }
 
@@ -499,4 +353,3 @@ class EntityGroup extends Sprite {
     entities.remove(e);
   }
 }
-

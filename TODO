@@ -1,4 +1,4 @@
-﻿TODO
+TODO
 ====
 
 - Convert SVG to canvas code
@@ -17,6 +17,12 @@ ugl is like "Basic Computer Games"
 
 ugl TODO
 --------
+
+- add support for non-coded assets
+  - animated sprites
+  - tiled sprites
+  - fonts
+
 - svg2graphics
 
 - Soundbank: { "name": Explosion(4) } on Game
@@ -25,7 +31,7 @@ ugl TODO
 
 - Support for UI like games
 
-- Add visual effects (blur, tv screen?)
+- Add visual effects (blur, tv screen?) per sprite
 
 - mobile: joystick interface send mouse commands
 - mobile: 1 and 2 buttons
