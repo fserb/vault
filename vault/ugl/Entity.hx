@@ -32,6 +32,7 @@ class Entity {
   public var art(get, null): PixelArt;
   public var gfx(get, null): GraphicArt;
   public var pattern(get, null): PatternArt;
+  public var effect(get, null): EffectArt;
 
   public var sprite: Sprite;
   public var base_sprite(default, null): Sprite;
@@ -56,6 +57,10 @@ class Entity {
     return pattern;
   }
 
+  function get_effect(): EffectArt {
+    return effect;
+  }
+
   public function new(?a: Dynamic, ?b: Dynamic, ?c: Dynamic, ?d: Dynamic, ?e: Dynamic) {
     args = [];
     if (a != null) args.push(a);
@@ -70,6 +75,7 @@ class Entity {
     art = new PixelArt(sprite);
     gfx = new GraphicArt(sprite);
     pattern = new PatternArt(sprite);
+    effect = new EffectArt(sprite);
     pos = new Vec2(0, 0);
     vel = new Vec2(0, 0);
     acc = new Vec2(0, 0);
