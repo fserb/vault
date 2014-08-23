@@ -29,50 +29,74 @@ class EffectArt {
   }
 
   function boxBlurH(src, dst, rad) {
-    var h = src.height;
-    var w = src.width;
-    for (i in 0...h) {
-      for (j in 0...w) {
-        var a =0.0, r = 0.0, g = 0.0, b = 0.0;
-        for (ix in (j-rad...j+rad+1)) {
-          var x = EMath.min(w-1, EMath.max(0, ix));
-          var s = src.getPixel32(x, i);
-          a += (s & 0xFF000000) >> 24;
-          r += (s & 0x00FF0000) >> 16;
-          g += (s & 0x0000FF00) >> 8;
-          b += (s & 0x000000FF);
-        }
+    var iarr = 1 / (rad + rad + 1);
+    for (i in 0...src.height) {
+      var a = 0.0, r = 0.0, g = 0.0, b = 0.0;
+
+      // initial window
+      var s = src.getPixel32(0, i);
+      a += (rad+1)*((s & 0xFF000000) >> 24);
+      r += (rad+1)*((s & 0x00FF0000) >> 16);
+      g += (rad+1)*((s & 0x0000FF00) >> 8);
+      b += (rad+1)*((s & 0x000000FF));
+      for (j in 0...rad) {
+        var s = src.getPixel32(EMath.min(src.width-1, j), i);
+        a += (s & 0xFF000000) >> 24;
+        r += (s & 0x00FF0000) >> 16;
+        g += (s & 0x0000FF00) >> 8;
+        b += (s & 0x000000FF);
+      }
+
+      for (j in 0...src.width) {
+        var prev = src.getPixel32(EMath.max(0, j-rad-1), i);
+        var next = src.getPixel32(EMath.min(src.width-1, j+rad), i);
+        a += ((next & 0xFF000000) >> 24) - ((prev & 0xFF000000) >> 24);
+        r += ((next & 0x00FF0000) >> 16) - ((prev & 0x00FF0000) >> 16);
+        g += ((next & 0x0000FF00) >> 8)  - ((prev & 0x0000FF00) >> 8);
+        b += ((next & 0x000000FF))       - ((prev & 0x000000FF));
+
         var v = 0;
-        var w = (rad+rad+1);
-        v += (0xFF & Math.round(a/w)) << 24;
-        v += (0xFF & Math.round(r/w)) << 16;
-        v += (0xFF & Math.round(g/w)) << 8;
-        v += (0xFF & Math.round(b/w));
+        v |= (0xFF & Math.round(a*iarr)) << 24;
+        v |= (0xFF & Math.round(r*iarr)) << 16;
+        v |= (0xFF & Math.round(g*iarr)) << 8;
+        v |= (0xFF & Math.round(b*iarr));
         dst.setPixel32(j, i, v);
       }
     }
   }
 
   function boxBlurT(src, dst, rad) {
-    var h = src.height;
-    var w = src.width;
-    for (i in 0...h) {
-      for (j in 0...w) {
-        var a =0.0, r = 0.0, g = 0.0, b = 0.0;
-        for (iy in (i-rad...i+rad+1)) {
-          var y = EMath.min(h-1, EMath.max(0, iy));
-          var s = src.getPixel32(j, y);
-          a += (s & 0xFF000000) >> 24;
-          r += (s & 0x00FF0000) >> 16;
-          g += (s & 0x0000FF00) >> 8;
-          b += (s & 0x000000FF);
-        }
+    var iarr = 1 / (rad + rad + 1);
+    for (j in 0...src.width) {
+      var a = 0.0, r = 0.0, g = 0.0, b = 0.0;
+
+      // initial window
+      var s = src.getPixel32(j, 0);
+      a += (rad+1)*((s & 0xFF000000) >> 24);
+      r += (rad+1)*((s & 0x00FF0000) >> 16);
+      g += (rad+1)*((s & 0x0000FF00) >> 8);
+      b += (rad+1)*((s & 0x000000FF));
+      for (i in 0...rad) {
+        var s = src.getPixel32(j, EMath.min(src.height-1, i));
+        a += (s & 0xFF000000) >> 24;
+        r += (s & 0x00FF0000) >> 16;
+        g += (s & 0x0000FF00) >> 8;
+        b += (s & 0x000000FF);
+      }
+
+      for (i in 0...src.height) {
+        var prev = src.getPixel32(j, EMath.max(0, i-rad-1));
+        var next = src.getPixel32(j, EMath.min(src.height-1, i+rad));
+        a += ((next & 0xFF000000) >> 24) - ((prev & 0xFF000000) >> 24);
+        r += ((next & 0x00FF0000) >> 16) - ((prev & 0x00FF0000) >> 16);
+        g += ((next & 0x0000FF00) >> 8)  - ((prev & 0x0000FF00) >> 8);
+        b += ((next & 0x000000FF))       - ((prev & 0x000000FF));
+
         var v = 0;
-        var w = (rad+rad+1);
-        v += (0xFF & Math.round(a/w)) << 24;
-        v += (0xFF & Math.round(r/w)) << 16;
-        v += (0xFF & Math.round(g/w)) << 8;
-        v += (0xFF & Math.round(b/w));
+        v |= (0xFF & Math.round(a*iarr)) << 24;
+        v |= (0xFF & Math.round(r*iarr)) << 16;
+        v |= (0xFF & Math.round(g*iarr)) << 8;
+        v |= (0xFF & Math.round(b*iarr));
         dst.setPixel32(j, i, v);
       }
     }
