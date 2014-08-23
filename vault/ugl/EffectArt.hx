@@ -29,37 +29,44 @@ class EffectArt {
   }
 
   function boxBlurH(src, dst, rad) {
-    var iarr = 1 / (rad + rad + 1);
+    var iarr:Float = 1.0 / (rad + rad + 1.0);
     for (i in 0...src.height) {
       var a = 0.0, r = 0.0, g = 0.0, b = 0.0;
 
       // initial window
       var s = src.getPixel32(0, i);
-      a += (rad+1)*((s & 0xFF000000) >> 24);
-      r += (rad+1)*((s & 0x00FF0000) >> 16);
-      g += (rad+1)*((s & 0x0000FF00) >> 8);
-      b += (rad+1)*((s & 0x000000FF));
+      a += (rad+1)*(0xFF & (s >> 24));
+      var alpha:Float = (0xFF & (s >> 24))/0xFF;
+      r += alpha*(rad+1)*(0xFF & (s >> 16));
+      g += alpha*(rad+1)*(0xFF & (s >> 8));
+      b += alpha*(rad+1)*(0xFF & (s));
       for (j in 0...rad) {
         var s = src.getPixel32(EMath.min(src.width-1, j), i);
-        a += (s & 0xFF000000) >> 24;
-        r += (s & 0x00FF0000) >> 16;
-        g += (s & 0x0000FF00) >> 8;
-        b += (s & 0x000000FF);
+        a += (0xFF & (s >> 24));
+        var alpha:Float = (0xFF & (s >> 24))/0xFF;
+        r += alpha*(0xFF & (s >> 16));
+        g += alpha*(0xFF & (s >> 8));
+        b += alpha*(0xFF & (s));
       }
 
       for (j in 0...src.width) {
         var prev = src.getPixel32(EMath.max(0, j-rad-1), i);
         var next = src.getPixel32(EMath.min(src.width-1, j+rad), i);
-        a += ((next & 0xFF000000) >> 24) - ((prev & 0xFF000000) >> 24);
-        r += ((next & 0x00FF0000) >> 16) - ((prev & 0x00FF0000) >> 16);
-        g += ((next & 0x0000FF00) >> 8)  - ((prev & 0x0000FF00) >> 8);
-        b += ((next & 0x000000FF))       - ((prev & 0x000000FF));
+        a += (0xFF & (next >> 24)) - (0xFF & (prev >> 24));
+        var palpha:Float = (0xFF & (prev >> 24))/0xFF;
+        var nalpha:Float = (0xFF & (next >> 24))/0xFF;
+        r += nalpha*(0xFF & (next >> 16)) - palpha*(0xFF & (prev >> 16));
+        g += nalpha*(0xFF & (next >> 8))  - palpha*(0xFF & (prev >> 8));
+        b += nalpha*(0xFF & (next))       - palpha*(0xFF & (prev));
 
         var v = 0;
         v |= (0xFF & Math.round(a*iarr)) << 24;
-        v |= (0xFF & Math.round(r*iarr)) << 16;
-        v |= (0xFF & Math.round(g*iarr)) << 8;
-        v |= (0xFF & Math.round(b*iarr));
+        var alpha:Float = (a*iarr)/0xFF;
+        if (alpha != 0.0) {
+          v |= (0xFF & Math.round(r*iarr/alpha)) << 16;
+          v |= (0xFF & Math.round(g*iarr/alpha)) << 8;
+          v |= (0xFF & Math.round(b*iarr/alpha));
+        }
         dst.setPixel32(j, i, v);
       }
     }
@@ -72,31 +79,38 @@ class EffectArt {
 
       // initial window
       var s = src.getPixel32(j, 0);
-      a += (rad+1)*((s & 0xFF000000) >> 24);
-      r += (rad+1)*((s & 0x00FF0000) >> 16);
-      g += (rad+1)*((s & 0x0000FF00) >> 8);
-      b += (rad+1)*((s & 0x000000FF));
+      a += (rad+1)*(0xFF & (s >> 24));
+      var alpha:Float = (0xFF & (s >> 24))/0xFF;
+      r += alpha*(rad+1)*(0xFF & (s >> 16));
+      g += alpha*(rad+1)*(0xFF & (s >> 8));
+      b += alpha*(rad+1)*(0xFF & (s));
       for (i in 0...rad) {
         var s = src.getPixel32(j, EMath.min(src.height-1, i));
-        a += (s & 0xFF000000) >> 24;
-        r += (s & 0x00FF0000) >> 16;
-        g += (s & 0x0000FF00) >> 8;
-        b += (s & 0x000000FF);
+        a += (0xFF & (s >> 24));
+        var alpha:Float = (0xFF & (s >> 24))/0xFF;
+        r += alpha*(0xFF & (s >> 16));
+        g += alpha*(0xFF & (s >> 8));
+        b += alpha*(0xFF & (s));
       }
 
       for (i in 0...src.height) {
         var prev = src.getPixel32(j, EMath.max(0, i-rad-1));
         var next = src.getPixel32(j, EMath.min(src.height-1, i+rad));
-        a += ((next & 0xFF000000) >> 24) - ((prev & 0xFF000000) >> 24);
-        r += ((next & 0x00FF0000) >> 16) - ((prev & 0x00FF0000) >> 16);
-        g += ((next & 0x0000FF00) >> 8)  - ((prev & 0x0000FF00) >> 8);
-        b += ((next & 0x000000FF))       - ((prev & 0x000000FF));
+        a += (0xFF & (next >> 24)) - (0xFF & (prev >> 24));
+        var palpha:Float = (0xFF & (prev >> 24))/0xFF;
+        var nalpha:Float = (0xFF & (next >> 24))/0xFF;
+        r += nalpha*(0xFF & (next >> 16)) - palpha*(0xFF & (prev >> 16));
+        g += nalpha*(0xFF & (next >> 8))  - palpha*(0xFF & (prev >> 8));
+        b += nalpha*(0xFF & (next))       - palpha*(0xFF & (prev));
 
         var v = 0;
         v |= (0xFF & Math.round(a*iarr)) << 24;
-        v |= (0xFF & Math.round(r*iarr)) << 16;
-        v |= (0xFF & Math.round(g*iarr)) << 8;
-        v |= (0xFF & Math.round(b*iarr));
+        var alpha:Float = (a*iarr)/0xFF;
+        if (alpha != 0.0) {
+          v |= (0xFF & Math.round(r*iarr/alpha)) << 16;
+          v |= (0xFF & Math.round(g*iarr/alpha)) << 8;
+          v |= (0xFF & Math.round(b*iarr/alpha));
+        }
         dst.setPixel32(j, i, v);
       }
     }
@@ -124,7 +138,33 @@ class EffectArt {
     boxBlur(src, dst, Std.int((boxes[2] - 1)/2));
 
     sprite.graphics.clear();
-    sprite.graphics.beginBitmapFill(dst);
+    sprite.graphics.beginBitmapFill(dst, null, false, false);
+    sprite.graphics.drawRect(0, 0, dst.width, dst.height);
+  }
+
+  public function glow(radius: Float) {
+    var orig = new BitmapData(Std.int(sprite.width), Std.int(sprite.height),
+      true, 0x00FFFFFF);
+    orig.draw(sprite);
+
+    var src = new BitmapData(Std.int(sprite.width), Std.int(sprite.height),
+      true, 0x00FFFFFF);
+    var b = orig.getPixels(orig.rect);
+    b.position = 0;
+    src.setPixels(orig.rect, b);
+
+    var dst = new BitmapData(Std.int(sprite.width), Std.int(sprite.height),
+      true, 0x00FFFFFF);
+
+    var boxes = boxesForGauss(radius, 3);
+    boxBlur(src, dst, Std.int((boxes[0] - 1)/2));
+    boxBlur(dst, src, Std.int((boxes[1] - 1)/2));
+    boxBlur(src, dst, Std.int((boxes[2] - 1)/2));
+
+    sprite.graphics.clear();
+    sprite.graphics.beginBitmapFill(dst, null, false, false);
+    sprite.graphics.drawRect(0, 0, dst.width, dst.height);
+    sprite.graphics.beginBitmapFill(orig);
     sprite.graphics.drawRect(0, 0, dst.width, dst.height);
   }
 }
