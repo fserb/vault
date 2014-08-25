@@ -95,6 +95,9 @@ class Micro extends Scene {
 
   public function new(title: String, version: String) {
     super();
+    var cn = Type.getClassName(Type.getClass(this)).split(".");
+    Game.name = cn[cn.length - 1];
+    
     _title = title;
     _version = version;
 
@@ -142,7 +145,7 @@ class Micro extends Scene {
           paused = false;
         }
         Game.totalTime -= Game.time;
-        return;
+        return false;
       case FINAL:
         finalupdate();
         holdback = Math.max(0.0, holdback - Game._time);
@@ -157,6 +160,7 @@ class Micro extends Scene {
       Game.scene = this;
       endGame();
     }
+    return true;
   }
 
   override public function onBackground() {

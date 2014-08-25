@@ -168,9 +168,6 @@ class Game {
   }
 
   public function new(scene:Scene) {
-    var cn = Type.getClassName(Type.getClass(this)).split(".");
-    Game.name = cn[cn.length - 1];
-
     var oldtrace = haxe.Log.trace;
     haxe.Log.trace = function(v, ?posInfos) {
       v = Std.string(v);
@@ -296,7 +293,9 @@ class Game {
 
     key.update();
     mouse.update();
-    scene.onFrame();
+    if (!scene.onFrame()) {
+      return;
+    }
 
     for (g in groups) {
       #if uglprof
