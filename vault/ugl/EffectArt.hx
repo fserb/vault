@@ -142,16 +142,32 @@ class EffectArt {
     sprite.graphics.drawRect(0, 0, dst.width, dst.height);
   }
 
-  public function glow(radius: Float) {
+#if flash
+  public function glow(radius: Float, c: Null<UInt> = null) {
+  }
+#else
+  public function glow(radius: Float, c: Null<UInt> = null) {
     var orig = new BitmapData(Std.int(sprite.width), Std.int(sprite.height),
       true, 0x00FFFFFF);
     orig.draw(sprite);
 
     var src = new BitmapData(Std.int(sprite.width), Std.int(sprite.height),
       true, 0x00FFFFFF);
-    var b = orig.getPixels(orig.rect);
-    b.position = 0;
-    src.setPixels(orig.rect, b);
+    var input = orig.getPixels(orig.rect);
+    input.position = 0;
+    input.endian = flash.utils.Endian.BIG_ENDIAN;
+    if (c != null) {
+      c = (c & 0xFFFFFF) << 8;
+      while (input.bytesAvailable > 0) {
+        var s = input.readInt();
+        var a = s & 0xFF;
+        var o = a | c;
+        input.position -= 4;
+        input.writeInt(o);
+      }
+    }
+    input.position = 0;
+    src.setPixels(orig.rect, input);
 
     var dst = new BitmapData(Std.int(sprite.width), Std.int(sprite.height),
       true, 0x00FFFFFF);
@@ -162,9 +178,10 @@ class EffectArt {
     boxBlur(src, dst, Std.int((boxes[2] - 1)/2));
 
     sprite.graphics.clear();
-    sprite.graphics.beginBitmapFill(dst, null, false, false);
+    sprite.graphics.beginBitmapFill(src, null, false, false);
     sprite.graphics.drawRect(0, 0, dst.width, dst.height);
     sprite.graphics.beginBitmapFill(orig);
     sprite.graphics.drawRect(0, 0, dst.width, dst.height);
   }
+#end
 }
