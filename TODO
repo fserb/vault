@@ -18,6 +18,8 @@ ugl is like "Basic Computer Games"
 ugl TODO
 --------
 
+- pause stopped working on redesign?
+
 - add support for non-coded assets
   - animated sprites
   - tiled sprites
@@ -30,8 +32,6 @@ ugl TODO
 - Timer: make chainable with delays
 
 - Support for UI like games
-
-- Add visual effects (blur, tv screen?) per sprite
 
 - mobile: joystick interface send mouse commands
 - mobile: 1 and 2 buttons

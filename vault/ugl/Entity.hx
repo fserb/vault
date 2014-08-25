@@ -300,9 +300,9 @@ class Entity {
   }
 
   public function hit(e: Entity): Bool {
-    if (e == null) return false;
+    if (e == null || e == this) return false;
     if (dead || e.dead) return false;
-    if (ticks <= 0.1) return false;
+    /*if (ticks <= 0.1) return false;*/
     for (a in hits) {
       for (b in e.hits) {
         if (isHit(transformHit(base_sprite.transform.matrix, a),
