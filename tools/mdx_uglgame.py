@@ -20,14 +20,14 @@ class UGLGamePattern(markdown.inlinepatterns.Pattern):
     path = "games/ugl/" + d.get('name') + ".swf"
     name = "uglgame_%d_swf" % COUNTER
     COUNTER += 1
-    content = """<div class="swf">
-<div id="%s">
-<b>Need flash to run this :(</b>
-</div>
+    content = """
+<div id="uglgame"></div>
 <script>
-swfobject.embedSWF("%s", "%s", 480, 480, "11.8");
+var gameName = "%s";
 </script>
-</div>""" % (name, path, name)
+<script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script src="http://fserb.com/vault/static/ugl.js"></script>""" % (name)
     return etree.fromstring(content)
 
 class UGLGameExtension(markdown.Extension):
@@ -37,7 +37,6 @@ class UGLGameExtension(markdown.Extension):
 
 if __name__ == "__main__":
   md = markdown.Markdown(extensions=[UGLGameExtension()])
-  print md.convert("hello")
-  print md.convert("[!uglgame:Amaze]")
+  print(md.convert("hello"))
+  print(md.convert("[!uglgame:Amaze]"))
   # print md.convert("&uglgame:Musician;")
-
