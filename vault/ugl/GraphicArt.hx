@@ -26,6 +26,10 @@ class GraphicArt {
     return this;
   }
 
+  public function size(w: Int, h: Int): GraphicArt {
+    return this.fill(0x000000, 0.0).rect(0, 0, w, h);
+  }
+
   public function cache(idx: Int): GraphicArt {
     if (idx == cacheIndex) {
       disabled = true;
@@ -76,7 +80,7 @@ class GraphicArt {
     at(x, y, r1, b, e, true);
     at(x, y, r2, e, b, false);
     return this;
-  }  
+  }
 
   public function text(x: Float, y: Float, text: String, color: UInt, ?size: Int = 1): GraphicArt {
     if (disabled) return this;
@@ -124,7 +128,5 @@ class GraphicArt {
       sprite.graphics.curveTo(cx, cy, px, py);
     }
     return this;
-  }  
+  }
 }
-
-
