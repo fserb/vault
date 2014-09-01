@@ -18,12 +18,12 @@ ugl is like "Basic Computer Games"
 ugl TODO
 --------
 
-- pause stopped working on redesign?
-
 - add support for non-coded assets
   - animated sprites
   - tiled sprites
   - fonts
+
+- animated gif support
 
 - svg2graphics
 

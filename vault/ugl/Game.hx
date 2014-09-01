@@ -37,7 +37,7 @@ class Game {
   static public var scene(default, set): Dynamic;
 
   static var groups: Map<String, EntityGroup>;
-  static var sprite: Sprite;
+  static public var sprite: Sprite;
   #if ugldebug
     static public var debugsprite: Sprite;
   #end
@@ -321,6 +321,7 @@ class Game {
     }
 
     Game.updateShake();
+    scene.onEndFrame();
   }
 
   function onGameInfo() {
