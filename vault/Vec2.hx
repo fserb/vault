@@ -128,11 +128,12 @@ class Vec2 {
     y = x * m.b + y * m.d + m.ty;
   }
 
-  public inline function clamp(v: Float) {
+  public inline function clamp(v: Float): Vec2 {
     var s = this.length;
     if (s > v) {
       mul(v/s);
     }
+    return this;
   }
 
   public inline function project(a: Vec2): Vec2 {

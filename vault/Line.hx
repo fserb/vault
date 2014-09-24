@@ -1,10 +1,83 @@
 package vault;
 
+import vault.Vec2;
+
 typedef WVec2 = {
   var x: Float;
   var y: Float;
   var w: Float;
 };
+
+class Ray {
+  // based on http://www.cse.yorku.ca/~amana/research/grid.pdf
+  static public function extend(from: Vec2, to: Vec2, tilesize: Int = 1, valid: Int -> Int -> Bool): Vec2 {
+    // normalise the points
+    var p1:Vec2 = Vec2.make(from.x/tilesize, from.y/tilesize);
+    var p2:Vec2 = Vec2.make(to.x/tilesize, to.y/tilesize);
+
+    if (Std.int(p1.x) == Std.int(p2.x) && Std.int(p1.y) == Std.int(p2.y)) {
+      //since it doesn't cross any boundaries, there can't be a collision
+      return to;
+    }
+
+    //find out which direction to step, on each axis
+    var stepX:Int = (p2.x > p1.x) ? 1 : -1;
+    var stepY:Int = (p2.y > p1.y) ? 1 : -1;
+
+    var rayDirection:Vec2 = p2.distance(p1);
+
+    //find out how far to move on each axis for every whole integer step on the other
+    var ratioX:Float = rayDirection.x / rayDirection.y;
+    var ratioY:Float = rayDirection.y / rayDirection.x;
+
+    var deltaY:Float = EMath.fabs(p2.x - p1.x);
+    var deltaX:Float = EMath.fabs(p2.y - p1.y);
+
+    //initialise the integer test coordinates with the coordinates of the starting tile, in tile space ( integer )
+    //Note: using noralised version of p1
+    var testX:Int = Std.int(p1.x);
+    var testY:Int = Std.int(p1.y);
+
+    //initialise the non-integer step, by advancing to the next tile boundary / ( whole integer of opposing axis )
+    //if moving in positive direction, move to end of curent tile, otherwise the beginning
+    var maxX:Float = deltaX * ( ( stepX > 0 ) ? ( 1.0 - (p1.x % 1) ) : (p1.x % 1) );
+    var maxY:Float = deltaY * ( ( stepY > 0 ) ? ( 1.0 - (p1.y % 1) ) : (p1.y % 1) );
+
+    var endTileX:Int = Std.int(p2.x);
+    var endTileY:Int = Std.int(p2.y);
+
+    var collisionPoint:Vec2 = Vec2.make(0, 0);
+
+    while (testX != endTileX || testY != endTileY) {
+      if (maxX < maxY) {
+        maxX += deltaX;
+        testX += stepX;
+
+        if (!valid(testX, testY)) {
+          collisionPoint.x = testX;
+          if ( stepX < 0 ) collisionPoint.x += 1.0; //add one if going left
+          collisionPoint.y = p1.y + ratioY * ( collisionPoint.x - p1.x);
+          collisionPoint.x *= tilesize;//scale up
+          collisionPoint.y *= tilesize;
+          return collisionPoint;
+        }
+      } else {
+        maxY += deltaY;
+        testY += stepY;
+        if (!valid( testX, testY )) {
+          collisionPoint.y = testY;
+          if ( stepY < 0 ) collisionPoint.y += 1.0; //add one if going up
+          collisionPoint.x = p1.x + ratioX * ( collisionPoint.y - p1.y);
+          collisionPoint.x *= tilesize;//scale up
+          collisionPoint.y *= tilesize;
+          return collisionPoint;
+        }
+      }
+    }
+    //no intersection found, just return end point:
+    return to;
+  }
+}
 
 class Bresenham {
   var p: Point;
