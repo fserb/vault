@@ -28,7 +28,7 @@ class EffectArt {
     return sizes;
   }
 
-  function boxBlurH(src, dst, rad) {
+  function boxBlurH(src:BitmapData, dst:BitmapData, rad:Int) {
     var iarr:Float = 1.0 / (rad + rad + 1.0);
     for (i in 0...src.height) {
       var a = 0.0, r = 0.0, g = 0.0, b = 0.0;
@@ -72,7 +72,7 @@ class EffectArt {
     }
   }
 
-  function boxBlurT(src, dst, rad) {
+  function boxBlurT(src:BitmapData, dst:BitmapData, rad:Int) {
     var iarr = 1 / (rad + rad + 1);
     for (j in 0...src.width) {
       var a = 0.0, r = 0.0, g = 0.0, b = 0.0;
@@ -142,11 +142,11 @@ class EffectArt {
     sprite.graphics.drawRect(0, 0, dst.width, dst.height);
   }
 
-#if flash
-  public function glow(radius: Float, c: Null<UInt> = null) {
+#if !html5
+  public function glow(radius: Float, c: Null<Int> = null) {
   }
 #else
-  public function glow(radius: Float, c: Null<UInt> = null) {
+  public function glow(radius: Float, c: Null<Int> = null) {
     var orig = new BitmapData(Std.int(sprite.width), Std.int(sprite.height),
       true, 0x00FFFFFF);
     orig.draw(sprite);

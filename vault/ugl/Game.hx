@@ -204,8 +204,11 @@ class Game {
       average_fps = 0.0;
     #end
 
-    sprite.addEventListener(Event.ADDED_TO_STAGE, onAdded);
-    Lib.current.addChild(sprite);
+    if (Lib.current.stage != null) {
+      onAdded(null);
+    } else {
+      Lib.current.addEventListener(Event.ADDED_TO_STAGE, onAdded);
+    }
 
     if (ExternalInterface.available) {
       ExternalInterface.addCallback("uglGameInfo", onGameInfo);
@@ -214,6 +217,7 @@ class Game {
   }
 
   function onAdded(ev) {
+    Lib.current.addChild(sprite);
     sprite.removeEventListener(Event.ADDED_TO_STAGE, onAdded);
 
     Game.width = Lib.current.stage.stageWidth;
@@ -225,8 +229,8 @@ class Game {
     Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0,
       width, height);
     #end
-    Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
-    Lib.current.stage.align = StageAlign.TOP;
+    // Lib.current.stage.align = StageAlign.TOP;
+    // Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
 
     key = new Key();
     mouse = new Mouse();

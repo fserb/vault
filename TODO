@@ -2,7 +2,7 @@ TODO
 ====
 
 - Convert SVG to canvas code
-- Point: refactor into a class
+- Fully support Processing
 
 - Add more algo: A*, maze generator
 - is our Heap implementation better than the 3rdp one?
@@ -27,11 +27,12 @@ ugl TODO
 
 - svg2graphics
 
-- Soundbank: { "name": Explosion(4) } on Game
-
 - Timer: make chainable with delays
 
 - Support for UI like games
+
+- Add glitch: https://github.com/steverichey/HaxeFlixelGlitchRender
+- Make glow/blur work on non-flash
 
 - mobile: joystick interface send mouse commands
 - mobile: 1 and 2 buttons

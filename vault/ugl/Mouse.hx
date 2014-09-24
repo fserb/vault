@@ -21,14 +21,18 @@ class Mouse {
     lmb = false;
     button_ = new Button(function() { return lmb; });
 
-    Lib.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
-    Lib.current.stage.addEventListener(MouseEvent.MOUSE_DOWN, onPress);
-    Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onRelease);
+    Game.sprite.graphics.beginFill(0, 0.0);
+    Game.sprite.graphics.drawRect(0,0,Game.width,Game.height);
+    Game.sprite.graphics.endFill();
+    Game.sprite.mouseChildren = false;
+    Game.sprite.addEventListener(MouseEvent.MOUSE_MOVE, onMove);
+    Game.sprite.addEventListener(MouseEvent.MOUSE_DOWN, onPress);
+    Game.sprite.addEventListener(MouseEvent.MOUSE_UP, onRelease);
   }
 
   function onMove(ev: MouseEvent) {
-    x = ev.stageX;
-    y = ev.stageY;
+    x = ev.localX;
+    y = ev.localY;
   }
 
   function onPress(ev: MouseEvent) {
