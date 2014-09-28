@@ -11,24 +11,24 @@ import vault.left.View;
 
 class Game extends Sprite {
   var currentTime: Float;
-  var scene(default, set): Group;
+  var scene: Group;
+  var nextscene: Void -> Group = null;
 
-  var partialAdded: Event -> Void;
-  public function new(scene: Group) {
+  public function new() {
     super();
-
     Left.game = this;
 
-    partialAdded = onAdded.bind(_, scene);
+    Left.views = new Array<View>();
+
     if (Lib.current.stage != null) {
-      onAdded(null, scene);
+      onAdded(null);
     } else {
-      Lib.current.addEventListener(Event.ADDED_TO_STAGE, partialAdded);
+      Lib.current.addEventListener(Event.ADDED_TO_STAGE, onAdded);
     }
   }
 
-  function onAdded(ev: Event, scene:Group): Void {
-    Lib.current.removeEventListener(Event.ADDED_TO_STAGE, partialAdded);
+  function onAdded(ev: Event): Void {
+    Lib.current.removeEventListener(Event.ADDED_TO_STAGE, onAdded);
 
     Lib.current.addChild(this);
 
@@ -40,7 +40,6 @@ class Game extends Sprite {
     Lib.current.stage.addEventListener(Event.ENTER_FRAME, onFrame);
     Lib.current.stage.addEventListener(Event.RESIZE, onResize);
     onResize(null);
-    this.scene = scene;
   }
 
   function onResize(ev) {
@@ -48,17 +47,26 @@ class Game extends Sprite {
     Left.height = Lib.current.stage.stageHeight;
   }
 
-  public function set_scene(s: Group): Group {
-    this.scene = s;
-    Left.view = new View(Left.width, Left.height);
-    if (numChildren > 0) {
-      removeChildren(0, numChildren-1);
-    }
-    addChild(Left.view.sprite);
-    return this.scene;
+  public function addView(v: View) {
+    Left.views.push(v);
+    addChild(v.sprite);
+  }
+
+  public function setScene(s: Void->Group) {
+    this.nextscene = s;
   }
 
   function onFrame(ev) {
+    if (this.nextscene != null) {
+      Left.views = [];
+      if (numChildren > 0) {
+        removeChildren(0, numChildren-1);
+      }
+      addView(new View());
+      this.scene = this.nextscene();
+      this.nextscene = null;
+    }
+
     var t = Lib.getTimer();
     Left.elapsed = (t - currentTime)/1000.0;
     currentTime = t;
@@ -71,6 +79,8 @@ class Game extends Sprite {
     scene.update();
 
     // draw
-    Left.view.render(scene);
+    for (view in Left.views) {
+      view.render(scene);
+    }
   }
 }

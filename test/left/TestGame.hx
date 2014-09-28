@@ -20,8 +20,8 @@ class TestObject extends Object {
   override public function draw(view: View) {
     // for (i in 0...1000) {
     view.draw(img, Left.width/2, Left.height/2, Math.PI*2*s/1000);
-    view.draw(img2, Left.width/2 + 200*Math.cos(2*Math.PI*s/300),
-      Left.height/2 + 200*Math.sin(2*Math.PI*s/300));
+    view.draw(img2, Left.width/2 + 300*Math.cos(2*Math.PI*s/300),
+      Left.height/2 + 300*Math.sin(2*Math.PI*s/300));
     // }
     s++;
   }
@@ -31,12 +31,18 @@ class TestScene extends Group {
   public function new() {
     super();
     add(new TestObject());
+    var v = new View();
+    v.sprite.scaleX = v.sprite.scaleY = 0.3;
+    v.sprite.x = 550;
+    v.sprite.y = 300;
+    Left.game.addView(v);
   }
 }
 
 class TestGame extends Game {
   public function new() {
-    super(new TestScene());
+    super();
+    setScene(function() return new TestScene());
   }
 
   public static function main() {

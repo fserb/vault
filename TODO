@@ -13,6 +13,8 @@ TODO
 left : the minimal game library
 ===============================
 
+[ TODO ]
+
 [ vault.left ]
 - Game: resize event, scene management, framerate, fullscreen
 - Atlas: BitmapData manager

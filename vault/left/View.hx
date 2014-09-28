@@ -1,6 +1,7 @@
 package vault.left;
 
 import flash.display.Sprite;
+import flash.geom.Rectangle;
 import openfl.display.Tilesheet;
 import vault.left.Group;
 import vault.left.Image;
@@ -28,11 +29,12 @@ class View {
   public var flags: Int = Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2;
 
   public function new(width:Int = 0, height:Int = 0) {
-    sprite = new Sprite();
-    sprite.x = sprite.y = 0;
     pos = Vec2.make(0, 0);
-    this.width = width;
-    this.height = height;
+    this.width = width == 0 ? Left.width : width;
+    this.height = height == 0 ? Left.height : height;
+    sprite = new Sprite();
+    sprite.scrollRect = new Rectangle(0, 0, this.width, this.height);
+    sprite.x = sprite.y = 0;
   }
 
   public function draw(img: Image, x: Float, y: Float, ?angle: Float = 0.0,
