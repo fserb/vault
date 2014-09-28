@@ -19,6 +19,7 @@ class Game extends Sprite {
     Left.game = this;
 
     Left.views = new Array<View>();
+    Left.atlas = new Atlas();
 
     if (Lib.current.stage != null) {
       onAdded(null);
@@ -70,7 +71,16 @@ class Game extends Sprite {
     var t = Lib.getTimer();
     Left.elapsed = (t - currentTime)/1000.0;
     currentTime = t;
-    trace(Left.elapsed + " - FPS: " + 1/Left.elapsed);
+
+    var orders = 0;
+    var cmds = 0;
+    var a = Left.views[0].draworder != null ? Left.views[0].draworder.next : null;
+    while (a != null) {
+      orders += 1;
+      cmds += Std.int(a.data.length/8);
+      a = a.next;
+    }
+    // trace(Left.elapsed + " - FPS: " + 1/Left.elapsed + " - " + orders + " / " + cmds);
 
     // input
     // TODO: keyboard/gamepad/mouse input update

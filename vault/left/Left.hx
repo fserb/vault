@@ -14,4 +14,6 @@ class Left {
   static public var elapsed: Float;
 
   static public var views: Array<View>;
+
+  static public var atlas: Atlas;
 }

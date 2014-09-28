@@ -68,7 +68,7 @@ class View {
 
     nextdraw = draworder.next;
     while (nextdraw != null) {
-      nextdraw.tilesheet.drawTiles(sprite.graphics, nextdraw.data, false, flags);
+      nextdraw.tilesheet.drawTiles(sprite.graphics, nextdraw.data, true, flags);
       nextdraw = nextdraw.next;
     }
   }
