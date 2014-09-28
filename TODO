@@ -23,6 +23,25 @@ left : the minimal game library
 - Gamepad: Input system
 - Console: FPS + watch variables
 
+[ render ]
+  >> view.draw(image, x, y, rotation, scale, alpha);
+
+  Image:
+    - single tile
+    - multiple tiles: image[n]
+
+  Atlas:
+    -
+
+Bitmapdata cases:
+  - Loaded image --> Atlas cache
+  - Loaded tiled image --> Atlas cache
+  - pre-generated BMD
+  - mutable BMD
+
+
+
+
 
 
 ugl : µ game library

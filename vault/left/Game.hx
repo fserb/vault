@@ -62,6 +62,7 @@ class Game extends Sprite {
     var t = Lib.getTimer();
     Left.elapsed = (t - currentTime)/1000.0;
     currentTime = t;
+    trace(Left.elapsed + " - FPS: " + 1/Left.elapsed);
 
     // input
     // TODO: keyboard/gamepad/mouse input update
