@@ -10,6 +10,21 @@ TODO
 - Music library?
 
 
+left : the minimal game library
+===============================
+
+[ vault.left ]
+- Game: resize event, scene management, framerate, fullscreen
+- Atlas: BitmapData manager
+- Sprite: Object with a sprite utils and pp collision detection
+- Tilemap: Object for tilemap
+- Backdrop: Object for backdrop
+- Keyboard: Input system
+- Gamepad: Input system
+- Console: FPS + watch variables
+
+
+
 ugl : µ game library
 ====================
 

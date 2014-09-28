@@ -17,7 +17,7 @@ class Ray {
 
     if (Std.int(p1.x) == Std.int(p2.x) && Std.int(p1.y) == Std.int(p2.y)) {
       //since it doesn't cross any boundaries, there can't be a collision
-      return to;
+      return to.copy();
     }
 
     //find out which direction to step, on each axis
@@ -75,7 +75,7 @@ class Ray {
       }
     }
     //no intersection found, just return end point:
-    return to;
+    return to.copy();
   }
 }
 
