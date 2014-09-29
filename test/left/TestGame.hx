@@ -6,8 +6,10 @@ import vault.left.Image;
 import vault.left.Key;
 import vault.left.Object;
 import vault.left.Sprite;
+import vault.left.Tilemap;
 import vault.left.View;
 import vault.left.Left;
+import vault.Vec2;
 
 class TestObject extends Object {
   var img: Image;
@@ -56,9 +58,7 @@ class TestSprite extends Sprite {
   }
 
   override public function update() {
-    // angle += Left.elapsed*2*Math.PI/10;
-    if (Left.key.pressed(Key.A)) { angle += Left.elapsed*Math.PI; }
-    if (Left.key.pressed(Key.D)) { angle -= Left.elapsed*Math.PI; }
+    angle += Left.elapsed*2*Math.PI/10;
 
   }
 }
@@ -77,9 +77,6 @@ class SecondSprite extends Sprite {
     if (Left.key.pressed(Key.UP)) { pos.y -= Left.elapsed*100; }
     if (Left.key.pressed(Key.DOWN)) { pos.y += Left.elapsed*100; }
 
-    if (Left.key.pressed(Key.Q)) { angle += Left.elapsed*Math.PI; }
-    if (Left.key.pressed(Key.E)) { angle -= Left.elapsed*Math.PI; }
-
     var sc: TestScene = cast Left.game.scene;
 
     collide(sc.s1);
@@ -89,18 +86,51 @@ class SecondSprite extends Sprite {
 class TestScene extends Group {
   public var s1: Sprite;
   public var s2: Sprite;
+  public var map: Tilemap;
   public function new() {
     super();
     // add(new TestObject());
+
+    var bmd = new BitmapData(150, 100, true, 0);
+    bmd.fillRect(new Rectangle(50, 0, 50, 50), 0xFF00FF00);
+    bmd.fillRect(new Rectangle(100, 0, 50, 50), 0xFFFFFF00);
+    bmd.fillRect(new Rectangle(0, 50, 50, 50), 0xFF0000FF);
+    bmd.fillRect(new Rectangle(50, 50, 50, 50), 0xFFFF0000);
+    bmd.fillRect(new Rectangle(100, 0, 50, 50), 0xFF00FFFF);
+
+    var data = new Array<Int>();
+    var dim = 20;
+    for (y in 0...dim) {
+      for (x in 0...dim) {
+        var c = Std.int(6*Vec2.make(x - dim/2, y -dim/2).length/10)%6;
+        if (x == 0 || y == 0 || x == dim-1 || y == dim -1) c = 4;
+        data.push(c);
+      }
+    }
+
+    map = new Tilemap(data, dim, dim, Image.loadTiledBitmap(bmd, 50, 50));
     s1 = new TestSprite();
     s2 = new SecondSprite();
+    add(map);
     add(s1);
     add(s2);
     var v = new View();
     v.scale = 0.3;
     v.sprite.x = 550;
     v.sprite.y = 300;
-    Left.game.addView(v);
+    // Left.game.addView(v);
+  }
+
+  override public function update() {
+    super.update();
+    if (Left.key.pressed(Key.W)) { Left.views[0].pos.y -= Left.elapsed*200; }
+    if (Left.key.pressed(Key.S)) { Left.views[0].pos.y += Left.elapsed*200; }
+    if (Left.key.pressed(Key.A)) { Left.views[0].pos.x -= Left.elapsed*200; }
+    if (Left.key.pressed(Key.D)) { Left.views[0].pos.x += Left.elapsed*200; }
+
+    // if (Left.key.just(Key.R)) { Left.views[1].scale *= 1.1; }
+    // if (Left.key.just(Key.F)) { Left.views[1].scale /= 1.1; }
+
   }
 }
 

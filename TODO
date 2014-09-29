@@ -14,10 +14,11 @@ left : the minimal game library
 ===============================
 
 [ TODO ]
-- Tilemap
 - Backdrop
+- View: camera translation / rotation / scale
 - View: Object that are view-specific
 - Sprite: basic animation
+- Sprite: support for scrollfactor
 - Sprite: collision working for multiple frames
 - Game: fullscreen toggle
 - Gamepad
