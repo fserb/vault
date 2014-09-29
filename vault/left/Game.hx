@@ -11,7 +11,7 @@ import vault.left.View;
 
 class Game extends Sprite {
   var currentTime: Float;
-  var scene: Group;
+  public var scene(default, null): Group;
   var nextscene: Void -> Group = null;
 
   public function new() {

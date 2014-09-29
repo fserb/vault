@@ -14,11 +14,11 @@ left : the minimal game library
 ===============================
 
 [ TODO ]
-- Sprite collision detection
 - Tilemap
 - Backdrop
 - View: Object that are view-specific
-- Sprite basic animation
+- Sprite: basic animation
+- Sprite: collision working for multiple frames
 - Game: fullscreen toggle
 - Gamepad
 - Console

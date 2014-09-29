@@ -50,13 +50,16 @@ class TestSprite extends Sprite {
   public function new() {
     super();
     var bmd = new BitmapData(80, 80);
-    bmd.fillRect(bmd.rect, 0xFFFFFFFF);
+    bmd.fillRect(bmd.rect, 0xFF0000FF);
     image = Image.loadBitmapData(bmd);
     pos.x = pos.y = 300;
   }
 
   override public function update() {
-    angle += Left.elapsed*2*Math.PI/10;
+    // angle += Left.elapsed*2*Math.PI/10;
+    if (Left.key.pressed(Key.A)) { angle += Left.elapsed*Math.PI; }
+    if (Left.key.pressed(Key.D)) { angle -= Left.elapsed*Math.PI; }
+
   }
 }
 
@@ -64,27 +67,35 @@ class TestSprite extends Sprite {
 class SecondSprite extends Sprite {
   public function new() {
     super();
-    var bmd = new BitmapData(40, 40);
-    bmd.fillRect(bmd.rect, 0xFFFF0000);
-    image = Image.loadBitmapData(bmd);
+    image= Image.loadImage("assets/test.png");
     pos.x = pos.y = 400;
   }
 
   override public function update() {
-    if (Left.key.pressed(Key.LEFT)) { pos.x -= Left.elapsed*150; }
-    if (Left.key.pressed(Key.RIGHT)) { pos.x += Left.elapsed*150; }
-    if (Left.key.pressed(Key.UP)) { pos.y -= Left.elapsed*150; }
-    if (Left.key.pressed(Key.DOWN)) { pos.y += Left.elapsed*150; }
+    if (Left.key.pressed(Key.LEFT)) { pos.x -= Left.elapsed*100; }
+    if (Left.key.pressed(Key.RIGHT)) { pos.x += Left.elapsed*100; }
+    if (Left.key.pressed(Key.UP)) { pos.y -= Left.elapsed*100; }
+    if (Left.key.pressed(Key.DOWN)) { pos.y += Left.elapsed*100; }
 
+    if (Left.key.pressed(Key.Q)) { angle += Left.elapsed*Math.PI; }
+    if (Left.key.pressed(Key.E)) { angle -= Left.elapsed*Math.PI; }
+
+    var sc: TestScene = cast Left.game.scene;
+
+    collide(sc.s1);
   }
 }
 
 class TestScene extends Group {
+  public var s1: Sprite;
+  public var s2: Sprite;
   public function new() {
     super();
     // add(new TestObject());
-    add(new TestSprite());
-    add(new SecondSprite());
+    s1 = new TestSprite();
+    s2 = new SecondSprite();
+    add(s1);
+    add(s2);
     var v = new View();
     v.scale = 0.3;
     v.sprite.x = 550;

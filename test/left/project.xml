@@ -12,7 +12,7 @@
   <set name="SWF_VERSION" value="11.8" />
 
   <source path="." />
-  <assets path="." />
+  <assets path="assets" />
 
   <haxelib name="openfl" />
   <haxelib name="vault" />
