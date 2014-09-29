@@ -14,17 +14,16 @@ left : the minimal game library
 ===============================
 
 [ TODO ]
-- Backdrop
-- View: camera translation / rotation / scale
+- View: camera rotation / scale
 - View: Object that are view-specific
 - Sprite: basic animation
 - Sprite: support for scrollfactor
-- Sprite: collision working for multiple frames
+- Sprite: collision working for sub frames
 - Game: fullscreen toggle
-- Gamepad
 - Console
 - Console: FPS, memory, timers
 - Console: watch variables
+- Gamepad
 
 
 ugl : µ game library

@@ -29,18 +29,18 @@ class Tilemap extends Object {
     var w = image[0].width;
     var h = image[0].height;
 
-    var startx = Std.int((view.pos.x - pos.x)/w);
-    var starty = Std.int((view.pos.y - pos.y)/h);
-    var endx = startx + Std.int(view.width/w) + 2;
-    var endy = starty + Std.int(view.height/h) + 2;
+    var startx = Std.int(Math.floor((view.pos.x - pos.x)/w));
+    var starty = Std.int(Math.floor((view.pos.y - pos.y)/h));
+    var endx = startx + Std.int(Math.ceil(view.width/w)) + 2;
+    var endy = starty + Std.int(Math.ceil(view.height/h)) + 2;
 
     startx = EMath.max(0, startx);
     starty = EMath.max(0, starty);
     endx = EMath.min(this.width, endx);
     endy = EMath.min(this.height, endy);
 
-    var posx = Std.int(pos.x + startx*w - view.pos.x);
-    var posy = Std.int(pos.y + starty*h - view.pos.y);
+    var posx = Std.int(Math.floor(pos.x + startx*w - view.pos.x));
+    var posy = Std.int(Math.floor(pos.y + starty*h - view.pos.y));
 
     var dy = posy;
     for (y in starty...endy) {

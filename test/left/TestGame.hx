@@ -1,5 +1,6 @@
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
+import vault.left.Backdrop;
 import vault.left.Game;
 import vault.left.Group;
 import vault.left.Image;
@@ -111,6 +112,7 @@ class TestScene extends Group {
     map = new Tilemap(data, dim, dim, Image.loadTiledBitmap(bmd, 50, 50));
     s1 = new TestSprite();
     s2 = new SecondSprite();
+    add(new Backdrop(Image.loadImage("assets/clouds.png"), 0.2, 0.2));
     add(map);
     add(s1);
     add(s2);
