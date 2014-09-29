@@ -16,15 +16,14 @@ class Image_ {
   public var tileid: Int = -1;
   public var width: Int = 0;
   public var height: Int = 0;
+  public var offset: Vec2;
 
   public var bitmap(default, null): BitmapData = null;
   public var tiles: Array<Image> = null;
   var zone: vault.left.Atlas.Zone = null;
 
-  function new() {}
-
-  @:arrayAccess public function getsub(key:Int): Image {
-    return this.tiles[key];
+  function new() {
+    offset = Vec2.make(0, 0);
   }
 }
 
@@ -37,20 +36,12 @@ abstract Image(Image_) to Image_ from Image_ {
     return this.tiles[key];
   }
 
-  static public function loadImage(filename: String): Image {
-    return loadBitmapData(Assets.getBitmapData(filename));
-  }
-
-  static public function loadBitmapData(bmd: BitmapData): Image {
+  static public function create(bmd: BitmapData): Image {
     var im = Left.atlas.storeImage(bmd);
     return im;
   }
 
-  static public function loadTiled(filename: String, width: Int, height: Int): Image {
-    return loadTiledBitmap(Assets.getBitmapData(filename), width, height);
-  }
-
-  static public function loadTiledBitmap(bmd: BitmapData, width: Int, height: Int): Image {
+  static public function createTiled(bmd: BitmapData, width: Int, height: Int, centered: Bool = true): Image {
     var base = Left.atlas.storeImage(bmd);
 
     var tx = Std.int(bmd.width/width);
@@ -68,6 +59,10 @@ abstract Image(Image_) to Image_ from Image_ {
         im.tileid = im.tilesheet.addTileRect(new Rectangle(
           base.zone.x + x*width, base.zone.y + y*width,
           width, height), center);
+        if (centered) {
+          im.offset.x = width/2.0;
+          im.offset.y = height/2.0;
+        }
         base.tiles.push(im);
       }
     }
@@ -80,6 +75,8 @@ abstract Image(Image_) to Image_ from Image_ {
     var im = new Image_();
     im.width = width;
     im.height = height;
+    im.offset.x = width/2.0;
+    im.offset.y = height/2.0;
     im.bitmap = new BitmapData(width, height, true, 0);
     im.tilesheet = new Tilesheet(im.bitmap);
     im.tileid = im.tilesheet.addTileRect(im.bitmap.rect,

@@ -138,9 +138,11 @@ class Atlas {
     im.height = bmd.height;
     im.tilesheet = tilesheets[im.zone.sheet];
     im.bitmap = bmd;
+    im.offset.x = bmd.width/2;
+    im.offset.y = bmd.height/2;
     im.tileid = im.tilesheet.addTileRect(
       new Rectangle(im.zone.x, im.zone.y, bmd.width, bmd.height),
-      new Point(bmd.width/2, bmd.height/2));
+      new Point(im.offset.x, im.offset.y));
     bitmaps[im.zone.sheet].copyPixels(bmd, bmd.rect,
       new Point(im.zone.x, im.zone.y));
     return im;

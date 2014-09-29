@@ -54,8 +54,8 @@ class View {
     }
 
     var l = nextdraw.data.length;
-    nextdraw.data[l++] = x;
-    nextdraw.data[l++] = y;
+    nextdraw.data[l++] = x - img.offset.x + img.width/2.0;
+    nextdraw.data[l++] = y - img.offset.y + img.height/2.0;
     nextdraw.data[l++] = img.tileid;
     nextdraw.data[l++] = cos;
     nextdraw.data[l++] = -sin;

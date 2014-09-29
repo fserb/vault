@@ -9,9 +9,9 @@ import vault.EMath;
 import vault.Vec2;
 
 class Sprite extends Object {
-  var pos: Vec2;
-  var scale: Float = 1.0;
-  var angle: Float = 0.0;
+  public var pos: Vec2;
+  public var scale: Float = 1.0;
+  public var angle: Float = 0.0;
 
   var image: Image = null;
   var frame: Int = -1;

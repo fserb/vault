@@ -49,6 +49,14 @@ class Game extends Sprite {
     Left.height = Lib.current.stage.stageHeight;
   }
 
+  public function resetViews() {
+    for (v in Left.views) {
+      removeChild(v.sprite);
+    }
+    Left.views = [];
+    addView(new View());
+  }
+
   public function addView(v: View) {
     Left.views.push(v);
     addChild(v.sprite);
@@ -60,11 +68,10 @@ class Game extends Sprite {
 
   function onFrame(ev) {
     if (this.nextscene != null) {
-      Left.views = [];
       if (numChildren > 0) {
         removeChildren(0, numChildren-1);
       }
-      addView(new View());
+      resetViews();
       this.scene = this.nextscene();
       this.nextscene = null;
     }
