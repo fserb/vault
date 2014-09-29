@@ -16,4 +16,6 @@ class Left {
   static public var views: Array<View>;
 
   static public var atlas: Atlas;
+
+  static public var key: Key;
 }

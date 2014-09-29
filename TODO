@@ -14,20 +14,16 @@ left : the minimal game library
 ===============================
 
 [ TODO ]
+- Sprite collision detection
+- Tilemap
+- Backdrop
 - View: Object that are view-specific
-
-[ vault.left ]
-- Game: resize event, scene management, framerate, fullscreen
-- Sprite: Object with a sprite utils and pp collision detection
-- Tilemap: Object for tilemap
-- Backdrop: Object for backdrop
-- Keyboard: Input system
-- Gamepad: Input system
-- Console: FPS + watch variables
-
-
-
-
+- Sprite basic animation
+- Game: fullscreen toggle
+- Gamepad
+- Console
+- Console: FPS, memory, timers
+- Console: watch variables
 
 
 ugl : µ game library

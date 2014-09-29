@@ -37,6 +37,7 @@ class Game extends Sprite {
     Lib.current.stage.align = StageAlign.TOP_LEFT;
 
     currentTime = Lib.getTimer();
+    Left.key = new Key();
 
     Lib.current.stage.addEventListener(Event.ENTER_FRAME, onFrame);
     Lib.current.stage.addEventListener(Event.RESIZE, onResize);
@@ -83,7 +84,7 @@ class Game extends Sprite {
     // trace(Left.elapsed + " - FPS: " + 1/Left.elapsed + " - " + orders + " / " + cmds);
 
     // input
-    // TODO: keyboard/gamepad/mouse input update
+    Left.key.update();
 
     // update
     scene.update();

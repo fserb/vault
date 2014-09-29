@@ -14,6 +14,8 @@ Interface for all images that need to be render on a view
 class Image_ {
   public var tilesheet: Tilesheet = null;
   public var tileid: Int = -1;
+  public var width: Int = 0;
+  public var height: Int = 0;
 
   public var bitmap(default, null): BitmapData = null;
   public var tiles: Array<Image> = null;
@@ -59,6 +61,8 @@ abstract Image(Image_) to Image_ from Image_ {
     for (y in 0...ty) {
       for (x in 0...tx) {
         var im = new Image_();
+        im.width = width;
+        im.height = height;
         im.bitmap = base.bitmap;
         im.tilesheet = base.tilesheet;
         im.tileid = im.tilesheet.addTileRect(new Rectangle(
@@ -74,6 +78,8 @@ abstract Image(Image_) to Image_ from Image_ {
 
   static public function createMutableBitmap(width: Int, height: Int): Image {
     var im = new Image_();
+    im.width = width;
+    im.height = height;
     im.bitmap = new BitmapData(width, height, true, 0);
     im.tilesheet = new Tilesheet(im.bitmap);
     im.tileid = im.tilesheet.addTileRect(im.bitmap.rect,

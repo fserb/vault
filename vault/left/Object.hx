@@ -8,7 +8,7 @@ class Object {
 
   public function update() {}
 
-  public function draw(vp: View) {}
+  public function draw(view: View) {}
 
   public function destroy() {
     dead = true;

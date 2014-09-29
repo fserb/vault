@@ -134,7 +134,10 @@ class Atlas {
     im.zone.y += BORDER;
     im.zone.w -= 2*BORDER;
     im.zone.h -= 2*BORDER;
+    im.width = bmd.width;
+    im.height = bmd.height;
     im.tilesheet = tilesheets[im.zone.sheet];
+    im.bitmap = bmd;
     im.tileid = im.tilesheet.addTileRect(
       new Rectangle(im.zone.x, im.zone.y, bmd.width, bmd.height),
       new Point(bmd.width/2, bmd.height/2));

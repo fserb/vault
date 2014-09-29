@@ -3,7 +3,9 @@ import flash.geom.Rectangle;
 import vault.left.Game;
 import vault.left.Group;
 import vault.left.Image;
+import vault.left.Key;
 import vault.left.Object;
+import vault.left.Sprite;
 import vault.left.View;
 import vault.left.Left;
 
@@ -44,12 +46,47 @@ class TestObject extends Object {
   }
 }
 
+class TestSprite extends Sprite {
+  public function new() {
+    super();
+    var bmd = new BitmapData(80, 80);
+    bmd.fillRect(bmd.rect, 0xFFFFFFFF);
+    image = Image.loadBitmapData(bmd);
+    pos.x = pos.y = 300;
+  }
+
+  override public function update() {
+    angle += Left.elapsed*2*Math.PI/10;
+  }
+}
+
+
+class SecondSprite extends Sprite {
+  public function new() {
+    super();
+    var bmd = new BitmapData(40, 40);
+    bmd.fillRect(bmd.rect, 0xFFFF0000);
+    image = Image.loadBitmapData(bmd);
+    pos.x = pos.y = 400;
+  }
+
+  override public function update() {
+    if (Left.key.pressed(Key.LEFT)) { pos.x -= Left.elapsed*150; }
+    if (Left.key.pressed(Key.RIGHT)) { pos.x += Left.elapsed*150; }
+    if (Left.key.pressed(Key.UP)) { pos.y -= Left.elapsed*150; }
+    if (Left.key.pressed(Key.DOWN)) { pos.y += Left.elapsed*150; }
+
+  }
+}
+
 class TestScene extends Group {
   public function new() {
     super();
-    add(new TestObject());
+    // add(new TestObject());
+    add(new TestSprite());
+    add(new SecondSprite());
     var v = new View();
-    v.sprite.scaleX = v.sprite.scaleY = 0.3;
+    v.scale = 0.3;
     v.sprite.x = 550;
     v.sprite.y = 300;
     Left.game.addView(v);
