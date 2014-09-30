@@ -13,8 +13,8 @@ class Sprite extends Object {
   public var scale: Float = 1.0;
   public var angle: Float = 0.0;
 
-  var image: Image = null;
-  var frame: Int = -1;
+  public var image: Image = null;
+  public var frame: Int = -1;
 
   public function new() {
     pos = Vec2.make(0, 0);
