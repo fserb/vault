@@ -36,7 +36,7 @@ class Game extends Sprite {
     Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
     Lib.current.stage.align = StageAlign.TOP_LEFT;
 
-    currentTime = Lib.getTimer();
+    currentTime = 0;
     Left.key = new Key();
 
     Lib.current.stage.addEventListener(Event.ENTER_FRAME, onFrame);
@@ -64,6 +64,7 @@ class Game extends Sprite {
 
   public function setScene(s: Void->Group) {
     this.nextscene = s;
+    this.currentTime = 0;
   }
 
   function onFrame(ev) {
@@ -77,7 +78,7 @@ class Game extends Sprite {
     }
 
     var t = Lib.getTimer();
-    Left.elapsed = (t - currentTime)/1000.0;
+    Left.elapsed = Math.min(0.1, (currentTime > 0 ? t - currentTime : 0)/1000.0);
     currentTime = t;
 
     var orders = 0;
