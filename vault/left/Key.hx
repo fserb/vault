@@ -65,6 +65,9 @@ class Key {
   public inline static var RIGHT = 39;
   public inline static var DOWN = 40;
 
+  public inline static var COMMA = 188;
+  public inline static var PERIOD = 190;
+
   public inline static var ENTER = 13;
   public inline static var COMMAND = 15;
   public inline static var CONTROL = 17;
@@ -127,16 +130,16 @@ class Key {
   public inline static var F14 = 125;
   public inline static var F15 = 126;
 
-  public inline static var DIGIT_0 = 48;
-  public inline static var DIGIT_1 = 49;
-  public inline static var DIGIT_2 = 50;
-  public inline static var DIGIT_3 = 51;
-  public inline static var DIGIT_4 = 52;
-  public inline static var DIGIT_5 = 53;
-  public inline static var DIGIT_6 = 54;
-  public inline static var DIGIT_7 = 55;
-  public inline static var DIGIT_8 = 56;
-  public inline static var DIGIT_9 = 57;
+  public inline static var ZERO = 48;
+  public inline static var ONE = 49;
+  public inline static var TWO = 50;
+  public inline static var THREE = 51;
+  public inline static var FOUR = 52;
+  public inline static var FIVE = 53;
+  public inline static var SIX = 54;
+  public inline static var SEVEN = 55;
+  public inline static var EIGHT = 56;
+  public inline static var NINE = 57;
 
   public inline static var NUMPAD_0 = 96;
   public inline static var NUMPAD_1 = 97;
