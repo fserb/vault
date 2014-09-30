@@ -18,8 +18,8 @@ Its main tech point is the ability to execute rendering orders from Objects.
 class View {
   // world space coordinates of the View:
   public var pos: Vec2;
-  public var width: Int;
-  public var height: Int;
+  public var width(default, set): Int;
+  public var height(default, set): Int;
 
   public var sprite: Sprite;
   public var scale(default, set): Float;
@@ -31,12 +31,23 @@ class View {
 
   public function new(width:Int = 0, height:Int = 0) {
     pos = Vec2.make(0, 0);
+    sprite = new Sprite();
     this.width = width == 0 ? Left.width : width;
     this.height = height == 0 ? Left.height : height;
-    sprite = new Sprite();
-    sprite.scrollRect = new Rectangle(0, 0, this.width, this.height);
     sprite.x = sprite.y = 0;
     scale = 1.0;
+  }
+
+  public function set_width(width: Int): Int {
+    this.width = width;
+    sprite.scrollRect = new Rectangle(0, 0, width, height);
+    return width;
+  }
+
+  public function set_height(height: Int): Int {
+    this.height = height;
+    sprite.scrollRect = new Rectangle(0, 0, width, height);
+    return height;
   }
 
   public function set_scale(f: Float): Float {
