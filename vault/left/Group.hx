@@ -21,6 +21,7 @@ class Group extends Object {
   override public function update() {
     for (m in members) {
       if (!m.dead) {
+        Left.profile.objectCount++;
         m.update();
       } else {
         members.remove(m);

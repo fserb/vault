@@ -1,5 +1,6 @@
 package vault.left;
 
+import vault.left.Console;
 import vault.left.Game;
 import vault.left.View;
 
@@ -17,4 +18,8 @@ class Left {
   static public var atlas: Atlas;
 
   static public var key: Key;
+
+  static public var console: Console;
+
+  static public var profile: Profile;
 }

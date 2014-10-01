@@ -7,6 +7,7 @@ import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import vault.left.Group;
 import vault.left.Left;
+import vault.left.Console.Profile;
 import vault.left.View;
 
 class Game extends Sprite {
@@ -18,6 +19,8 @@ class Game extends Sprite {
 
   public function new() {
     super();
+    Left.console = new Console();
+    Left.profile = new Profile();
     Left.game = this;
 
     Left.views = new Array<View>();
@@ -41,6 +44,7 @@ class Game extends Sprite {
     currentTime = 0;
     frameCount = 0;
     fps = 0.0;
+    Left.console.watch(this, "fps", "FPS");
     Left.key = new Key();
 
     Lib.current.stage.addEventListener(Event.ENTER_FRAME, onFrame);
@@ -72,6 +76,8 @@ class Game extends Sprite {
   }
 
   function onFrame(ev) {
+    Left.profile.mark();
+
     if (this.nextscene != null) {
       if (numChildren > 0) {
         removeChildren(0, numChildren-1);
@@ -86,18 +92,8 @@ class Game extends Sprite {
     Left.elapsed = Math.min(0.1, (currentTime > 0 ? t - currentTime : 0)/1000.0);
     currentTime = t;
     if (Left.elapsed > 0) {
-      fps = (9.0*fps + 1.0/Left.elapsed)/10.0;
+      fps = Math.round((9.0*fps + 1.0/Left.elapsed)/10.0);
     }
-
-    var orders = 0;
-    var cmds = 0;
-    var a = Left.views[0].draworder != null ? Left.views[0].draworder.next : null;
-    while (a != null) {
-      orders += 1;
-      cmds += Std.int(a.data.length/8);
-      a = a.next;
-    }
-    // trace(Left.elapsed + " - FPS: " + 1/Left.elapsed + " - " + orders + " / " + cmds);
 
     // input
     Left.key.update();
@@ -105,9 +101,16 @@ class Game extends Sprite {
     // update
     scene.update();
 
+    Left.profile.updateTime = Left.profile.average(Left.profile.updateTime, Left.profile.mark());
+
     // draw
     for (view in Left.views) {
       view.render(scene);
     }
+
+    Left.profile.renderTime = Left.profile.average(Left.profile.renderTime, Left.profile.mark());
+
+    Left.console.update();
+    Left.profile.update();
   }
 }

@@ -73,6 +73,8 @@ class View {
     nextdraw.data[l++] = sin;
     nextdraw.data[l++] = cos;
     nextdraw.data[l++] = alpha;
+
+    Left.profile.renderDraw++;
   }
 
   public function render(scene: Group) {
@@ -86,6 +88,7 @@ class View {
 
     nextdraw = draworder.next;
     while (nextdraw != null) {
+      Left.profile.renderTiles++;
       nextdraw.tilesheet.drawTiles(sprite.graphics, nextdraw.data, true, flags);
       nextdraw = nextdraw.next;
     }
