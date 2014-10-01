@@ -76,7 +76,7 @@ class Game extends Sprite {
   }
 
   function onFrame(ev) {
-    Left.profile.mark();
+    Left.profile.start("left.update");
 
     if (this.nextscene != null) {
       if (numChildren > 0) {
@@ -101,14 +101,15 @@ class Game extends Sprite {
     // update
     scene.update();
 
-    Left.profile.updateTime = Left.profile.average(Left.profile.updateTime, Left.profile.mark());
+    Left.profile.end("left.update");
+    Left.profile.start("left.render");
 
     // draw
     for (view in Left.views) {
       view.render(scene);
     }
 
-    Left.profile.renderTime = Left.profile.average(Left.profile.renderTime, Left.profile.mark());
+    Left.profile.end("left.render");
 
     Left.console.update();
     Left.profile.update();

@@ -45,6 +45,7 @@ class Atlas {
   }
 
   public function dumpAtlas() {
+#if !flash
     for (i in 0...bitmaps.length) {
       var b = bitmaps[i];
       var bmp = new BitmapData(b.width, b.height, true, 0);
@@ -64,6 +65,7 @@ class Atlas {
       fo.writeString(ba.toString());
       fo.close();
     }
+#end
   }
 
   function splitZone(free: Zone, used: Zone): Bool {
