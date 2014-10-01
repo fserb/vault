@@ -42,32 +42,26 @@ abstract Image(Image_) to Image_ from Image_ {
   }
 
   static public function createTiled(bmd: BitmapData, width: Int, height: Int, centered: Bool = true): Image {
-    var base = Left.atlas.storeImage(bmd);
-
     var tx = Std.int(bmd.width/width);
     var ty = Std.int(bmd.height/height);
+
+    var base = new Image_();
     base.tiles = [];
 
     var center = new Point(width/2, height/2);
     for (y in 0...ty) {
       for (x in 0...tx) {
-        var im = new Image_();
-        im.width = width;
-        im.height = height;
-        im.bitmap = base.bitmap;
-        im.tilesheet = base.tilesheet;
-        im.tileid = im.tilesheet.addTileRect(new Rectangle(
-          base.zone.x + x*width, base.zone.y + y*width,
-          width, height), center);
-        if (centered) {
-          im.offset.x = width/2.0;
-          im.offset.y = height/2.0;
+        var b = new BitmapData(width, height);
+        b.copyPixels(bmd, new Rectangle(x*width, y*height, width, height), new Point(0, 0));
+        var im = create(b);
+        if (!centered) {
+          im.offset.x = 0;
+          im.offset.y = 0;
         }
         base.tiles.push(im);
       }
     }
 
-    // create new subimages with tiles.
     return base;
   }
 

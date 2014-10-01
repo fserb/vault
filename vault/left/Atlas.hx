@@ -19,13 +19,51 @@ class Atlas {
   var tilesheets: Array<Tilesheet>;
   var zones: Array<Zone>;
 
-  var BORDER: Int = 1;
-  var DIM: Int = 2048;
+  var BORDER: Int = 2;
+  static public var DIM: Int = 2048;
 
   public function new() {
     zones = new Array<Zone>();
     bitmaps = new Array<BitmapData>();
     tilesheets = new Array<Tilesheet>();
+  }
+
+  public function debug() {
+    var b = new flash.display.Bitmap(bitmaps[0]);
+    // b.scaleX = b.scaleY = 500/2048;
+    b.scaleX = b.scaleY = 0.5;
+    b.x = 5;
+    b.y = -2048*b.scaleX+ 576 - 5;
+    Left.game.addChild(b);
+  }
+
+  function drawRect(bmp: BitmapData, x: Int, y: Int, w: Int, h: Int, c: UInt) {
+    bmp.fillRect(new Rectangle(x, y, 1, h), c);
+    bmp.fillRect(new Rectangle(x+w-1, y, 1, h), c);
+    bmp.fillRect(new Rectangle(x, y, w, 1), c);
+    bmp.fillRect(new Rectangle(x, y+h-1, w, 1), c);
+  }
+
+  public function dumpAtlas() {
+    for (i in 0...bitmaps.length) {
+      var b = bitmaps[i];
+      var bmp = new BitmapData(b.width, b.height, true, 0);
+      bmp.copyPixels(b, b.rect, new Point(0, 0));
+
+      var j = 0;
+      for (z in zones) {
+        if (z.sheet != i) continue;
+        var c = 0xFF000000 | Std.int(0xFFFFFF*Math.random());
+        drawRect(bmp, z.x+j, z.y+j, z.w-j*2, z.h-j*2, c);
+        j++;
+      }
+
+      // Saving the BitmapData
+      var ba:flash.utils.ByteArray = bmp.encode("png", 1);
+      var fo:sys.io.FileOutput = sys.io.File.write("atlas" + i + ".png", true);
+      fo.writeString(ba.toString());
+      fo.close();
+    }
   }
 
   function splitZone(free: Zone, used: Zone): Bool {
@@ -116,8 +154,8 @@ class Atlas {
           continue;
         }
 
-        if (b.x >= a.x && b.y >= a.y &&
-            b.x + b.w <= a.x + a.w && b.x + b.h <= a.y + a.h) {
+        if ((b.x >= a.x) && (b.y >= a.y) &&
+            (b.x + b.w <= a.x + a.w) && (b.y + b.h <= a.y + a.h)) {
           zones.remove(b);
         }
       }
@@ -141,10 +179,21 @@ class Atlas {
     im.offset.x = bmd.width/2;
     im.offset.y = bmd.height/2;
     im.tileid = im.tilesheet.addTileRect(
-      new Rectangle(im.zone.x, im.zone.y, bmd.width, bmd.height),
+      new Rectangle(im.zone.x, im.zone.y, im.zone.w, im.zone.h),
       new Point(im.offset.x, im.offset.y));
-    bitmaps[im.zone.sheet].copyPixels(bmd, bmd.rect,
-      new Point(im.zone.x, im.zone.y));
+
+    for (b in 0...BORDER) {
+      bitmaps[im.zone.sheet].copyPixels(bmd, new Rectangle(0, 0, bmd.width, 1), new Point(im.zone.x-1-b, im.zone.y-1-b));
+      bitmaps[im.zone.sheet].copyPixels(bmd, new Rectangle(0, 0, bmd.width, 1), new Point(im.zone.x+b, im.zone.y-1-b));
+      bitmaps[im.zone.sheet].copyPixels(bmd, new Rectangle(0, bmd.height-1, bmd.width, 1), new Point(im.zone.x-1-b, im.zone.y+bmd.height+b));
+      bitmaps[im.zone.sheet].copyPixels(bmd, new Rectangle(0, bmd.height-1, bmd.width, 1), new Point(im.zone.x+b, im.zone.y+bmd.height+b));
+
+      bitmaps[im.zone.sheet].copyPixels(bmd, new Rectangle(0, 0, 1, bmd.height), new Point(im.zone.x-1-b, im.zone.y-1-b));
+      bitmaps[im.zone.sheet].copyPixels(bmd, new Rectangle(0, 0, 1, bmd.height), new Point(im.zone.x-1-b, im.zone.y+b));
+      bitmaps[im.zone.sheet].copyPixels(bmd, new Rectangle(bmd.width-1, 0, 1, bmd.height), new Point(im.zone.x+bmd.width+b, im.zone.y-1-b));
+      bitmaps[im.zone.sheet].copyPixels(bmd, new Rectangle(bmd.width-1, 0, 1, bmd.height), new Point(im.zone.x+bmd.width+b, im.zone.y+1+b));
+    }
+    bitmaps[im.zone.sheet].copyPixels(bmd, bmd.rect, new Point(im.zone.x, im.zone.y));
     return im;
   }
 }

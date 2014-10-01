@@ -10,6 +10,8 @@ import vault.left.Left;
 import vault.left.View;
 
 class Game extends Sprite {
+  var frameCount: Int;
+  var fps: Float;
   var currentTime: Float;
   public var scene(default, null): Group;
   var nextscene: Void -> Group = null;
@@ -37,6 +39,8 @@ class Game extends Sprite {
     Lib.current.stage.align = StageAlign.TOP_LEFT;
 
     currentTime = 0;
+    frameCount = 0;
+    fps = 0.0;
     Left.key = new Key();
 
     Lib.current.stage.addEventListener(Event.ENTER_FRAME, onFrame);
@@ -77,9 +81,13 @@ class Game extends Sprite {
       this.nextscene = null;
     }
 
+    frameCount++;
     var t = Lib.getTimer();
     Left.elapsed = Math.min(0.1, (currentTime > 0 ? t - currentTime : 0)/1000.0);
     currentTime = t;
+    if (Left.elapsed > 0) {
+      fps = (9.0*fps + 1.0/Left.elapsed)/10.0;
+    }
 
     var orders = 0;
     var cmds = 0;

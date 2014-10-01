@@ -14,11 +14,9 @@ left : the minimal game library
 ===============================
 
 [ TODO ]
-- View: camera rotation / scale
 - View: Object that are view-specific
 - Sprite: basic animation
 - Sprite: support for scrollfactor
-- Sprite: collision working for sub frames
 - Game: fullscreen toggle
 - Console
 - Console: FPS, memory, timers
