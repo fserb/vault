@@ -24,7 +24,15 @@ class Sprite extends Object {
   override public function draw(view: View) {
     if (image == null) return;
     var im = frame == -1 ? image : image[frame];
-    view.draw(im, pos.x - view.pos.x, pos.y - view.pos.y, angle, scale, alpha);
+
+    var x1 = pos.x - im.offset.x - view.pos.x;
+    var y1 = pos.y - im.offset.y - view.pos.y;
+    var x2 = x1 + im.width;
+    var y2 = y1 + im.height;
+
+    if (x1 < view.width && x2 > 0 && y1 < view.height && y2 > 0) {
+      view.draw(im, pos.x - view.pos.x, pos.y - view.pos.y, angle, scale, alpha);
+    }
   }
 
   // using this (instead of Tilesheet) means Image.bitmap must be always valid

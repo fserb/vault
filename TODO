@@ -18,9 +18,6 @@ left : the minimal game library
 - Sprite: basic animation
 - Sprite: support for scrollfactor
 - Game: fullscreen toggle
-- Console
-- Console: FPS, memory, timers
-- Console: watch variables
 - Gamepad
 
 
