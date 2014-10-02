@@ -11,6 +11,7 @@ class Left {
   static public var width(default, null): Int;
   static public var height(default, null): Int;
 
+  static public var time: Float;
   static public var elapsed: Float;
 
   static public var views: Array<View>;

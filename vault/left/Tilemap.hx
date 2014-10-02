@@ -25,7 +25,14 @@ class Tilemap extends Object {
     this.pos = Vec2.make(0, 0);
   }
 
-  override public function draw(view: View) {
+  function drawcmd(view: View, x: Int, y: Int, dx: Int, dy: Int) {
+    var d = data[x+y*width];
+    if (d != 0) {
+      view.draw(image[d], dx, dy);
+    }
+  }
+
+  override public function render(view: View) {
     var w = image[0].width;
     var h = image[0].height;
 
@@ -46,10 +53,7 @@ class Tilemap extends Object {
     for (y in starty...endy) {
       var dx = posx;
       for (x in startx...endx) {
-        var d = data[x+y*width];
-        if (d != 0) {
-          view.draw(image[d], dx, dy);
-        }
+        drawcmd(view, x, y, dx, dy);
         dx += w;
       }
       dy += h;

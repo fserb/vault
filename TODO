@@ -14,7 +14,6 @@ left : the minimal game library
 ===============================
 
 [ TODO ]
-- View: Object that are view-specific
 - Sprite: basic animation
 - Sprite: support for scrollfactor
 - Game: fullscreen toggle

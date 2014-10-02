@@ -17,7 +17,7 @@ class Backdrop extends Object {
     this.repeaty = repeaty;
   }
 
-  override public function draw(view: View) {
+  override public function render(view: View) {
     var startx = Std.int(Math.floor((view.pos.x*scrollfactor.x - pos.x)/image.width));
     var starty = Std.int(Math.floor((view.pos.y*scrollfactor.y - pos.y)/image.height));
     var endx = startx + Std.int(Math.ceil(view.width/image.width)) + 2;

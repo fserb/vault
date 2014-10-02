@@ -9,11 +9,11 @@ import vault.left.Group;
 import vault.left.Left;
 import vault.left.Console.Profile;
 import vault.left.View;
+import haxe.Timer;
 
 class Game extends Sprite {
   var frameCount: Int;
   var fps: Float;
-  var currentTime: Float;
   public var scene(default, null): Group;
   var nextscene: Void -> Group = null;
 
@@ -41,7 +41,7 @@ class Game extends Sprite {
     Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
     Lib.current.stage.align = StageAlign.TOP_LEFT;
 
-    currentTime = 0;
+    Left.time = 0;
     frameCount = 0;
     fps = 0.0;
     Left.console.watch(this, "fps", "FPS");
@@ -72,7 +72,7 @@ class Game extends Sprite {
 
   public function setScene(s: Void->Group) {
     this.nextscene = s;
-    this.currentTime = 0;
+    Left.time = 0;
   }
 
   function onFrame(ev) {
@@ -88,9 +88,9 @@ class Game extends Sprite {
     }
 
     frameCount++;
-    var t = Lib.getTimer();
-    Left.elapsed = Math.min(0.1, (currentTime > 0 ? t - currentTime : 0)/1000.0);
-    currentTime = t;
+    var t = Timer.stamp();
+    Left.elapsed = Math.min(0.1, (Left.time > 0 ? t - Left.time : 0));
+    Left.time = t;
     if (Left.elapsed > 0) {
       fps = Math.round((9.0*fps + 1.0/Left.elapsed)/10.0);
     }
@@ -100,6 +100,10 @@ class Game extends Sprite {
 
     // update
     scene.update();
+
+    for (view in Left.views) {
+      view.update();
+    }
 
     Left.profile.end("left.update");
     Left.profile.start("left.render");

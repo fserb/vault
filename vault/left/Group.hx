@@ -29,10 +29,10 @@ class Group extends Object {
     }
   }
 
-  override public function draw(vp: View) {
+  override public function render(vp: View) {
     for (m in members) {
       if (!m.dead && m.visible) {
-        m.draw(vp);
+        m.render(vp);
       }
     }
   }

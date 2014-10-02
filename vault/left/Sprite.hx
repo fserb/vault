@@ -10,28 +10,33 @@ import vault.Vec2;
 
 class Sprite extends Object {
   public var pos: Vec2;
-  public var scale: Float = 1.0;
+  public var scaleX: Float = 1.0;
+  public var scaleY: Float = 1.0;
   public var angle: Float = 0.0;
   public var alpha: Float = 1.0;
 
   public var image: Image = null;
   public var frame: Int = -1;
 
+  public var globalpos: Bool = false;
+
   public function new() {
     pos = Vec2.make(0, 0);
   }
 
-  override public function draw(view: View) {
+  override public function render(view: View) {
     if (image == null) return;
     var im = frame == -1 ? image : image[frame];
 
-    var x1 = pos.x - im.offset.x - view.pos.x;
-    var y1 = pos.y - im.offset.y - view.pos.y;
+    var vp = globalpos? Vec2.make(0,0): view.pos;
+
+    var x1 = pos.x - im.offset.x - vp.x;
+    var y1 = pos.y - im.offset.y - vp.y;
     var x2 = x1 + im.width;
     var y2 = y1 + im.height;
 
     if (x1 < view.width && x2 > 0 && y1 < view.height && y2 > 0) {
-      view.draw(im, pos.x - view.pos.x, pos.y - view.pos.y, angle, scale, alpha);
+      view.draw(im, pos.x - vp.x, pos.y - vp.y, angle, scaleX, scaleY, alpha);
     }
   }
 
@@ -40,11 +45,11 @@ class Sprite extends Object {
   // TODO: account for subzones.
   function imageBlit(width: Int, height: Int,
                      img: Image, x: Float, y: Float,
-                     angle: Float, scale: Float): BitmapData {
+                     angle: Float, scaleX: Float, scaleY: Float): BitmapData {
     var sprite = new flash.display.Sprite();
     var mat = new Matrix();
     mat.translate(-img.width/2, -img.height/2);
-    mat.scale(scale, scale);
+    mat.scale(scaleX, scaleY);
     mat.rotate(-angle);
     mat.translate(x, y);
     sprite.graphics.beginBitmapFill(img.bitmap, mat, false, false);
@@ -102,11 +107,11 @@ class Sprite extends Object {
     // 3. Pixel perfect collision
     var aimg = this.frame == -1 ? this.image : this.image[this.frame];
     var abmd = imageBlit(width, height, aimg, this.pos.x - intersect.x,
-      this.pos.y - intersect.y, this.angle, this.scale);
+      this.pos.y - intersect.y, this.angle, this.scaleX, this.scaleY);
 
     var bimg = target.frame == -1 ? target.image : target.image[target.frame];
     var bbmd = imageBlit(width, height, bimg, target.pos.x - intersect.x,
-      target.pos.y - intersect.y, target.angle, target.scale);
+      target.pos.y - intersect.y, target.angle, target.scaleX, this.scaleY);
 
     for (y in 0...height) {
       for (x in 0...width) {

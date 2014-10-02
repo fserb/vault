@@ -15,7 +15,7 @@ sprite values are display space.
 pos, width, height are world space.
 Its main tech point is the ability to execute rendering orders from Objects.
 */
-class View {
+class View extends Group {
   // world space coordinates of the View:
   public var pos: Vec2;
   public var width(default, set): Int;
@@ -30,6 +30,7 @@ class View {
   public var flags: Int = Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2;
 
   public function new(width:Int = 0, height:Int = 0) {
+    super();
     pos = Vec2.make(0, 0);
     sprite = new Sprite();
     this.width = width == 0 ? Left.width : width;
@@ -56,9 +57,9 @@ class View {
   }
 
   public function draw(img: Image, x: Float, y: Float, ?angle: Float = 0.0,
-    scale: Float = 1.0, alpha: Float = 1.0) {
-    var cos = scale*Math.cos(angle);
-    var sin = scale*Math.sin(angle);
+    scaleX: Float = 1.0, scaleY: Float = 1.0, alpha: Float = 1.0) {
+    var cos = Math.cos(angle);
+    var sin = Math.sin(angle);
 
     if (nextdraw.tilesheet != img.tilesheet) {
       nextdraw = nextdraw.next = { tilesheet: img.tilesheet, data: [], next: null };
@@ -68,23 +69,24 @@ class View {
     nextdraw.data[l++] = x - img.offset.x + img.width/2.0;
     nextdraw.data[l++] = y - img.offset.y + img.height/2.0;
     nextdraw.data[l++] = img.tileid;
-    nextdraw.data[l++] = cos;
-    nextdraw.data[l++] = -sin;
-    nextdraw.data[l++] = sin;
-    nextdraw.data[l++] = cos;
+    nextdraw.data[l++] = scaleX*cos;
+    nextdraw.data[l++] = scaleX*-sin;
+    nextdraw.data[l++] = scaleY*sin;
+    nextdraw.data[l++] = scaleY*cos;
     nextdraw.data[l++] = alpha;
 
     Left.profile.renderDraw++;
   }
 
-  public function render(scene: Group) {
+  override public function render(scene: Group) {
     sprite.graphics.clear();
     sprite.graphics.beginFill(0x000000, 1.0);
     sprite.graphics.drawRect(0, 0, width, height);
     sprite.graphics.endFill();
     draworder = nextdraw = {tilesheet: null, data: null, next: null};
 
-    scene.draw(this);
+    scene.render(this);
+    super.render(this);
 
     nextdraw = draworder.next;
     while (nextdraw != null) {
