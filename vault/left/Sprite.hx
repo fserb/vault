@@ -30,10 +30,14 @@ class Sprite extends Object {
 
     var vp = globalpos? Vec2.make(0,0): view.pos;
 
-    var x1 = pos.x - im.offset.x - vp.x;
-    var y1 = pos.y - im.offset.y - vp.y;
-    var x2 = x1 + im.width;
-    var y2 = y1 + im.height;
+    var acos = EMath.fabs(Math.cos(angle));
+    var asin = EMath.fabs(Math.sin(angle));
+    var w = im.height*asin + im.width*acos;
+    var h = im.width*asin + im.height*acos;
+    var x1 = pos.x - im.offset.x*w/im.width - vp.x;
+    var y1 = pos.y - im.offset.y*h/im.height - vp.y;
+    var x2 = x1 + w;
+    var y2 = y1 + h;
 
     if (x1 < view.width && x2 > 0 && y1 < view.height && y2 > 0) {
       view.draw(im, pos.x - vp.x, pos.y - vp.y, angle, scaleX, scaleY, alpha);
@@ -82,6 +86,9 @@ class Sprite extends Object {
       return false;
     }
 
+    var aimg = this.frame == -1 ? this.image : this.image[this.frame];
+    var bimg = target.frame == -1 ? target.image : target.image[target.frame];
+
     // 2. Small BB collision considering rotation
     var acos = Math.cos(this.angle);
     var asin = Math.sin(this.angle);
@@ -89,12 +96,12 @@ class Sprite extends Object {
     var bsin = Math.sin(target.angle);
     aBB.width = this.image.height*EMath.fabs(asin) + this.image.width*EMath.fabs(acos);
     aBB.height = this.image.width*EMath.fabs(asin) + this.image.height*EMath.fabs(acos);
-    aBB.x = this.pos.x - aBB.width/2;
-    aBB.y = this.pos.y - aBB.height/2;
+    aBB.x = this.pos.x - aimg.offset.x*aBB.width/aimg.width;
+    aBB.y = this.pos.y - aimg.offset.y*aBB.height/aimg.height;
     bBB.width = target.image.height*EMath.fabs(bsin) + target.image.width*EMath.fabs(bcos);
     bBB.height = target.image.width*EMath.fabs(bsin) + target.image.height*EMath.fabs(bcos);
-    bBB.x = target.pos.x - bBB.width/2;
-    bBB.y = target.pos.y - bBB.height/2;
+    bBB.x = target.pos.x - bimg.offset.x*bBB.width/bimg.width;
+    bBB.y = target.pos.y - bimg.offset.y*bBB.height/bimg.height;
 
     var intersect = aBB.intersection(bBB);
     if (intersect.width <= 0) {
@@ -105,11 +112,9 @@ class Sprite extends Object {
     var height: Int = Std.int(Math.ceil(intersect.height));
 
     // 3. Pixel perfect collision
-    var aimg = this.frame == -1 ? this.image : this.image[this.frame];
     var abmd = imageBlit(width, height, aimg, this.pos.x - intersect.x,
       this.pos.y - intersect.y, this.angle, this.scaleX, this.scaleY);
 
-    var bimg = target.frame == -1 ? target.image : target.image[target.frame];
     var bbmd = imageBlit(width, height, bimg, target.pos.x - intersect.x,
       target.pos.y - intersect.y, target.angle, target.scaleX, this.scaleY);
 
