@@ -28,6 +28,9 @@ class View extends Group {
   public var draworder: DrawOrder;
   public var nextdraw: DrawOrder;
 
+  public var bgalpha: Float = 1.0;
+  public var bgcolor: UInt = 0x000000;
+
   public var flags: Int = Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2;
 
   public function new(width:Int = 0, height:Int = 0) {
@@ -87,13 +90,18 @@ class View extends Group {
 
   override public function render(scene: Group) {
     sprite.graphics.clear();
-    sprite.graphics.beginFill(0x000000, 1.0);
-    sprite.graphics.drawRect(0, 0, width, height);
-    sprite.graphics.endFill();
+    if (bgalpha != 0.0) {
+      sprite.graphics.beginFill(bgcolor, bgalpha);
+      sprite.graphics.drawRect(0, 0, width, height);
+      sprite.graphics.endFill();
+    }
     draworder = nextdraw = {tilesheet: null, data: null, next: null};
 
-    scene.render(this);
-    super.render(this);
+    if (members.length != 0) {
+      super.render(this);
+    } else {
+      scene.render(this);
+    }
 
     nextdraw = draworder.next;
     while (nextdraw != null) {
