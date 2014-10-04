@@ -22,7 +22,8 @@ class View extends Group {
   public var height(default, set): Int;
 
   public var sprite: Sprite;
-  public var scale(default, set): Float;
+  public var scale(default, set): Float = 1.0;
+  public var zoom(default, set): Float = 1.0;
 
   public var draworder: DrawOrder;
   public var nextdraw: DrawOrder;
@@ -36,7 +37,6 @@ class View extends Group {
     this.width = width == 0 ? Left.width : width;
     this.height = height == 0 ? Left.height : height;
     sprite.x = sprite.y = 0;
-    scale = 1.0;
   }
 
   public function set_width(width: Int): Int {
@@ -54,6 +54,13 @@ class View extends Group {
   public function set_scale(f: Float): Float {
     sprite.scaleX = sprite.scaleY = scale = f;
     return scale;
+  }
+
+  public function set_zoom(f: Float): Float {
+    width = Math.round(width*zoom/f);
+    height = Math.round(height*zoom/f);
+    scale = zoom = f;
+    return zoom;
   }
 
   public function draw(img: Image, x: Float, y: Float, ?angle: Float = 0.0,
