@@ -53,4 +53,12 @@ class Geom {
     }
     return s > 0 && t > 0 && (s + t) < A;
   }
+
+  // returns -1 if if @p is to the left of @ab, 1 if to the right or 0 if straight
+  static public function directionSegmentPoint(a: Vec2, b: Vec2, p: Vec2): Int {
+    var v = (p.x - a.x)*(b.y - a.y) - (b.x - a.x)*(p.y - a.y);
+    if (v < 0) return -1;
+    if (v > 0) return 1;
+    return 0;
+  }
 }
