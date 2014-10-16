@@ -46,6 +46,7 @@ class Game extends Sprite {
     fps = 0.0;
     Left.console.watch(this, "fps", "FPS");
     Left.key = new Key();
+    Left.mouse = new Mouse();
 
     Lib.current.stage.addEventListener(Event.ENTER_FRAME, onFrame);
     Lib.current.stage.addEventListener(Event.RESIZE, onResize);
@@ -97,6 +98,7 @@ class Game extends Sprite {
 
     // input
     Left.key.update();
+    Left.mouse.update();
 
     // update
     scene.update();

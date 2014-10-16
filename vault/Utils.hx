@@ -8,6 +8,18 @@ import haxe.macro.Type;
 
 class Utils {
 
+  public static function initGrid<T>(width: Int, height: Int): Array<Array<T>> {
+    var ret = new Array<Array<T>>();
+    for (x in 0...width) {
+      var col = new Array<T>();
+      for (y in 0...height) {
+        col.push(null);
+      }
+      ret.push(col);
+    }
+    return ret;
+  }
+
   public static function initArray<T>(num: Int, def:T): Array<T> {
     var ar = new Array<T>();
     for (i in 0...num) {

@@ -17,7 +17,7 @@ class Heap<T> {
   inline function left(i:Int):Int { return (i*2)+1; }
   inline function right(i:Int):Int { return (i*2)+2; }
 
-  public function push(k:T) {
+  public function add(k:T) {
     var new_index:Int = array.length;
     var parent_index:Int = parent(new_index);
     var tmp:T;
@@ -93,7 +93,7 @@ class Heap<T> {
     return -1;
   }
 
-  public function peek():T {
+  public function top():T {
     if (empty()) {
       return null;
     }

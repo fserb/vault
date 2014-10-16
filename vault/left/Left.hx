@@ -19,6 +19,7 @@ class Left {
   static public var atlas: Atlas;
 
   static public var key: Key;
+  static public var mouse: Mouse;
 
   static public var console: Console;
 
