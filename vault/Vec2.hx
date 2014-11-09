@@ -50,11 +50,12 @@ class Vec2 {
     return v;
   }
 
-  public inline function normalize(): Vec2 {
+  public inline function normalize(to: Float = 1.0): Vec2 {
     var d = length;
     if (d > 0) {
-      x /= d;
-      y /= d;
+      var t = to/d;
+      x *= t;
+      y *= t;
     }
     return this;
   }
