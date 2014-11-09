@@ -12,6 +12,7 @@ class Sprite extends Object {
   public var pos: Vec2;
   public var scaleX: Float = 1.0;
   public var scaleY: Float = 1.0;
+  public var scale(get, set): Float;
   public var angle: Float = 0.0;
   public var alpha: Float = 1.0;
 
@@ -19,6 +20,14 @@ class Sprite extends Object {
   public var frame: Int = -1;
 
   public var globalpos: Bool = false;
+
+  public function get_scale(): Float {
+    return scaleX;
+  }
+  public function set_scale(v: Float): Float {
+    scaleX = scaleY = v;
+    return scaleX;
+  }
 
   public function new() {
     pos = Vec2.make(0, 0);
