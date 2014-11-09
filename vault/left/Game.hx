@@ -84,8 +84,9 @@ class Game extends Sprite {
         removeChildren(0, numChildren-1);
       }
       resetViews();
-      this.scene = this.nextscene();
+      var tmp = this.nextscene;
       this.nextscene = null;
+      this.scene = tmp();
     }
 
     frameCount++;
