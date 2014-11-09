@@ -18,16 +18,18 @@ class Key {
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
   }
 
-  public function just(key: Int): Bool {
+  inline public function just(key: Int): Bool {
+    var ret: Bool = false;
     for (k in justpressed) {
       if (k == key) {
-        return true;
+        ret = true;
+        break;
       }
     }
-    return false;
+    return ret;
   }
 
-  public function pressed(key: Int): Bool {
+  inline public function pressed(key: Int): Bool {
     return state[key];
   }
 
