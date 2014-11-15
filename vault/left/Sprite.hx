@@ -33,9 +33,13 @@ class Sprite extends Object {
     pos = Vec2.make(0, 0);
   }
 
+  function getImage(): Image {
+    return (frame == -1) ? image : image[frame];
+  }
+
   override public function render(view: View) {
     if (image == null) return;
-    var im = frame == -1 ? image : image[frame];
+    var im = getImage();
 
     var vp = globalpos? Vec2.make(0,0): view.pos;
 
@@ -84,10 +88,13 @@ class Sprite extends Object {
 
   // returns true if colliding with @target. It does a pixel perfect collision.
   public function collide(target: Sprite): Bool {
+    var aimg = this.getImage();
+    var bimg = target.getImage();
+
     // 1. Big BB collision considering rotation
-    var aDiag = Vec2.make(this.image.width/2, this.image.height/2).length;
+    var aDiag = Vec2.make(aimg.width/2, aimg.height/2).length;
     var aBB = new Rectangle(this.pos.x - aDiag, this.pos.y -aDiag, aDiag*2, aDiag*2);
-    var bDiag = Vec2.make(target.image.width/2, target.image.height/2).length;
+    var bDiag = Vec2.make(bimg.width/2, bimg.height/2).length;
     var bBB = new Rectangle(target.pos.x - bDiag, target.pos.y -bDiag, bDiag*2, bDiag*2);
 
     var bigintersect = aBB.intersection(bBB);
@@ -95,20 +102,17 @@ class Sprite extends Object {
       return false;
     }
 
-    var aimg = this.frame == -1 ? this.image : this.image[this.frame];
-    var bimg = target.frame == -1 ? target.image : target.image[target.frame];
-
     // 2. Small BB collision considering rotation
     var acos = Math.cos(this.angle);
     var asin = Math.sin(this.angle);
     var bcos = Math.cos(target.angle);
     var bsin = Math.sin(target.angle);
-    aBB.width = this.image.height*EMath.fabs(asin) + this.image.width*EMath.fabs(acos);
-    aBB.height = this.image.width*EMath.fabs(asin) + this.image.height*EMath.fabs(acos);
+    aBB.width = aimg.height*EMath.fabs(asin) + aimg.width*EMath.fabs(acos);
+    aBB.height = aimg.width*EMath.fabs(asin) + aimg.height*EMath.fabs(acos);
     aBB.x = this.pos.x - aimg.offset.x*aBB.width/aimg.width;
     aBB.y = this.pos.y - aimg.offset.y*aBB.height/aimg.height;
-    bBB.width = target.image.height*EMath.fabs(bsin) + target.image.width*EMath.fabs(bcos);
-    bBB.height = target.image.width*EMath.fabs(bsin) + target.image.height*EMath.fabs(bcos);
+    bBB.width = bimg.height*EMath.fabs(bsin) + bimg.width*EMath.fabs(bcos);
+    bBB.height = bimg.width*EMath.fabs(bsin) + bimg.height*EMath.fabs(bcos);
     bBB.x = target.pos.x - bimg.offset.x*bBB.width/bimg.width;
     bBB.y = target.pos.y - bimg.offset.y*bBB.height/bimg.height;
 

@@ -16,6 +16,8 @@ left : the minimal game library
 [ TODO ]
 - Sprite: basic animation
 - Sprite: support for scrollfactor
+- Sprite: support for subimage collision
+- Sprite: collide with bb
 - Game: fullscreen toggle
 - Gamepad
 
