@@ -24,6 +24,7 @@ class Image_ {
 
   function new() {
     offset = Vec2.make(0, 0);
+    tiles = [];
   }
 }
 
@@ -36,19 +37,30 @@ abstract Image(Image_) to Image_ from Image_ {
     return this.tiles[key];
   }
 
+  public function add(bmd: BitmapData): Image {
+    return addImage(Left.atlas.storeImage(bmd));
+  }
+
+  public function addImage(im: Image): Image {
+    this.tiles.push(im);
+    return im;
+  }
+
+  static public function createEmpty(): Image {
+    return new Image_();
+  }
+
   static public function create(bmd: BitmapData): Image {
     var im = Left.atlas.storeImage(bmd);
     return im;
   }
 
   static public function createTiled(bmd: BitmapData, width: Int, height: Int, centered: Bool = true): Image {
+    var base = new Image_();
+    var center = new Point(width/2, height/2);
+
     var tx = Std.int(bmd.width/width);
     var ty = Std.int(bmd.height/height);
-
-    var base = new Image_();
-    base.tiles = [];
-
-    var center = new Point(width/2, height/2);
     for (y in 0...ty) {
       for (x in 0...tx) {
         var b = new BitmapData(width, height);
