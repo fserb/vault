@@ -19,46 +19,57 @@ import spinehaxe.Skin;
 import vault.Point;
 import vault.Vec2;
 
-class SpineRegionAttachment extends RegionAttachment {
-  public var image: Image = null;
-}
-
-class SpineAttachmentLoader implements AttachmentLoader {
-  var atlas: Map<String, Image>;
-  public function new(atlas: Map<String, Image>) {
-    this.atlas = atlas;
-  }
-
-  public function newAttachment (skin:Skin, type:AttachmentType, name:String):Attachment {
-    if (type != region) {
-      throw "don't know how to deal with attachment type: " + type;
-    }
-
-    var att = new SpineRegionAttachment(name);
-    att.image = atlas[name];
-
-    return att;
-  }
-}
-
 class Spine extends Sprite {
-  var atlas: Map<String, Image>;
-  var skeletonData: SkeletonData;
+  var skels: Map<String, SkeletonData>;
+  var currentSkel: String = null;
+  var anims: Map<String, String>;
   public var skeleton: Skeleton;
   public var state: AnimationState;
+  public var offset: Vec2;
 
-  public function new(basename: String, data: SkeletonData = null) {
+  public function new(names: Map<String, String>, parent: Spine = null) {
     super();
 
-    if (data == null) {
-      atlas = loadAtlas(basename + ".atlas");
-      var json = new SkeletonJson(new SpineAttachmentLoader(atlas));
-      skeletonData = json.readSkeletonData(Assets.getText(basename + ".json"), basename);
+    if (parent == null) {
+      skels = new Map();
+      anims = new Map();
+      for (k in names.keys()) {
+        var basename = names[k];
+        var atlas = loadAtlas(basename + ".atlas");
+        var json = new SkeletonJson(new SpineAttachmentLoader(atlas));
+        skels[k] = json.readSkeletonData(Assets.getText(basename + ".json"), basename);
+        for (a in skels[k].animations) {
+          anims[a.name] = k;
+        }
+      }
     } else {
-      skeletonData = data;
+      skels = parent.skels;
+      anims = parent.anims;
     }
-    skeleton = new Skeleton(skeletonData);
-    state = new AnimationState(new AnimationStateData(skeletonData));
+    var first: String = null;
+    for (k in names.keys()) {
+      first = k;
+      break;
+    }
+    setSkel(first);
+    offset = new Vec2(0, 0);
+  }
+
+  public function setAnimation(name: String, loop: Bool = false) {
+    setSkel(anims[name]);
+    skeleton.setToSetupPose();
+    state.setAnimationByName(0, name, loop);
+    state.update(0);
+    state.apply(skeleton);
+    skeleton.updateWorldTransform();
+    skeleton.update(0);
+  }
+
+  public function setSkel(name: String) {
+    if (currentSkel == name) return;
+    skeleton = new Skeleton(skels[name]);
+    state = new AnimationState(new AnimationStateData(skels[name]));
+    currentSkel = name;
   }
 
   override public function update() {
@@ -73,24 +84,38 @@ class Spine extends Sprite {
       var att:SpineRegionAttachment = cast slot.attachment;
       var bone:Bone = slot.bone;
 
-      var x = bone.worldX*0.05 + 0.05*att.x * bone.m00 + 0.05*att.y * bone.m01;
-      var y = (bone.worldY*0.05 + 0.05*att.x * bone.m10 + 0.05*att.y * bone.m11);
-
+      var x = bone.worldX + att.x * bone.m00 + att.y * bone.m01;
+      var y = bone.worldY + att.x * bone.m10 + att.y * bone.m11;
       var angle = bone.worldRotation + att.rotation;
-
-      var scaleX = bone.worldScaleX + att.scaleX - 1;
-      var scaleY = bone.worldScaleY + att.scaleY - 1;
+      var bonescaleX = bone.worldScaleY + att.scaleX - 1;
+      var bonescaleY = bone.worldScaleX + att.scaleY - 1;
 
       if (bone.worldFlipX) {
-        scaleX = -scaleX;
+        bonescaleX = -bonescaleX;
         angle = -angle;
       }
       if (bone.worldFlipY) {
-        scaleY = -scaleY;
+        bonescaleY = -bonescaleY;
         angle = -angle;
       }
 
-      view.draw(att.image, pos.x + x, pos.y - y, angle*Math.PI/180, scaleX, scaleY, 1.0);
+      view.draw(att.image, pos.x + (offset.x + x)*this.scaleX, pos.y - (y - offset.y)*this.scaleY, angle*Math.PI/180, bonescaleX*this.scaleX, bonescaleY*this.scaleY, 1.0);
+    }
+
+    // view.postDraw = drawSkel;
+  }
+
+  public function drawSkel(gfx: flash.display.Graphics) {
+    for (bone in skeleton.bones) {
+      gfx.lineStyle(2, 0xFF00FF);
+      gfx.moveTo(pos.x + bone.worldX*this.scaleX, pos.y - bone.worldY*this.scaleY);
+      var v = new Vec2(0, bone.data.length);
+      v.angle = bone.worldRotation*Math.PI/180;
+      v.x *= bone.worldFlipX ? -bone.worldScaleX : bone.worldScaleX;
+      v.y *= bone.worldFlipY ? -bone.worldScaleY : bone.worldScaleY;
+      v.x += bone.worldX;
+      v.y += bone.worldY;
+      gfx.lineTo(pos.x + v.x*this.scaleX, pos.y - v.y*this.scaleY);
     }
   }
 
@@ -129,7 +154,6 @@ class Spine extends Sprite {
             var b = new BitmapData(size.x, size.y, true, 0);
             b.copyPixels(bmp, new Rectangle(xy.x, xy.y, size.x, size.y), new flash.geom.Point(0, 0));
             var im = Image.create(b);
-            // im.offset.x = im.offset.y = 0;
             ret[name] = im;
           }
         }
@@ -138,3 +162,37 @@ class Spine extends Sprite {
     return ret;
   }
 }
+
+class SpineRegionAttachment extends RegionAttachment {
+  public var image: Image = null;
+}
+
+class SpineAttachmentLoader implements AttachmentLoader {
+  var atlas: Map<String, Image>;
+  public function new(atlas: Map<String, Image>) {
+    this.atlas = atlas;
+  }
+
+  /** @return May be null to not load an attachment. */
+  public function newRegionAttachment (skin:Skin, name:String, path:String) : RegionAttachment {
+    var att = new SpineRegionAttachment(name);
+    att.image = atlas[name];
+    return att;
+  }
+
+  /** @return May be null to not load an attachment. */
+  public function newMeshAttachment (skin:Skin, name:String, path:String) : spinehaxe.attachments.MeshAttachment {
+    return null;
+  }
+
+  /** @return May be null to not load an attachment. */
+  public function newSkinnedMeshAttachment (skin:Skin, name:String, path:String) : spinehaxe.attachments.SkinnedMeshAttachment {
+    return null;
+  }
+
+  /** @return May be null to not load an attachment. */
+  public function newBoundingBoxAttachment (skin:Skin, name:String) : spinehaxe.attachments.BoundingBoxAttachment {
+    return null;
+  }
+}
+
