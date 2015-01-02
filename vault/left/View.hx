@@ -109,7 +109,11 @@ class View extends Group {
       nextdraw.tilesheet.drawTiles(sprite.graphics, nextdraw.data, true, flags);
       nextdraw = nextdraw.next;
     }
+
+    if (postDraw != null) postDraw(sprite.graphics);
   }
+
+  public var postDraw: flash.display.Graphics -> Void = null;
 }
 
 typedef DrawOrder = {
