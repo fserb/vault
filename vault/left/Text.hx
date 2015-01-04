@@ -32,6 +32,8 @@ class Text extends Object {
   public var xoffset: Float;
   public var align: TextAlign;
   public var valign: TextVAlign;
+  public var scale: Float;
+  public var alpha: Float;
 
   static var repo_font: Map<String, BMFont>;
 
@@ -42,6 +44,8 @@ class Text extends Object {
     xoffset = 0.0;
     align = LEFT;
     valign = TOP;
+    scale = 1.0;
+    alpha = 1.0;
 
     if (repo_font == null) {
       repo_font = new Map<String, BMFont>();
@@ -77,20 +81,20 @@ class Text extends Object {
 
     switch (align) {
       case LEFT:
-      case CENTER: x -= dx/2;
-      case RIGHT: x -= dx;
+      case CENTER: x -= dx*scale/2;
+      case RIGHT: x -= dx*scale;
     }
 
     switch (valign) {
       case TOP:
-      case MIDDLE: y -= font.lineHeight/2;
-      case BOTTOM: y -= font.lineHeight;
+      case MIDDLE: y -= font.lineHeight*scale/2;
+      case BOTTOM: y -= font.lineHeight*scale;
     }
 
     for (i in 0...text.length) {
       var c: Char = cast font.chars[text.charCodeAt(i)];
-      view.draw(c.image, x, y);
-      x += c.xadvance + xoffset;
+      view.draw(c.image, x, y, 0.0, scale, scale, alpha);
+      x += (c.xadvance + xoffset)*scale;
     }
   }
 }
