@@ -29,8 +29,9 @@ class Sprite extends Object {
     return scaleX;
   }
 
-  public function new() {
+  public function new(img: Image = null) {
     pos = Vec2.make(0, 0);
+    image = img;
   }
 
   function getImage(): Image {
