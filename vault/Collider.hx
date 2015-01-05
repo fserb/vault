@@ -23,27 +23,27 @@ class Collider {
 
   public static function transform(orig: HitType, m: Matrix): HitType {
     return switch (orig) {
-      case Circle(x, y, r):
+      case CIRCLE(x, y, r):
         var p = m.transformPoint(new Point(x, y));
-        Circle(p.x, p.y, m.a*r);
-      case Polygon(points):
+        CIRCLE(p.x, p.y, m.a*r);
+      case POLYGON(points):
         var out = new Array<Vec2>();
         for (p in points) {
           out.push(transformVec2(m, p.x, p.y));
         }
-        Polygon(out);
-      case Rect(x, y, w, h):
+        POLYGON(out);
+      case RECT(x, y, w, h):
         if (m.b == 0 && m.d == 0) {
           var a = transformVec2(m, x, y);
           var b = transformVec2(m, x+w, y+h);
-          Rect(a.x, a.y, b.x - a.x, b.y - a.y);
+          RECT(a.x, a.y, b.x - a.x, b.y - a.y);
         } else {
           var out = new Array<Vec2>();
           out.push(transformVec2(m, x, y));
           out.push(transformVec2(m, x, y + h));
           out.push(transformVec2(m, x + w, y + h));
           out.push(transformVec2(m, x + w, y));
-          Polygon(out);
+          POLYGON(out);
         }
     };
   }
