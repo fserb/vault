@@ -30,6 +30,7 @@ class Micro extends Scene {
     state = TITLE;
     Game.mouse.clear();
     Game.key.clear();
+    Game.touch.clear();
   }
 
   function set_state(s: GameState): GameState {
@@ -37,6 +38,7 @@ class Micro extends Scene {
     // clear input.
     Game.mouse.clear();
     Game.key.clear();
+    Game.touch.clear();
     return s;
   }
 
@@ -97,7 +99,7 @@ class Micro extends Scene {
     super();
     var cn = Type.getClassName(Type.getClass(this)).split(".");
     Game.name = cn[cn.length - 1];
-    
+
     _title = title;
     _version = version;
 

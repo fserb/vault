@@ -34,6 +34,7 @@ class Game {
   static public var totalTime: Float;
   static public var key: Key;
   static public var mouse: Mouse;
+  static public var touch: Touch;
   static public var scene(default, set): Dynamic;
 
   static var groups: Map<String, EntityGroup>;
@@ -234,15 +235,28 @@ class Game {
 
     key = new Key();
     mouse = new Mouse();
+    touch = new Touch();
 
     scene.onBegin();
 
     Lib.current.addEventListener(Event.ENTER_FRAME, onFrame);
     Lib.current.addEventListener(Event.DEACTIVATE, onDeactivate);
     Lib.current.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+    #if tabletop
+    Lib.current.stage.addEventListener(Event.RESIZE, onResize);
+    #end
   }
 
+  #if tabletop
+  function onResize(ev) {
+    Game.width = Lib.current.stage.stageWidth;
+    Game.height = Lib.current.stage.stageHeight;
+    scene.onBegin();
+  }
+  #end
+
   function set_fullscreen(value: Bool): Bool {
+    trace("fullscreen", fullscreen, value);
     if (fullscreen && !value) {
       Lib.current.stage.displayState = StageDisplayState.NORMAL;
     } else if (!fullscreen && value) {
@@ -260,7 +274,9 @@ class Game {
   }
 
   function onDeactivate(ev) {
-    scene.onBackground();
+    #if !tabletop
+      scene.onBackground();
+    #end
   }
 
   function onFrame(ev) {
@@ -297,6 +313,7 @@ class Game {
 
     key.update();
     mouse.update();
+    touch.update();
     if (!scene.onFrame()) {
       return;
     }
