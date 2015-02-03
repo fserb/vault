@@ -3,6 +3,7 @@ package vault.ugl;
 import flash.display.Sprite;
 import flash.geom.Matrix;
 import flash.geom.Point;
+import flash.geom.Rectangle;
 import vault.Vec2;
 
 enum HitType {
@@ -28,6 +29,7 @@ class Entity {
   var className: String;
   var alignment: Align;
   var hits: List<HitType>;
+  public var aabb: Rectangle;
   public var dead: Bool = false;
   public var art(get, null): PixelArt;
   public var gfx(get, null): GraphicArt;
@@ -86,6 +88,7 @@ class Entity {
     rotationcenter = null;
 
     hits = new List<HitType>();
+    aabb = new Rectangle();
 
     var cn = Type.getClassName(Type.getClass(this)).split(".");
     className = cn[cn.length - 1];
@@ -275,7 +278,7 @@ class Entity {
         }
         Polygon(out);
       case Rect(x, y, w, h):
-        if (m.b == 0 && m.d == 0) {
+        if (m.b == 0 && m.c == 0) {
           var a = transformVec2(m, x, y);
           var b = transformVec2(m, x+w, y+h);
           Rect(a.x, a.y, b.x - a.x, b.y - a.y);
@@ -299,10 +302,25 @@ class Entity {
     return null;
   }
 
+  public function hitPoint(x: Float, y: Float, r: Float = 2): Bool {
+    if (dead) return false;
+    var hp = Circle(x, y, r);
+    for (a in hits) {
+      if (isHit(transformHit(base_sprite.transform.matrix, a), hp)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public function hit(e: Entity): Bool {
     if (e == null || e == this) return false;
     if (dead || e.dead) return false;
-    /*if (ticks <= 0.1) return false;*/
+
+    // hit aabb first.
+    var int = aabb.intersection(e.aabb);
+    if (int.width == 0) return false;
+
     for (a in hits) {
       for (b in e.hits) {
         if (isHit(transformHit(base_sprite.transform.matrix, a),
@@ -336,6 +354,43 @@ class Entity {
     _update_location();
   }
 
+  inline function _aabb_union(x: Float, y: Float, w: Float, h: Float) {
+    var r = x+w;
+    var b = y+h;
+    aabb.x = aabb.x > x ? x : aabb.x;
+    aabb.y = aabb.y > y ? y : aabb.y;
+    aabb.width = (aabb.right < r ? r : aabb.right) - aabb.x;
+    aabb.height = (aabb.bottom < b ? b : aabb.bottom) - aabb.y;
+  }
+
+  var aabb_m: Matrix = null;
+  inline function _update_aabb() {
+    if (base_sprite.transform.matrix.equals(aabb_m)) return;
+    aabb.x = aabb.y = 1e99;
+    aabb.right = aabb.bottom = 0;
+    for (a in hits) {
+      switch (transformHit(base_sprite.transform.matrix, a)) {
+        case Circle(x, y, r):
+          _aabb_union(x-r,y-r,2*r,2*r);
+        case Polygon(points):
+          var x = 1e99;
+          var y = 1e99;
+          var r = 0.0;
+          var b = 0.0;
+          for (p in points) {
+            x = Math.min(x, p.x);
+            y = Math.min(y, p.y);
+            r = Math.max(r, p.x);
+            b = Math.max(b, p.y);
+          }
+          _aabb_union(x, y, r-x, b-y);
+        case Rect(x, y, w, h):
+          _aabb_union(x,y,w,h);
+      }
+    }
+    aabb_m = base_sprite.transform.matrix;
+  }
+
   inline function _update_location() {
     var m = new Matrix();
 
@@ -359,5 +414,6 @@ class Entity {
       case BOTTOMRIGHT: m.translate(-sprite.width, -sprite.height);
     }
     base_sprite.transform.matrix = m;
+    _update_aabb();
   }
 }
