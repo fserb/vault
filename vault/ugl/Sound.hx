@@ -13,7 +13,7 @@ class Sound {
 
   public function new(name: String) {
     this.name = name;
-    if (soundbank.exists(name)) {
+    if (this.name != "" && soundbank.exists(name)) {
       sfxr = soundbank[name];
     } else {
       sfxr = null;
