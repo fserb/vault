@@ -9,10 +9,14 @@ import vault.ugl.Key.Button;
 import vault.Vec2;
 
 class Touch {
+  var evs: Map<Int, Vec2>;
   public var touches: Map<Int, Vec2>;
+  public var press: Map<Int, Vec2>;
 
   public function new() {
     touches = new Map<Int, Vec2>();
+    evs = new Map<Int, Vec2>();
+    press = new Map<Int, Vec2>();
 
     Game.sprite.graphics.beginFill(0, 0.0);
     Game.sprite.graphics.drawRect(0,0,Game.width,Game.height);
@@ -41,28 +45,51 @@ class Touch {
 
   function onMove(ev: TouchEvent) {
     var id = getID(ev);
-    if (!touches.exists(id)) return;
-    touches[id].x = ev.localX;
-    touches[id].y = ev.localY;
+    if (!evs.exists(id)) return;
+    evs[id].x = ev.localX;
+    evs[id].y = ev.localY;
   }
 
   function onPress(ev: TouchEvent) {
     var id = getID(ev);
-    touches[id] = new Vec2(ev.localX, ev.localY);
+    evs[id] = new Vec2(ev.localX, ev.localY);
   }
 
   function onRelease(ev: TouchEvent) {
     var id = getID(ev);
-    if (touches.exists(id)) {
-      touches.remove(id);
+    if (evs.exists(id)) {
+      evs.remove(id);
     }
   }
 
   public function clear() {
+    evs = new Map<Int, Vec2>();
     touches = new Map<Int, Vec2>();
+    press = new Map<Int, Vec2>();
     update();
   }
 
   public function update() {
+    for (e in evs.keys()) {
+      if (!touches.exists(e) && !press.exists(e)) {
+        press[e] = evs[e];
+        touches[e] = evs[e];
+      } else {
+        if (press.exists(e)) {
+          press.remove(e);
+        }
+        touches[e] = evs[e];
+      }
+    }
+    for (e in touches.keys()) {
+      if (!evs.exists(e)) {
+        touches.remove(e);
+      }
+    }
+    for (e in press.keys()) {
+      if (!evs.exists(e)) {
+        press.remove(e);
+      }
+    }
   }
 }
