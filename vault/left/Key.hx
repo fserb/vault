@@ -33,6 +33,10 @@ class Key {
     return state[key];
   }
 
+  public function reset(key: Int) {
+    state[key] = false;
+  }
+
   public function update() {
     if (justpressed.length > 0) {
       for (k in justpressed) {
