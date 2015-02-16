@@ -17,6 +17,8 @@ class Game extends Sprite {
   public var scene(default, null): Group;
   var nextscene: Void -> Group = null;
 
+  public var paused: Bool;
+
   public function new() {
     super();
     Left.console = new Console();
@@ -44,6 +46,7 @@ class Game extends Sprite {
     Left.time = 0;
     frameCount = 0;
     fps = 0.0;
+    paused = false;
     Left.console.watch(this, "fps", "FPS");
     Left.key = new Key();
     Left.mouse = new Mouse();
@@ -86,6 +89,7 @@ class Game extends Sprite {
       resetViews();
       var tmp = this.nextscene;
       this.nextscene = null;
+      paused = false;
       this.scene = tmp();
     }
 
@@ -103,6 +107,8 @@ class Game extends Sprite {
 
     // update
     scene.update();
+
+    if (paused) return;
 
     for (view in Left.views) {
       view.update();
