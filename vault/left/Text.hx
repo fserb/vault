@@ -69,26 +69,33 @@ class Text extends Object {
     }
   }
 
-  override public function render(view: View) {
+  public function width(): Float {
     var dx = 0.0;
     for (i in 0...text.length) {
       var c: Char = cast font.chars[text.charCodeAt(i)];
       dx += c.xadvance + xoffset;
     }
+    return dx*scale;
+  }
 
+  public function height(): Float {
+    return font.lineHeight*scale;
+  }
+
+  override public function render(view: View) {
     var x = pos.x;
     var y = pos.y;
 
     switch (align) {
       case LEFT:
-      case CENTER: x -= dx*scale/2;
-      case RIGHT: x -= dx*scale;
+      case CENTER: x -= width()/2;
+      case RIGHT: x -= width();
     }
 
     switch (valign) {
       case TOP:
-      case MIDDLE: y -= font.lineHeight*scale/2;
-      case BOTTOM: y -= font.lineHeight*scale;
+      case MIDDLE: y -= height()/2;
+      case BOTTOM: y -= height();
     }
 
     for (i in 0...text.length) {
