@@ -28,24 +28,29 @@ enum TextVAlign {
 
 class Text extends Object {
   public var pos: Vec2;
-  public var text: String;
+  public var text(default, set): String = "";
   public var xoffset: Float;
   public var align: TextAlign;
   public var valign: TextVAlign;
-  public var scale: Float;
+  public var scale(default, set): Float = 1.0;
   public var alpha: Float;
+  public var width: Float;
+  public var height: Float;
 
   static var repo_font: Map<String, BMFont>;
 
   var font: BMFont;
+  var widths: Array<Float>;
 
   public function new(fontname: String) {
     pos = Vec2.make(0, 0);
     xoffset = 0.0;
     align = LEFT;
     valign = TOP;
-    scale = 1.0;
     alpha = 1.0;
+    width = 0.0;
+    height = 0.0;
+    widths = null;
 
     if (repo_font == null) {
       repo_font = new Map<String, BMFont>();
@@ -69,39 +74,71 @@ class Text extends Object {
     }
   }
 
-  public function width(): Float {
+  function update_dimensions() {
     var dx = 0.0;
+    var dy = 1;
+    widths = new Array<Float>();
+
     for (i in 0...text.length) {
-      var c: Char = cast font.chars[text.charCodeAt(i)];
+      var cc = text.charCodeAt(i);
+      if (cc == 10) {
+        widths.push(dx*scale);
+        dx = 0.0;
+        dy++;
+        continue;
+      }
+      var c: Char = cast font.chars[cc];
       dx += c.xadvance + xoffset;
     }
-    return dx*scale;
+    widths.push(dx*scale);
+    width = 0.0;
+    for (w in widths) {
+      width = Math.max(width, w);
+    }
+    height = dy*font.lineHeight*scale;
   }
 
-  public function height(): Float {
-    return font.lineHeight*scale;
+  public function set_scale(s: Float): Float {
+    scale = s;
+    update_dimensions();
+    return scale;
+  }
+
+  public function set_text(t: String): String {
+    text = t;
+    update_dimensions();
+    return text;
+  }
+
+  function getAligned(line: Int = 0): Vec2 {
+    var v = pos.copy();
+    switch (align) {
+      case LEFT:
+      case CENTER: v.x -= widths[line]/2;
+      case RIGHT: v.x -= width;
+    }
+    switch (valign) {
+      case TOP:
+      case MIDDLE: v.y -= height/2;
+      case BOTTOM: v.y -= height;
+    }
+    return v;
   }
 
   override public function render(view: View) {
-    var x = pos.x;
-    var y = pos.y;
-
-    switch (align) {
-      case LEFT:
-      case CENTER: x -= width()/2;
-      case RIGHT: x -= width();
-    }
-
-    switch (valign) {
-      case TOP:
-      case MIDDLE: y -= height()/2;
-      case BOTTOM: y -= height();
-    }
-
+    var v = getAligned(0);
+    var line = 0;
     for (i in 0...text.length) {
-      var c: Char = cast font.chars[text.charCodeAt(i)];
-      view.draw(c.image, x, y, 0.0, scale, scale, alpha);
-      x += (c.xadvance + xoffset)*scale;
+      var cc = text.charCodeAt(i);
+      if (cc == 10) {
+        line++;
+        v.x = getAligned(line).x;
+        v.y += font.lineHeight*scale;
+        continue;
+      }
+      var c: Char = cast font.chars[cc];
+      view.draw(c.image, v.x, v.y, 0.0, scale, scale, alpha);
+      v.x += (c.xadvance + xoffset)*scale;
     }
   }
 }
