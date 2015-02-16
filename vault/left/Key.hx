@@ -6,12 +6,15 @@ import flash.Lib;
 class Key {
   var justpressed: Array<Int>;
   var state: Array<Bool>;
+  var realstate: Array<Bool>;
 
   public function new() {
     justpressed = [];
     state = [];
+    realstate = [];
     for (i in 0...256) {
       state[i] = false;
+      realstate[i] = false;
     }
 
     Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -34,6 +37,7 @@ class Key {
   }
 
   public function reset(key: Int) {
+    justpressed.remove(key);
     state[key] = false;
   }
 
@@ -55,12 +59,15 @@ class Key {
 
   function onKeyDown(ev: KeyboardEvent) {
     var k = keyCode(ev);
+    if (realstate[k]) return;
     justpressed.push(k);
+    realstate[k] = true;
   }
 
   function onKeyUp(ev: KeyboardEvent) {
     var k = keyCode(ev);
     state[k] = false;
+    realstate[k] = false;
     justpressed.remove(k);
   }
 
