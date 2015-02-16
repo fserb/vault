@@ -76,8 +76,8 @@ class View extends Group {
     }
 
     var l = nextdraw.data.length;
-    nextdraw.data[l++] = x - img.offset.x + img.width/2.0;
-    nextdraw.data[l++] = y - img.offset.y + img.height/2.0;
+    nextdraw.data[l++] = x - img.offset.x*scaleX + img.width/2.0*scaleX;
+    nextdraw.data[l++] = y - img.offset.y*scaleY + img.height/2.0*scaleY;
     nextdraw.data[l++] = img.tileid;
     nextdraw.data[l++] = scaleX*cos;
     nextdraw.data[l++] = scaleX*-sin;
