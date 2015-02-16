@@ -17,7 +17,7 @@ class Game extends Sprite {
   public var scene(default, null): Group;
   var nextscene: Void -> Group = null;
 
-  public var paused: Bool;
+  public var paused: Bool = false;
 
   public function new() {
     super();
@@ -116,10 +116,9 @@ class Game extends Sprite {
 
     Left.profile.end("left.update");
     Left.profile.start("left.render");
-
     // draw
     for (view in Left.views) {
-      view.render(scene);
+      view.redraw(scene);
     }
 
     Left.profile.end("left.render");

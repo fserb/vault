@@ -88,7 +88,7 @@ class View extends Group {
     Left.profile.renderDraw++;
   }
 
-  override public function render(scene: Group) {
+  public function redraw(scene: Group) {
     sprite.graphics.clear();
     if (bgalpha != 0.0) {
       sprite.graphics.beginFill(bgcolor, bgalpha);
