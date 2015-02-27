@@ -9,6 +9,7 @@ import flash.geom.Point;
 import Math;
 import flash.geom.Rectangle;
 import vault.ds.RBTree;
+import vault.ds.RBTree.RBNode;
 
 class Cell {
 

@@ -4,7 +4,7 @@ package vault.ds;
 // Red-Black tree code (based on C version of "rbtree" by Franck Bui-Huu
 // https://github.com/fbuihuu/libtree/blob/master/rb.c
 
-private class RBNode<T:RBNode<T>> {
+class RBNode<T:RBNode<T>> {
   public var rbRed : Bool;
   public var rbLeft : T;
   public var rbRight : T;
@@ -13,7 +13,7 @@ private class RBNode<T:RBNode<T>> {
   public var rbPrevious : T;
 }
 
-@:generic private class RBTree<T:RBNode<T>> {
+@:generic class RBTree<T:RBNode<T>> {
 
   public var root : T;
 
