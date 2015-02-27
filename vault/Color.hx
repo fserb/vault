@@ -15,13 +15,7 @@ class Color {
            ((((( fromColor & 0x00FF00 ) * f1 ) + ( ( toColor & 0x00FF00 ) * f2 )) >> 8 ) & 0x00FF00 );
   }
 
-  static public function RGBToHSL(rgb: UInt): Dynamic {
-    var c = ColorToolkit.toHSL(rgb);
-    return {h: c.hue, s: c.saturation, l: c.lightness};
-  }
-
-  static public function HSL(h: Float, s: Float, l: Float): UInt {
-    var c = new HSL(h,s,l);
-    return c.getColor();
+  static inline public function HSL(color: UInt): HSL {
+    return ColorToolkit.toHSL(color);
   }
 }
