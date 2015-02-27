@@ -71,11 +71,4 @@ class Utils {
     }
     return array;
   }
-
-  /**
-   * Date at compile time.
-   */
-  macro public static function builddate() :Expr {
-    return Context.makeExpr(Date.now().toString(), Context.currentPos());
-  }
 }
