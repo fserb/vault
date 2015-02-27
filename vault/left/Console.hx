@@ -148,7 +148,11 @@ class Console {
     for (o in onelist) {
       logfile.writeString(makeline(o.name, o.value));
     }
-    for (t in timelist) {
+    var tk = [];
+    for (k in timelist.keys()) tk.push(k);
+    tk.sort(function(a, b) return Reflect.compare(a, b));
+    for (k in tk) {
+      var t = timelist[k];
       var worst = 0.0;
       var average = 0.0;
       for (p in t.prev) {
