@@ -126,6 +126,10 @@ class Atlas {
     if (target.sheet == -1) {
       // 1b. otherwise, create a new zone and select it.
       var bmp = new BitmapData(DIM, DIM, true, 0);
+      if (bmp == null) {
+        trace("Failed to create Atlas");
+        Sys.exit(12);
+      }
       bitmaps.push(bmp);
       tilesheets.push(new Tilesheet(bmp));
       zones.push({sheet: tilesheets.length-1, x: 0, y: 0,
@@ -145,24 +149,18 @@ class Atlas {
     }
     // 4. cleanup redundant zones.
     for (a in zones) {
-      if (a == null) {
-        zones.remove(a);
-        continue;
-      }
-      for (b in zones) {
-        if (a == b) continue;
-        if (b == null) {
-          zones.remove(b);
-          continue;
-        }
+      if (a == null) continue;
+      for (i in 0...zones.length) {
+        var b = zones[i];
+        if (a == b || b == null) continue;
 
         if ((b.x >= a.x) && (b.y >= a.y) &&
             (b.x + b.w <= a.x + a.w) && (b.y + b.h <= a.y + a.h)) {
-          zones.remove(b);
+          zones[i] = null;
         }
       }
     }
-
+    zones = zones.filter(function (a) return a != null);
     return target;
   }
 
