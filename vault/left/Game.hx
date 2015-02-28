@@ -1,6 +1,7 @@
 package vault.left;
 
 import flash.display.Sprite;
+import flash.display.StageDisplayState;
 import flash.Lib;
 import flash.events.Event;
 import flash.display.StageAlign;
@@ -16,6 +17,7 @@ class Game extends Sprite {
   var fps: Float;
   public var scene(default, null): Group;
   var nextscene: Void -> Group = null;
+  public var fullscreen(default, set): Bool;
 
   public var paused: Bool = false;
 
@@ -40,8 +42,8 @@ class Game extends Sprite {
 
     Lib.current.addChild(this);
 
-    Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-    Lib.current.stage.align = StageAlign.TOP_LEFT;
+    Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
+    Lib.current.stage.align = StageAlign.TOP;
 
     Left.time = 0;
     frameCount = 0;
@@ -77,6 +79,17 @@ class Game extends Sprite {
   public function setScene(s: Void->Group) {
     this.nextscene = s;
     Left.time = 0;
+  }
+
+  function set_fullscreen(value: Bool): Bool {
+    if (!value) {
+      Lib.current.stage.displayState = StageDisplayState.NORMAL;
+    } else {
+      Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN;
+    }
+
+    fullscreen = value;
+    return value;
   }
 
   function onFrame(ev) {
