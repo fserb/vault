@@ -23,28 +23,6 @@ class Cell {
     this.halfedges = [];
     }
 
-  // public function getCircle() {
-  //   // still not the best enclosing circle
-  //   // would require implementing http://www.personal.kent.edu/~rmuhamma/Compgeometry/MyCG/CG-Applets/Center/centercli.htm for complete solution
-  //   var p = new Point(), ec = 0;
-  //   for( e in halfedges ) {
-  //     var ep = e.getStartpoint();
-  //     p.x += ep.x;
-  //     p.y += ep.y;
-  //     ec++;
-  //   }
-  //   p.x /= ec;
-  //   p.y /= ec;
-  //   var r = 0.;
-  //   for( e in halfedges ) {
-  //     var dx = p.x - e.getStartpoint().x;
-  //     var dy = p.y - e.getStartpoint().y;
-  //     var d = dx * dx + dy * dy;
-  //     if( d > r ) r = d;
-  //   }
-  //   return new Circle(p.x, p.y, Math.sqrt(r));
-  // }
-
   public function prepare() {
     var halfedges = this.halfedges, iHalfedge = halfedges.length, edge;
     // get rid of unused halfedges
@@ -57,11 +35,6 @@ class Cell {
         }
       }
 
-    // rhill 2011-05-26: I tried to use a binary search at insertion
-    // time to keep the array sorted on-the-fly (in Cell.addHalfedge()).
-    // There was no real benefits in doing so, performance on
-    // Firefox 3.6 was improved marginally, while performance on
-    // Opera 11 was penalized marginally.
     halfedges.sort(sortByAngle);
     return halfedges.length;
   }
@@ -819,7 +792,7 @@ class Voronoi {
       ry = rPoint.y,
       fx = (lx+rx)/2,
       fy = (ly+ry)/2,
-      fm = 0., fb = 0.;
+      fm = 0.0, fb = 0.0;
 
     // get the line equation of the bisector if line is not vertical
     if (ry != ly) {
@@ -845,7 +818,7 @@ class Voronoi {
       if (fx < xl || fx >= xr) {return false;}
       // downward
       if (lx > rx) {
-        if (va == null) {
+        if (va == null || va.y < yt) {
           va = this.createVertex(fx, yt);
           }
         else if (va.y >= yb) {
@@ -855,7 +828,7 @@ class Voronoi {
         }
       // upward
       else {
-        if (va == null) {
+        if (va == null || va.y > yb) {
           va = this.createVertex(fx, yb);
           }
         else if (va.y < yt) {
@@ -869,7 +842,7 @@ class Voronoi {
     else if (fm < -1 || fm > 1) {
       // downward
       if (lx > rx) {
-        if (va == null) {
+        if (va == null || va.y < yt) {
           va = this.createVertex((yt-fb)/fm, yt);
           }
         else if (va.y >= yb) {
@@ -879,7 +852,7 @@ class Voronoi {
         }
       // upward
       else {
-        if (va == null) {
+        if (va == null || va.y > yb) {
           va = this.createVertex((yb-fb)/fm, yb);
           }
         else if (va.y < yt) {
@@ -893,7 +866,7 @@ class Voronoi {
     else {
       // rightward
       if (ly < ry) {
-        if (va == null) {
+        if (va == null || va.x < xl) {
           va = this.createVertex(xl, fm*xl+fb);
           }
         else if (va.x >= xr) {
@@ -903,7 +876,7 @@ class Voronoi {
         }
       // leftward
       else {
-        if (va == null) {
+        if (va == null || va.x > xr) {
           va = this.createVertex(xr, fm*xr+fb);
           }
         else if (va.x < xl) {
@@ -1085,7 +1058,8 @@ class Voronoi {
             vb = this.createVertex(this.equalWithepsilon(startpoint.y,yt) ? startpoint.x : xl, yt);
           }
           edge = this.createBorderEdge(cell.point, va, vb);
-          halfedges.insert(iLeft+1, new Halfedge(edge, cell.point, null));
+          iLeft++;
+          halfedges.insert(iLeft, new Halfedge(edge, cell.point, null));
           nHalfedges = halfedges.length;
         }
         iLeft++;

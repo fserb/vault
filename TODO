@@ -1,6 +1,8 @@
 TODO
 ====
 
+- Voronoi: closeCell is buggy and needs check/rewrite
+
 - Convert SVG to canvas code
 - Fully support Processing
 
