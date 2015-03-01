@@ -23,7 +23,7 @@ class Vec2 {
   }
 
   public inline function get_length(): Float {
-    return Math.sqrt(x*x + y*y);
+    return Math.sqrt(lsq());
   }
 
   public inline function set_length(v: Float): Float {
