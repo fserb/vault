@@ -36,6 +36,15 @@ class Key {
     return state[key];
   }
 
+  public function any(key: Array<Int>): Bool {
+    for (k in key) {
+      if (state[k]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public function reset(key: Int) {
     justpressed.remove(key);
     state[key] = false;
