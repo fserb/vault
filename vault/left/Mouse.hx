@@ -20,8 +20,8 @@ class Mouse {
   }
 
   function onMove(ev: MouseEvent) {
-    pos.x = ev.localX;
-    pos.y = ev.localY;
+    pos.x = ev.stageX;
+    pos.y = ev.stageY;
   }
 
   function onPress(ev: MouseEvent) {
