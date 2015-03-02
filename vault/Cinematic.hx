@@ -56,9 +56,9 @@ How the Script works:
     x % 100
 
   Calls a(t), waits for 3 seconds, triggers 'sig1'. Waits for 'sig1' to trigger
-  b(t) with 4s quadratic ease (that the triggers 'sig2') and c(t).
+  c(t) and b(t) with 4s quadratic ease (that then triggers 'sig2').
     a() > 3 > [!sig1];
-    [sig1] > b() << QuadIn(4) >> [sig2];
+    [sig1] > b() << QuadIn(4) > [sig2];
     [sig1] > c();
 */
 
