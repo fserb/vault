@@ -20,8 +20,8 @@ class Version {
   }
 
   macro static function getGitVersion() {
-    var name = getLine("/usr/bin/git", ["rev-parse", "--abbrev-ref", "HEAD"]);
-    var ver = getLine("/usr/bin/git", ["describe", "--always"]);
+    var name = getLine("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
+    var ver = getLine("git", ["describe", "--always"]);
     var ret = ver + "/" + name;
     return macro $v{ret};
   }
