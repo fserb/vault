@@ -8,9 +8,20 @@ class Version {
     return macro $v{ret};
   }
 
+  static function getLine(cmd: String, args: Array<String>): String {
+  #if !linux
+    return new Process(cmd, args).stdout.readLine();
+  #else
+    Sys.command(cmd + " " + args.join(" ") + " > .tmp.vault.version");
+    var f = sys.io.File.getContent(".tmp.vault.version");
+    Sys.command("rm -f .tmp.vault.version");
+    return StringTools.trim(f);
+  #end
+  }
+
   macro static function getGitVersion() {
-    var name = new Process("/usr/bin/git", ["rev-parse", "--abbrev-ref", "HEAD"]).stdout.readLine();
-    var ver = new Process("/usr/bin/git", ["describe", "--always"]).stdout.readLine();
+    var name = getLine("/usr/bin/git", ["rev-parse", "--abbrev-ref", "HEAD"]);
+    var ver = getLine("/usr/bin/git", ["describe", "--always"]);
     var ret = ver + "/" + name;
     return macro $v{ret};
   }
