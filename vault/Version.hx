@@ -9,7 +9,7 @@ class Version {
   }
 
   static function getLine(cmd: String, args: Array<String>): String {
-  #if !linux
+  #if (!linux && !windows)
     return new Process(cmd, args).stdout.readLine();
   #else
     Sys.command(cmd + " " + args.join(" ") + " > .tmp.vault.version");
