@@ -11,7 +11,8 @@ class Glitch {
 
   static public function glitch(source: BitmapData, quality: Int = 50, alpha: Bool = true): BitmapData {
     return source;
-    var jpg: ByteArray = source.encode("jpg", quality);
+    var jpg = new ByteArray();
+    source.encode(source.rect, "jpg", jpg);
     // var header_length = getJPEGHeaderLength(jpg);
     var header_length = 611;
 

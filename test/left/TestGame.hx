@@ -1,5 +1,6 @@
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
+import openfl.Assets;
 import vault.left.Backdrop;
 import vault.left.Game;
 import vault.left.Group;
@@ -172,10 +173,34 @@ class TestScene2 extends Group {
   }
 }
 
+
+class X extends Sprite {
+  public function new() {
+    super();
+    image= Image.create(Assets.getBitmapData("assets/test.png"));
+    pos.x = 400;
+    pos.y = 300;
+  }
+}
+
+class TestScene3 extends Group {
+  public function new() {
+    super();
+    add(new X());
+  }
+
+  override public function update() {
+    super.update();
+    if (Left.key.just(Key.R)) {
+      Left.game.setScene(function() return new TestScene3());
+    }
+  }
+}
+
 class TestGame extends Game {
   public function new() {
     super();
-    setScene(function() return new TestScene2());
+    setScene(function() return new TestScene3());
   }
 
   public static function main() {

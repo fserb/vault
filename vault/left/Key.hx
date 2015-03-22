@@ -63,6 +63,7 @@ class Key {
   }
 
   inline function keyCode(ev: KeyboardEvent): Int {
+    if (ev.keyCode < 0 || ev.keyCode >= 256) return 0;
     return ev.keyCode;
   }
 

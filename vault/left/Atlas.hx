@@ -60,7 +60,8 @@ class Atlas {
       }
 
       // Saving the BitmapData
-      var ba:flash.utils.ByteArray = bmp.encode("png", 1);
+      var ba = new flash.utils.ByteArray();
+      bmp.encode(bmp.rect, "png", ba);
       var fo:sys.io.FileOutput = sys.io.File.write("atlas" + i + ".png", true);
       fo.writeString(ba.toString());
       fo.close();
