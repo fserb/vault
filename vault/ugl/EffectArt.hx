@@ -156,11 +156,12 @@ class EffectArt {
     var input = orig.getPixels(orig.rect);
     input.position = 0;
     input.endian = flash.utils.Endian.BIG_ENDIAN;
+
     if (c != null) {
-      c = (c & 0xFFFFFF) << 8;
+      c = (c & 0xFFFFFF);
       while (input.bytesAvailable > 0) {
         var s = input.readInt();
-        var a = s & 0xFF;
+        var a = s & 0xFF000000;
         var o = a | c;
         input.position -= 4;
         input.writeInt(o);
