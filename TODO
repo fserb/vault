@@ -18,15 +18,14 @@ left : the minimal game library
 [ TODO ]
 
 - Reverse View model:
-  - each object has to be called to be draw. Draw receives a View object.
+  - each object has to be called to be draw. Draw receives a Renderer object.
   - this means no "object list" by default, but Group just passes all elements.
 
-- Low level graphics:
-  - set shader
-  - set uniforms
-  - Graphics() functions
-  - ?? how to handle renderToTexture
-
+- Renderer:
+  - buffer of vertices, triangles
+  - set shader / uniforms. Calls draw when changed.
+  - has Graphics functions
+  - can be textureRendender or directRenderer
 
 - Sprite: basic animation
 - Sprite: support for scrollfactor

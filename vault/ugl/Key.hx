@@ -104,12 +104,12 @@ class Key extends KeyGroup {
   public function new() {
     state = Utils.initArray(256, false);
 
-    up_ = new Button(function() { return state[0x26] || state[0x57] || joyY < 0; });
-    down_ = new Button(function() { return state[0x28] || state[0x53] || joyY > 0; });
-    left_ = new Button(function() { return state[0x25] || state[0x41] || joyX < 0; });
-    right_ = new Button(function() { return state[0x27] || state[0x44] || joyX > 0; });
+    up_ = new Button(function() { return state[0x26] || state[0x5A] || state[0xBC] || state[0x57] || joyY < 0; });
+    down_ = new Button(function() { return state[0x28] || state[0x53] || state[0x4F] || joyY > 0; });
+    left_ = new Button(function() { return state[0x25] || state[0x41] || state[0x51] || joyX < 0; });
+    right_ = new Button(function() { return state[0x27] || state[0x44] || state[0x45] || joyX > 0; });
     b1_ = new Button(function() { return joyB1 || state[0x58] || state[0xbe] || state[0x20] || state[0x0d]; });
-    b2_ = new Button(function() { return joyB2 || state[0x5a] || state[0xbf]; });
+    b2_ = new Button(function() { return joyB2 || state[0x43] || state[0xbf]; });
     esc_ = new Button(function() { return state[0x1b]; });
     pause_ = new Button(function() { return state[0x50]; });
     any_ = new Button(function() {
