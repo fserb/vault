@@ -82,7 +82,6 @@ class Text extends Entity {
   function redraw() {
     sprite.graphics.clear();
     if (_text.length == 0) return;
-
     _redraw = false;
     var bmpd = Text.drawText(_text, _color, _size);
     sprite.graphics.beginBitmapFill(bmpd, null, false, false);

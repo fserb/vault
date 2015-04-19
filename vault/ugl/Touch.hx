@@ -35,27 +35,27 @@ class Touch {
     }
   }
 
-  function getID(ev: TouchEvent): Int {
+  function getID(ev: Dynamic): Int {
     #if html5
       return ev.touchPointID != null ? ev.touchPointID : -1;
     #else
-      return ev.touchPointID;
+      return Std.is(ev, TouchEvent) ? ev.touchPointID : 1;
     #end
   }
 
-  function onMove(ev: TouchEvent) {
+  function onMove(ev: Dynamic) {
     var id = getID(ev);
     if (!evs.exists(id)) return;
     evs[id].x = ev.localX;
     evs[id].y = ev.localY;
   }
 
-  function onPress(ev: TouchEvent) {
+  function onPress(ev: Dynamic) {
     var id = getID(ev);
     evs[id] = new Vec2(ev.localX, ev.localY);
   }
 
-  function onRelease(ev: TouchEvent) {
+  function onRelease(ev: Dynamic) {
     var id = getID(ev);
     if (evs.exists(id)) {
       evs.remove(id);
