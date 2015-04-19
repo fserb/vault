@@ -189,7 +189,6 @@ class Entity {
       }
     }
     #end
-
     var lastangle = axis[0] - 1;
     for (angle in axis) {
       if (angle - lastangle < 1e-15) continue;
@@ -270,7 +269,8 @@ class Entity {
     return switch (input) {
       case Circle(x, y, r):
         var p = m.transformPoint(new Point(x, y));
-        Circle(p.x, p.y, m.a*r);
+        var sx = Math.sqrt(m.a*m.a + m.b*m.b);
+        Circle(p.x, p.y, sx*r);
       case Polygon(points):
         var out = new Array<Vec2>();
         for (p in points) {
@@ -365,7 +365,9 @@ class Entity {
 
   var aabb_m: Matrix = null;
   inline function _update_aabb() {
+  #if !flash
     if (base_sprite.transform.matrix.equals(aabb_m)) return;
+  #end
     aabb.x = aabb.y = 1e99;
     aabb.right = aabb.bottom = 0;
     for (a in hits) {
@@ -393,7 +395,6 @@ class Entity {
 
   inline function _update_location() {
     var m = new Matrix();
-
     m.identity();
     if (rotationcenter == null) {
       m.translate(-sprite.width/2.0, -sprite.height/2.0);
