@@ -1,44 +1,54 @@
 package vault;
 
-import RTMidi;
+import rtmidi.RTMidiIn;
 
 class Kontrol {
-  var midi: RTMidi = null;
+  var midi_input: RTMidiIn = null;
 
   public var slider: Array<Float>;
   public var knob: Array<Float>;
-  public var track_set: Array<Bool>;
+  public var track_solo: Array<Bool>;
   public var track_mute: Array<Bool>;
-  public var track_reset: Array<Bool>;
+  public var track_rec: Array<Bool>;
   public var button: Array<Bool>;
 
   public function new() {
-    midi = new RTMidi();
-    var ports = midi.getPortCount();
+    midi_input = new RTMidiIn();
+    var ports = midi_input.getPortCount();
 
-    if (ports == 0) {
-      midi.close();
-      midi = null;
+    var valid = false;
+
+    for (i in 0...ports) {
+      midi_input.openPort(i);
+      if (midi_input.getPortName(i) == "nanoKONTROL2 SLIDER/KNOB") {
+        valid = true;
+        break;
+      }
+      midi_input.closePort();
+    }
+
+    if (!valid) {
+      midi_input.close();
+      midi_input = null;
       return;
     }
 
-    midi.openPort(0);
-    midi.setCallback(callback);
-    midi.ignoreTypes(false, false, false);
+    midi_input.setCallback(callback);
+    midi_input.ignoreTypes(false, false, false);
 
     slider = new Array<Float>();
     knob = new Array<Float>();
-    track_set = new Array<Bool>();
+    track_solo = new Array<Bool>();
     track_mute = new Array<Bool>();
-    track_reset = new Array<Bool>();
+    track_rec = new Array<Bool>();
     button = new Array<Bool>();
 
     for (i in 0...8) {
       slider.push(0.0);
       knob.push(0.0);
-      track_set.push(false);
+      track_solo.push(false);
       track_mute.push(false);
-      track_reset.push(false);
+      track_rec.push(false);
     }
 
     for (i in 0...11) {
@@ -46,14 +56,15 @@ class Kontrol {
     }
   }
 
-  public function destroy() {
-    midi.close();
-    midi = null;
+  public function close() {
+    if (midi_input != null) {
+      midi_input.close();
+      midi_input = null;
+    }
   }
 
   function callback(msg: Array<Int>) {
     if (msg[0] != 176) return;
-
 
     var track = msg[1] & 7;
     var clicked = msg[2] == 127;
@@ -64,11 +75,11 @@ class Kontrol {
     } else if (msg[1] >= 16 && msg[1] <= 23) {
       knob[track] = msg[2]/127.0;
     } else if (msg[1] >= 32 && msg[1] <= 39) {
-      track_set[track] = msg[2] == 127;
+      track_solo[track] = msg[2] == 127;
     } else if (msg[1] >= 48 && msg[1] <= 55) {
       track_mute[track] = msg[2] == 127;
     } else if (msg[1] >= 64 && msg[1] <= 71) {
-      track_reset[track] = msg[2] == 127;
+      track_rec[track] = msg[2] == 127;
     } else if (msg[1] == 58) { button[TRACK_LEFT] = clicked; }
       else if (msg[1] == 59) { button[TRACK_RIGHT] = clicked; }
       else if (msg[1] == 46) { button[CYCLE] = clicked; }
@@ -84,7 +95,6 @@ class Kontrol {
       trace(msg, track);
     }
   }
-
 
   static public var TRACK_LEFT = 0;
   static public var TRACK_RIGHT = 1;
