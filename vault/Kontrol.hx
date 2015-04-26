@@ -1,6 +1,9 @@
 package vault;
 
 import rtmidi.RTMidiIn;
+#if (cpp || neko)
+import sys.io.File;
+#end
 
 class Kontrol {
   var midi_input: RTMidiIn = null;
@@ -54,13 +57,58 @@ class Kontrol {
     for (i in 0...11) {
       button.push(false);
     }
+
+    load();
   }
 
   public function close() {
+    store();
     if (midi_input != null) {
       midi_input.close();
       midi_input = null;
     }
+  }
+
+  function load() {
+  #if (cpp || neko)
+    var content = File.getContent('kontrol.data');
+    if (content == null || content.length == 0) return;
+
+    var data = content.split(',');
+
+    if (data.length < 8*5 + button.length) return;
+    var p = 0;
+
+    for (i in 0...8) {
+      slider[i] = Std.parseFloat(data[p++]);
+      knob[i] = Std.parseFloat(data[p++]);
+      track_solo[i] = data[p++] == "1";
+      track_mute[i] = data[p++] == "1";
+      track_rec[i] = data[p++] == "1";
+    }
+    for (i in 0...button.length) {
+      button[i] = data[p++] == "1";
+    }
+  #end
+  }
+
+  function store() {
+  #if (cpp || neko)
+    var data = new Array<String>();
+
+    for (i in 0...8) {
+      data.push(Std.string(slider[i]));
+      data.push(Std.string(knob[i]));
+      data.push(Std.string(track_solo[i] ? "1": "0"));
+      data.push(Std.string(track_mute[i] ? "1": "0"));
+      data.push(Std.string(track_rec[i] ? "1": "0"));
+    }
+    for (i in 0...button.length) {
+      data.push(button[i] ? "1": "0");
+    }
+
+    File.saveContent('kontrol.data', data.join(',') + ',\n');
+  #end
   }
 
   function callback(msg: Array<Int>) {
