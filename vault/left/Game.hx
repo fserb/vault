@@ -6,6 +6,7 @@ import flash.Lib;
 import flash.events.Event;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
+import flash.display.StageQuality;
 import vault.left.Group;
 import vault.left.Left;
 import vault.left.Console.Profile;
@@ -25,6 +26,7 @@ class Game extends Sprite {
     super();
     Left.console = new Console();
     Left.profile = new Profile();
+
     Left.game = this;
 
     Left.views = new Array<View>();
@@ -42,8 +44,14 @@ class Game extends Sprite {
 
     Lib.current.addChild(this);
 
-    Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
-    Lib.current.stage.align = StageAlign.TOP;
+    #if android
+      Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
+      Lib.current.stage.align = StageAlign.TOP_LEFT;
+    #else
+      Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
+      Lib.current.stage.align = StageAlign.TOP;
+      Lib.current.stage.quality = StageQuality.BEST;
+    #end
 
     Left.time = 0;
     frameCount = 0;

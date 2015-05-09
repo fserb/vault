@@ -52,7 +52,7 @@ typedef TimeVariable = {
 };
 
 class Console {
-#if !flash
+#if (cpp && desktop)
   var logfile: sys.io.FileOutput;
 #end
   var watchlist: Array<WatchVariable>;
@@ -61,7 +61,7 @@ class Console {
   var maxsize: Int;
 
   public function new() {
-#if !flash
+#if (cpp && desktop)
     logfile = sys.io.File.write("console.log", false);
 #end
     watchlist = [];
@@ -133,11 +133,11 @@ class Console {
       return '0.'+str;
     }
     else{
-      return str.substr(0, str.length-prec) + '.'+str.substr(str.length-prec);
+    return str.substr(0, str.length-prec) + '.'+str.substr(str.length-prec);
     }
   }
 
-#if !flash
+#if (cpp && desktop)
   public function update() {
     logfile.writeString("\x1B[2J\x1B[0;0H");
 

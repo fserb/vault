@@ -45,7 +45,7 @@ class Atlas {
   }
 
   public function dumpAtlas() {
-#if !flash
+#if (!flash && !html5)
     for (i in 0...bitmaps.length) {
       var b = bitmaps[i];
       var bmp = new BitmapData(b.width, b.height, true, 0);
@@ -129,7 +129,10 @@ class Atlas {
       var bmp = new BitmapData(DIM, DIM, true, 0);
       if (bmp == null) {
         trace("Failed to create Atlas");
-        Sys.exit(12);
+        #if !html5
+          Sys.exit(12);
+        #end
+        return null;
       }
       bitmaps.push(bmp);
       tilesheets.push(new Tilesheet(bmp));
