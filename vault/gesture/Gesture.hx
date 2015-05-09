@@ -34,6 +34,7 @@ class Gesture {
   var target: EventDispatcher;
 
   public var triggered: GestureEvent;
+  public var isTouch: Bool;
 
   public function registerDetector(g: GestureDetector) {
     gestures.push(g);
@@ -43,7 +44,7 @@ class Gesture {
     this.target = target;
     touches = new Map<Int, Vec2>();
 
-    var isTouch = Multitouch.supportsTouchEvents;
+    isTouch = Multitouch.supportsTouchEvents;
     #if html5
       // For HTML5, supportsTouchEvents seems kinda broken.
       // So we fallback to detecting if it's a mobile browser or not.
@@ -62,6 +63,18 @@ class Gesture {
       target.addEventListener(MouseEvent.MOUSE_DOWN, mouseEvent);
       target.addEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
       target.addEventListener(MouseEvent.MOUSE_UP, mouseEvent);
+    }
+  }
+
+  public function detach() {
+    if (isTouch) {
+      target.removeEventListener(TouchEvent.TOUCH_BEGIN, touchEvent);
+      target.removeEventListener(TouchEvent.TOUCH_MOVE, touchEvent);
+      target.removeEventListener(TouchEvent.TOUCH_END, touchEvent);
+    } else {
+      target.removeEventListener(MouseEvent.MOUSE_DOWN, mouseEvent);
+      target.removeEventListener(MouseEvent.MOUSE_MOVE, mouseEvent);
+      target.removeEventListener(MouseEvent.MOUSE_UP, mouseEvent);
     }
   }
 
