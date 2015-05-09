@@ -48,9 +48,7 @@ class Gesture {
       // For HTML5, supportsTouchEvents seems kinda broken.
       // So we fallback to detecting if it's a mobile browser or not.
       isTouch = false;
-      if (~/android/i.match(js.Browser.navigator.userAgent) ||
-          ~/iphone/i.match(js.Browser.navigator.userAgent) ||
-          ~/ipad/i.match(js.Browser.navigator.userAgent)) {
+      if (~/android/i.match(js.Browser.navigator.userAgent)) {
         isTouch = true;
       }
     #end
