@@ -44,6 +44,16 @@ class Gesture {
     touches = new Map<Int, Vec2>();
 
     var isTouch = Multitouch.supportsTouchEvents;
+    #if html5
+      // For HTML5, supportsTouchEvents seems kinda broken.
+      // So we fallback to detecting if it's a mobile browser or not.
+      isTouch = false;
+      if (~/android/i.match(js.Browser.navigator.userAgent) ||
+          ~/iphone/i.match(js.Browser.navigator.userAgent) ||
+          ~/ipad/i.match(js.Browser.navigator.userAgent)) {
+        isTouch = true;
+      }
+    #end
 
     if (isTouch) {
       Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
