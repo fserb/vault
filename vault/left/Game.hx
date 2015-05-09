@@ -104,6 +104,9 @@ class Game extends Sprite {
     Left.profile.start("left.update");
 
     if (this.nextscene != null) {
+      if (this.scene != null) {
+        this.scene.destroy();
+      }
       if (numChildren > 0) {
         removeChildren(0, numChildren-1);
       }
