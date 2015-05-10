@@ -2,6 +2,7 @@ package vault;
 
 import rtmidi.RTMidiIn;
 #if (cpp || neko)
+import sys.FileSystem;
 import sys.io.File;
 #end
 
@@ -62,15 +63,15 @@ class Kontrol {
   }
 
   public function close() {
+    if (midi_input == null) return;
     store();
-    if (midi_input != null) {
-      midi_input.close();
-      midi_input = null;
-    }
+    midi_input.close();
+    midi_input = null;
   }
 
   function load() {
   #if (cpp || neko)
+    if (!FileSystem.exists('kontrol.data')) return;
     var content = File.getContent('kontrol.data');
     if (content == null || content.length == 0) return;
 
