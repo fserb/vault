@@ -60,8 +60,8 @@ class View extends Group {
   }
 
   public function set_zoom(f: Float): Float {
-    width = Math.round(width*zoom/f);
-    height = Math.round(height*zoom/f);
+    width = Math.round(width);
+    height = Math.round(height);
     scale = zoom = f;
     return zoom;
   }

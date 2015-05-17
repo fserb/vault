@@ -22,6 +22,10 @@ class Game extends Sprite {
 
   public var paused: Bool = false;
 
+  var desiredWidth: Int = 0;
+  var desiredHeight: Int = 0;
+  public var zoom: Float = 1.0;
+
   public function new() {
     super();
     Left.console = new Console();
@@ -44,7 +48,7 @@ class Game extends Sprite {
 
     Lib.current.addChild(this);
 
-    #if android
+    #if (android || ios)
       Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
       Lib.current.stage.align = StageAlign.TOP_LEFT;
     #else
@@ -66,9 +70,31 @@ class Game extends Sprite {
     onResize(null);
   }
 
+  public function forceSize(width: Int = 0, height: Int = 0): Float {
+    desiredWidth = width;
+    desiredHeight = height;
+    onResize(null);
+    return zoom;
+  }
+
   function onResize(ev) {
     Left.width = Lib.current.stage.stageWidth;
     Left.height = Lib.current.stage.stageHeight;
+    if (desiredWidth * desiredHeight != 0) {
+      zoom = Math.min(Left.width/desiredWidth, Left.height/desiredHeight);
+    } else {
+      zoom = 1.0;
+    }
+    Lib.current.scaleX = Lib.current.scaleY = zoom;
+    Left.width = Math.floor(Left.width/zoom);
+    Left.height = Math.floor(Left.height/zoom);
+    if (desiredWidth * desiredHeight != 0) {
+      Lib.current.x = (Left.width - desiredWidth)/2.0;
+      Lib.current.y = (Left.height - desiredHeight)/2.0;
+    } else {
+      Lib.current.x = Lib.current.y = 0;
+    }
+    trace(zoom, Left.width, Left.height);
   }
 
   public function resetViews() {
@@ -76,6 +102,7 @@ class Game extends Sprite {
       removeChild(v.sprite);
     }
     Left.views = [];
+    forceSize();
     addView(new View());
   }
 
