@@ -34,6 +34,12 @@ abstract Point(Point_) from Point_ to Point_ {
     return new Vec2(x, y);
   }
 
+  public inline function distance(p: Point): Float {
+    var xx = p.x - x;
+    var yy = p.y - y;
+    return Math.sqrt(xx*xx + yy*yy);
+  }
+
   public inline function fromVec2(v: Vec2): Point {
     return new Point(Std.int(v.x), Std.int(v.y));
   }
