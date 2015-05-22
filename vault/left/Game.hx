@@ -94,7 +94,6 @@ class Game extends Sprite {
     } else {
       Lib.current.x = Lib.current.y = 0;
     }
-    trace(zoom, Left.width, Left.height);
   }
 
   public function resetViews() {

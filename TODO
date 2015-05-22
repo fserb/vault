@@ -15,24 +15,23 @@ TODO
 left : the minimal game library
 ===============================
 
-[ TODO ]
+- Left2:
+  - keep display lists and basic openfl structure
+  - add classes that help on top of that
+  - Game: basic "Scene" management, time, fullscreen, rescale
+  - Better DisplayObjectContainer z-order handling
+  - Atlas-based sprite
+  - Atlas-based animator
+  - Atlas-based tilemap
+  - Extend graphics
+  - Key/Mouse
+  - Better actuators
+  - Text
+  - Console/Profile
 
-- Reverse View model:
-  - each object has to be called to be draw. Draw receives a Renderer object.
-  - this means no "object list" by default, but Group just passes all elements.
 
-- Renderer:
-  - buffer of vertices, triangles
-  - set shader / uniforms. Calls draw when changed.
-  - has Graphics functions
-  - can be textureRendender or directRenderer
 
-- Sprite: basic animation
-- Sprite: support for scrollfactor
-- Sprite: support for subimage collision
-- Sprite: collide with bb
-- Game: fullscreen toggle
-- Gamepad
+
 
 
 ugl : µ game library
