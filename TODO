@@ -16,7 +16,7 @@ left : the minimal game library
 ===============================
 
 - Left2:
-  - Better DisplayObjectContainer z-order handling
+  - Collision detection composition
   - Extend graphics
   - Better actuators
   - Text

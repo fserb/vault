@@ -1,7 +1,9 @@
 import flash.display.Bitmap;
 import flash.display.BitmapData;
+import flash.display.Sprite;
 import flash.geom.Rectangle;
 import openfl.Assets;
+import vault.Extra;
 import vault.left.Scene;
 import vault.left.Key;
 import vault.left.Left;
@@ -9,31 +11,39 @@ import vault.left.View;
 import vault.Vec2;
 import vault.algo.Catmull;
 
-class TestView extends View {
-  var im: vault.left.View.Image;
+class A extends Sprite {
   public function new() {
     super();
-    im = createImage(Assets.getBitmapData("assets/test.png"));
-    viewport(100, 100, 0x00FF00, 1.0);
+    graphics.beginFill(0xFF0000);
+    graphics.drawRect(0, 0, 100, 100);
   }
-
-  public function update() {
-    draw(im, 100, 50);
-    render();
+}
+class B extends Sprite {
+  public function new() {
+    super();
+    graphics.beginFill(0x00FF00);
+    graphics.drawRect(75, 75, 100, 100);
+  }
+}
+class C extends Sprite {
+  public function new() {
+    super();
+    graphics.beginFill(0x0000FF);
+    graphics.drawRect(150, 150, 100, 100);
   }
 }
 
 class TestScene extends Scene {
-  var view: TestView;
   public function new() {
     super();
 
-    view = new TestView();
-    addChild(view);
+    addChild(new A());
+    addChild(new B());
+    addChild(new C());
   }
 
   override public function update() {
-    view.update();
+    super.update();
     if (Left.key.just(Key.R)) {
       Left.setScene(function() return new TestScene());
     }

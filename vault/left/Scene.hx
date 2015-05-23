@@ -99,6 +99,13 @@ class Scene extends Sprite {
   }
 
   function update() {
+    for (i in 0...numChildren) {
+      var c = getChildAt(i);
+      var up = Reflect.field(c, 'update');
+      if (up != null) {
+        up();
+      }
+    }
   }
 
   function onDestroy() {
