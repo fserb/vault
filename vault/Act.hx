@@ -52,17 +52,21 @@ class Act {
     }
   }
 
-  static public function obj(obj: Dynamic): Act {
+  static public function obj(obj: Dynamic = null): Act {
     return new Act(obj);
+  }
+
+  static public function reset() {
+    actions = [];
   }
 
   var object: Dynamic = null;
   var lastDuration: Float = 1.0;
   var lastEase: Float->Float = null;
 
-  public function new(obj: Dynamic) {
+  public function new(obj: Dynamic = null) {
     setup();
-    object = obj;
+    object = obj != null ? obj : this;
     lastEase = Ease.linear;
   }
 

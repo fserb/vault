@@ -18,7 +18,6 @@ left : the minimal game library
 - Left2:
   - Collision detection composition
   - Extend graphics
-  - Better actuators
   - Text
 
 
