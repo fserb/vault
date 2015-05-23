@@ -10,6 +10,7 @@ import vault.left.Left;
 import vault.left.View;
 import vault.Vec2;
 import vault.algo.Catmull;
+import vault.act.Act;
 
 class A extends Sprite {
   public function new() {

@@ -15,6 +15,13 @@ TODO
 left : the minimal game library
 ===============================
 
+- Act:
+  Act.obj(this).delay(1.0).attr('alpha', 1.0, 3.0, quadIn).then(myFunc);
+  Act.obj(this).stop();
+  Act.obj(this).attr('x', 100.0, 1.0);
+  Act.obj().delay(1.0).tween(myFunc, 4.0, quadIn);
+
+
 - Left2:
   - Collision detection composition
   - Extend graphics
