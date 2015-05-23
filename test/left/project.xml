@@ -4,12 +4,10 @@
 
   <app main="TestGame" path="bin" file="TestGame" />
 
-  <window fps="60" background="" hardware="true" vsync="true" />
+  <window fps="60" background="" vsync="true" />
   <window width="800" height="450" resizable="true" />
-  <window allow-shaders="true" require-shaders="true" antialiasing="2" />
+  <window antialiasing="2" />
   <window orientation="landscape" if="cpp"/>
-
-  <set name="SWF_VERSION" value="11.8" />
 
   <source path="." />
   <assets path="assets" />

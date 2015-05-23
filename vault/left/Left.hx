@@ -1,27 +1,29 @@
 package vault.left;
 
 import vault.left.Console;
-import vault.left.Game;
-import vault.left.View;
+import vault.left.Scene;
 
-@:allow(vault.left.Game)
+@:allow(vault.left.Scene)
 class Left {
-  static public var game(default, null): Game;
+  static public var scene(default, null): Scene;
 
   static public var width(default, null): Int;
   static public var height(default, null): Int;
 
-  static public var time: Float;
-  static public var elapsed: Float;
+  static public var time(default, null): Float;
+  static public var elapsed(default, null): Float;
 
-  static public var views: Array<View>;
+  static public var key(default, null): Key;
+  static public var mouse(default, null): Mouse;
 
-  static public var atlas: Atlas;
+  static public var console(default, null): Console;
 
-  static public var key: Key;
-  static public var mouse: Mouse;
+  static public var profile(default, null): Profile;
 
-  static public var console: Console;
-
-  static public var profile: Profile;
+  static public function setScene(scenefunc: Void->Scene) {
+    if (Left.scene != null) {
+      Left.scene.onDestroy();
+    }
+    Left.scene = scenefunc();
+  }
 }

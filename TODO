@@ -16,18 +16,16 @@ left : the minimal game library
 ===============================
 
 - Left2:
-  - keep display lists and basic openfl structure
   - add classes that help on top of that
-  - Game: basic "Scene" management, time, fullscreen, rescale
   - Better DisplayObjectContainer z-order handling
-  - Atlas-based sprite
-  - Atlas-based animator
-  - Atlas-based tilemap
+  - Atlas-based sprite, animator, tilemap
   - Extend graphics
   - Key/Mouse
   - Better actuators
   - Text
   - Console/Profile
+
+  - Game has update() function call on Scene.
 
 
 

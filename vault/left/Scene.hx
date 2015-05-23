@@ -7,17 +7,14 @@ import flash.events.Event;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.display.StageQuality;
-import vault.left.Group;
 import vault.left.Left;
 import vault.left.Console.Profile;
-import vault.left.View;
 import haxe.Timer;
 
-class Game extends Sprite {
+@:allow(vault.left.Left)
+class Scene extends Sprite {
   var frameCount: Int;
   var fps: Float;
-  public var scene(default, null): Group;
-  var nextscene: Void -> Group = null;
   public var fullscreen(default, set): Bool;
 
   public var paused: Bool = false;
@@ -31,10 +28,7 @@ class Game extends Sprite {
     Left.console = new Console();
     Left.profile = new Profile();
 
-    Left.game = this;
-
-    Left.views = new Array<View>();
-    Left.atlas = new Atlas();
+    Left.scene = this;
 
     if (Lib.current.stage != null) {
       onAdded(null);
@@ -96,25 +90,6 @@ class Game extends Sprite {
     }
   }
 
-  public function resetViews() {
-    for (v in Left.views) {
-      removeChild(v.sprite);
-    }
-    Left.views = [];
-    forceSize();
-    addView(new View());
-  }
-
-  public function addView(v: View) {
-    Left.views.push(v);
-    addChild(v.sprite);
-  }
-
-  public function setScene(s: Void->Group) {
-    this.nextscene = s;
-    Left.time = 0;
-  }
-
   function set_fullscreen(value: Bool): Bool {
     if (!value) {
       Lib.current.stage.displayState = StageDisplayState.NORMAL;
@@ -126,22 +101,17 @@ class Game extends Sprite {
     return value;
   }
 
+  function update() {
+  }
+
+  function onDestroy() {
+    Lib.current.stage.removeEventListener(Event.ENTER_FRAME, onFrame);
+    Lib.current.stage.removeEventListener(Event.RESIZE, onResize);
+    Lib.current.removeChild(this);
+  }
+
   function onFrame(ev) {
     Left.profile.start("left.update");
-
-    if (this.nextscene != null) {
-      if (this.scene != null) {
-        this.scene.destroy();
-      }
-      if (numChildren > 0) {
-        removeChildren(0, numChildren-1);
-      }
-      resetViews();
-      var tmp = this.nextscene;
-      this.nextscene = null;
-      paused = false;
-      this.scene = tmp();
-    }
 
     frameCount++;
     var t = Timer.stamp();
@@ -156,22 +126,11 @@ class Game extends Sprite {
     Left.mouse.update();
 
     // update
-    scene.update();
+    update();
 
     if (paused) return;
 
-    for (view in Left.views) {
-      view.update();
-    }
-
     Left.profile.end("left.update");
-    Left.profile.start("left.render");
-    // draw
-    for (view in Left.views) {
-      view.redraw(scene);
-    }
-
-    Left.profile.end("left.render");
 
     Left.console.update();
     Left.profile.update();
