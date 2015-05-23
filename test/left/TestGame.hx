@@ -3,6 +3,7 @@ import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.geom.Rectangle;
 import openfl.Assets;
+import vault.Ease;
 import vault.Extra;
 import vault.left.Scene;
 import vault.left.Key;
@@ -10,13 +11,16 @@ import vault.left.Left;
 import vault.left.View;
 import vault.Vec2;
 import vault.algo.Catmull;
-import vault.act.Act;
+import vault.Act;
 
 class A extends Sprite {
   public function new() {
     super();
     graphics.beginFill(0xFF0000);
     graphics.drawRect(0, 0, 100, 100);
+
+    Act.obj(this).attr("x", 200, 1.0, Ease.quadIn).attr("y", 200);
+    Act.obj(this).then().attr("y", 0, 1.0, Ease.quadIn);
   }
 }
 class B extends Sprite {
@@ -35,16 +39,27 @@ class C extends Sprite {
 }
 
 class TestScene extends Scene {
+  var a: A;
   public function new() {
     super();
 
-    addChild(new A());
+    a = new A();
+    addChild(a);
     addChild(new B());
     addChild(new C());
   }
 
   override public function update() {
     super.update();
+    if (Left.key.just(Key.SPACE)) {
+      Act.obj(a).pause();
+    }
+    if (Left.key.just(Key.X)) {
+      Act.obj(a).resume();
+    }
+    if (Left.key.just(Key.Z)) {
+      Act.obj(a).stop();
+    }
     if (Left.key.just(Key.R)) {
       Left.setScene(function() return new TestScene());
     }

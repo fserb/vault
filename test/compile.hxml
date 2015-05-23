@@ -1,7 +1,6 @@
 -main Run
 -neko run.n
 -lib openfl
--lib openfl-native
 --macro allowPackage("flash")
 -cp ..
 -D tools=1.4.0
