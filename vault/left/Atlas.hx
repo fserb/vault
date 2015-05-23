@@ -2,7 +2,7 @@ package vault.left;
 
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import vault.left.Image;
+import vault.left.View.Image;
 import flash.display.BitmapData;
 import openfl.display.Tilesheet;
 
@@ -20,9 +20,10 @@ class Atlas {
   var zones: Array<Zone>;
 
   var BORDER: Int = 2;
-  static public var DIM: Int = 2048;
+  var size: Int;
 
-  public function new() {
+  public function new(size: Int = 1024) {
+    this.size = size;
     zones = new Array<Zone>();
     bitmaps = new Array<BitmapData>();
     tilesheets = new Array<Tilesheet>();
@@ -34,7 +35,7 @@ class Atlas {
     b.scaleX = b.scaleY = 0.5;
     b.x = 5;
     b.y = -2048*b.scaleX+ 576 - 5;
-    Left.game.addChild(b);
+    Left.scene.addChild(b);
   }
 
   function drawRect(bmp: BitmapData, x: Int, y: Int, w: Int, h: Int, c: UInt) {
@@ -126,7 +127,7 @@ class Atlas {
 
     if (target.sheet == -1) {
       // 1b. otherwise, create a new zone and select it.
-      var bmp = new BitmapData(DIM, DIM, true, 0);
+      var bmp = new BitmapData(size, size, true, 0);
       if (bmp == null) {
         trace("Failed to create Atlas");
         #if !html5
@@ -169,8 +170,7 @@ class Atlas {
   }
 
   // returns a new image with @bmd stored in an atlas.
-  public function storeImage(bmd: BitmapData): Image_ {
-    var im = new Image_();
+  public function storeImage(bmd: BitmapData, im: Image) {
     im.zone = getZone(bmd.width + 2*BORDER, bmd.height + 2*BORDER);
     im.zone.x += BORDER;
     im.zone.y += BORDER;

@@ -20,7 +20,6 @@ left : the minimal game library
   - Better DisplayObjectContainer z-order handling
   - Atlas-based sprite, animator, tilemap
   - Extend graphics
-  - Key/Mouse
   - Better actuators
   - Text
   - Console/Profile

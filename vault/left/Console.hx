@@ -3,10 +3,6 @@ package vault.left;
 import haxe.Timer;
 
 class Profile {
-  public var renderTiles: Int = 0;
-  public var renderDraw: Int = 0;
-  public var objectCount: Int = 0;
-
   var regions: Map<String, Float>;
 
   public function average(oldv: Float, newv: Float): Float {
@@ -15,9 +11,6 @@ class Profile {
 
   public function new() {
     regions = new Map<String, Float>();
-    Left.console.watch(this, "renderTiles", "left.render.drawTiles");
-    Left.console.watch(this, "renderDraw", "left.render.drawSprites");
-    Left.console.watch(this, "objectCount", "left.objects");
   }
 
   public function start(region: String) {
@@ -29,9 +22,6 @@ class Profile {
   }
 
   public function update() {
-    renderTiles = 0;
-    renderDraw = 0;
-    objectCount = 1;
   }
 }
 

@@ -1,73 +1,84 @@
 package vault.left;
 
-import flash.display.Sprite;
+import flash.display.BitmapData;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 import openfl.display.Tilesheet;
-import vault.left.Group;
-import vault.left.Image;
-import vault.Vec2;
+import flash.display.Sprite;
 
-/*
-A View represents a view into the object space where all objects will be drawn to.
-Since it exists both on the world space and on the display space, it contains values
-for both sites.
-sprite values are display space.
-pos, width, height are world space.
-Its main tech point is the ability to execute rendering orders from Objects.
-*/
-class View extends Group {
-  // world space coordinates of the View:
-  public var pos: Vec2;
-  public var width(default, set): Int;
-  public var height(default, set): Int;
+typedef Image = {
+  var tilesheet: Tilesheet;
+  var tileid: Int;
+  var width: Int;
+  var height: Int;
+  var offset: Vec2;
+  var bitmap: BitmapData;
+  var tiles: Array<Image>;
+  var zone: vault.left.Atlas.Zone;
+}
 
-  public var sprite: Sprite;
-  public var scale(default, set): Float = 1.0;
-  public var zoom(default, set): Float = 1.0;
+typedef DrawOrder = {
+  tilesheet: Tilesheet,
+  data: Array<Float>,
+  next: DrawOrder,
+}
 
-  public var draworder: DrawOrder;
-  public var nextdraw: DrawOrder;
+class View extends Sprite {
+  var atlas: Atlas;
+  var bgalpha: Float = 1.0;
+  var bgcolor: UInt = 0x000000;
+  var vport: Vec2 = null;
+  var draworder: DrawOrder;
+  var nextdraw: DrawOrder;
 
-  public var bgalpha: Float = 1.0;
-  public var bgcolor: UInt = 0x000000;
-
-  public var flags: Int = Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2;
-
-  public function new(width:Int = 0, height:Int = 0) {
+  public function new() {
     super();
-    pos = Vec2.make(0, 0);
-    sprite = new Sprite();
-    this.width = width == 0 ? Left.width : width;
-    this.height = height == 0 ? Left.height : height;
-    sprite.x = sprite.y = 0;
+    atlas = new Atlas();
+    draworder = nextdraw = {tilesheet: null, data: null, next: null};
   }
 
-  public function set_width(width: Int): Int {
-    this.width = width;
-    sprite.scrollRect = new Rectangle(0, 0, width, height);
-    return width;
+  public function viewport(width: Float, height: Float,
+      bgcolor: UInt=0x000000, bgalpha: Float = 1.0) {
+    vport = new Vec2(width, height);
+    this.bgcolor = bgcolor;
+    this.bgalpha = bgalpha;
+    scrollRect = new Rectangle(0, 0, width, height);
   }
 
-  public function set_height(height: Int): Int {
-    this.height = height;
-    sprite.scrollRect = new Rectangle(0, 0, width, height);
-    return height;
+  public function newImage(): Image {
+    return { tilesheet: null, tileid: -1, width: 0, height: 0,
+        offset: new Vec2(0, 0), bitmap: null, tiles: [], zone: null };
   }
 
-  public function set_scale(f: Float): Float {
-    sprite.scaleX = sprite.scaleY = scale = f;
-    return scale;
+  public function createImage(bmd: BitmapData): Image {
+    var im = newImage();
+    atlas.storeImage(bmd, im);
+    return im;
   }
 
-  public function set_zoom(f: Float): Float {
-    width = Math.round(width);
-    height = Math.round(height);
-    scale = zoom = f;
-    return zoom;
+  public function createTiled(bmd: BitmapData, width: Int, height: Int, centered: Bool = true): Image {
+    var base:Image = newImage();
+    var center = new Point(width/2, height/2);
+
+    var tx = Std.int(bmd.width/width);
+    var ty = Std.int(bmd.height/height);
+    for (y in 0...ty) {
+      for (x in 0...tx) {
+        var b = new BitmapData(width, height);
+        b.copyPixels(bmd, new Rectangle(x*width, y*height, width, height), new Point(0, 0));
+        var im = createImage(b);
+        if (!centered) {
+          im.offset.x = 0;
+          im.offset.y = 0;
+        }
+        base.tiles.push(im);
+      }
+    }
+    return base;
   }
 
   public function draw(img: Image, x: Float, y: Float, ?angle: Float = 0.0,
-    scaleX: Float = 1.0, scaleY: Float = 1.0, alpha: Float = 1.0) {
+      scaleX: Float = 1.0, scaleY: Float = 1.0, alpha: Float = 1.0) {
     var cos = Math.cos(angle);
     var sin = Math.sin(angle);
 
@@ -85,39 +96,20 @@ class View extends Group {
     nextdraw.data[l++] = scaleY*cos;
     nextdraw.data[l++] = alpha;
 
-    Left.profile.renderDraw++;
   }
 
-  public function redraw(scene: Group) {
-    sprite.graphics.clear();
-    if (bgalpha != 0.0) {
-      sprite.graphics.beginFill(bgcolor, bgalpha);
-      sprite.graphics.drawRect(0, 0, width, height);
-      sprite.graphics.endFill();
+  public function render() {
+    graphics.clear();
+    if (vport != null) {
+      graphics.beginFill(bgcolor, bgalpha);
+      graphics.drawRect(0, 0, vport.x, vport.y);
+      graphics.endFill();
     }
-    draworder = nextdraw = {tilesheet: null, data: null, next: null};
-
-    if (members.length != 0) {
-      super.render(this);
-    } else {
-      scene.render(this);
-    }
-
     nextdraw = draworder.next;
     while (nextdraw != null) {
-      Left.profile.renderTiles++;
-      nextdraw.tilesheet.drawTiles(sprite.graphics, nextdraw.data, true, flags);
+      nextdraw.tilesheet.drawTiles(graphics, nextdraw.data, true, Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2);
       nextdraw = nextdraw.next;
     }
-
-    if (postDraw != null) postDraw(sprite.graphics);
+    draworder = nextdraw = {tilesheet: null, data: null, next: null};
   }
-
-  public var postDraw: flash.display.Graphics -> Void = null;
-}
-
-typedef DrawOrder = {
-  tilesheet: Tilesheet,
-  data: Array<Float>,
-  next: DrawOrder,
 }
