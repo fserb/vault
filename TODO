@@ -16,19 +16,10 @@ left : the minimal game library
 ===============================
 
 - Left2:
-  - add classes that help on top of that
   - Better DisplayObjectContainer z-order handling
-  - Atlas-based sprite, animator, tilemap
   - Extend graphics
   - Better actuators
   - Text
-  - Console/Profile
-
-  - Game has update() function call on Scene.
-
-
-
-
 
 
 ugl : µ game library

@@ -17,8 +17,6 @@ class Scene extends Sprite {
   var fps: Float;
   public var fullscreen(default, set): Bool;
 
-  public var paused: Bool = false;
-
   var desiredWidth: Int = 0;
   var desiredHeight: Int = 0;
   public var zoom: Float = 1.0;
@@ -54,7 +52,6 @@ class Scene extends Sprite {
     Left.time = 0;
     frameCount = 0;
     fps = 0.0;
-    paused = false;
     Left.console.watch(this, "fps", "FPS");
     Left.key = new Key();
     Left.mouse = new Mouse();
@@ -127,8 +124,6 @@ class Scene extends Sprite {
 
     // update
     update();
-
-    if (paused) return;
 
     Left.profile.end("left.update");
 
