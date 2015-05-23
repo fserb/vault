@@ -19,7 +19,6 @@ class TestView extends View {
 
   public function update() {
     draw(im, 100, 50);
-
     render();
   }
 }

@@ -42,7 +42,7 @@ class View extends Sprite {
     vport = new Vec2(width, height);
     this.bgcolor = bgcolor;
     this.bgalpha = bgalpha;
-    scrollRect = new Rectangle(0, 0, width, height);
+    scrollRect = new Rectangle(0, 0, vport.x, vport.y);
   }
 
   public function newImage(): Image {
@@ -100,7 +100,10 @@ class View extends Sprite {
 
   public function render() {
     graphics.clear();
+
     if (vport != null) {
+    scrollRect = new Rectangle(0, 0, vport.x, vport.y);
+
       graphics.beginFill(bgcolor, bgalpha);
       graphics.drawRect(0, 0, vport.x, vport.y);
       graphics.endFill();
