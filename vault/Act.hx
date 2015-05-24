@@ -117,7 +117,7 @@ class Act {
     return this;
   }
 
-  public function attr(attr: String, value: Dynamic, duration: Float = -1.0, ease: Float->Float = null): Act {
+  public function attr(attr: String, value: Float, duration: Float = -1.0, ease: Float->Float = null): Act {
     if (ease == null) {
       ease = lastEase;
     }
@@ -126,12 +126,12 @@ class Act {
     }
     lastDuration = duration;
     lastEase = ease;
-    var initial: Dynamic = null;
+    var initial: Null<Float> = null;
     var func = function(t: Float) {
       if (initial == null) {
-        initial = Reflect.field(object, attr);
+        initial = Reflect.getProperty(object, attr);
       }
-      Reflect.setField(object, attr, initial + (value - initial)*ease(t));
+      Reflect.setProperty(object, attr, initial + (value - initial)*ease(t));
     };
 
     Act.actions.push({

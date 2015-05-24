@@ -8,6 +8,7 @@ import vault.Extra;
 import vault.left.Scene;
 import vault.left.Key;
 import vault.left.Left;
+import vault.left.Text;
 import vault.left.View;
 import vault.Vec2;
 import vault.algo.Catmull;
@@ -40,6 +41,7 @@ class C extends Sprite {
 
 class TestScene extends Scene {
   var a: A;
+  var txt: Text;
   public function new() {
     super();
 
@@ -47,12 +49,17 @@ class TestScene extends Scene {
     addChild(a);
     addChild(new B());
     addChild(new C());
+
+    txt = new Text("hello", "assets/BebasNeue.otf", 40, 0xFFFFFF);
+    addChild(txt);
+    txt.x = 200;
+    txt.y = 200;
   }
 
   override public function update() {
     super.update();
     if (Left.key.just(Key.SPACE)) {
-      Act.obj(a).pause();
+      Act.obj(txt).attr('scaleX', 3.0, 2.0).attr('scaleY', 3.0);
     }
     if (Left.key.just(Key.X)) {
       Act.obj(a).resume();

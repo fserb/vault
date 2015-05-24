@@ -18,7 +18,8 @@ left : the minimal game library
 - Left2:
   - Collision detection composition
   - Extend graphics
-  - Text
+
+- Act: add repeat / reverse
 
 
 ugl : µ game library
