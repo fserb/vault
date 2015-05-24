@@ -38,10 +38,11 @@ class View extends Sprite {
   }
 
   public function viewport(width: Float, height: Float,
-      bgcolor: UInt=0x000000, bgalpha: Float = 1.0) {
+      bgcolor: UInt=0x000000, bgalpha: Float = 0.0, scale: Float = 1.0) {
     vport = new Vec2(width, height);
     this.bgcolor = bgcolor;
     this.bgalpha = bgalpha;
+    this.scaleX = this.scaleY = scale;
     scrollRect = new Rectangle(0, 0, vport.x, vport.y);
   }
 

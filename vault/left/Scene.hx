@@ -80,10 +80,10 @@ class Scene extends Sprite {
     Left.width = Math.floor(Left.width/zoom);
     Left.height = Math.floor(Left.height/zoom);
     if (desiredWidth * desiredHeight != 0) {
-      Lib.current.x = (Left.width - desiredWidth)/2.0;
-      Lib.current.y = (Left.height - desiredHeight)/2.0;
+      x = (Left.width - desiredWidth)/2.0;
+      y = (Left.height - desiredHeight)/2.0;
     } else {
-      Lib.current.x = Lib.current.y = 0;
+      x = y = 0;
     }
   }
 
