@@ -90,6 +90,7 @@ class Key {
 
   public inline static var COMMA = 188;
   public inline static var PERIOD = 190;
+  public inline static var SLASH = 191;
 
   public inline static var ENTER = 13;
   public inline static var COMMAND = 15;
