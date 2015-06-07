@@ -30,9 +30,11 @@ class View extends Sprite {
   var vport: Vec2 = null;
   var draworder: DrawOrder;
   var nextdraw: DrawOrder;
+  var sprite: Sprite;
 
   public function new() {
     super();
+    sprite = this;
     atlas = new Atlas();
     draworder = nextdraw = {tilesheet: null, data: null, next: null};
   }
@@ -96,22 +98,22 @@ class View extends Sprite {
     nextdraw.data[l++] = scaleY*sin;
     nextdraw.data[l++] = scaleY*cos;
     nextdraw.data[l++] = alpha;
-
   }
 
   public function render() {
-    graphics.clear();
+    sprite.graphics.clear();
 
     if (vport != null) {
     scrollRect = new Rectangle(0, 0, vport.x, vport.y);
 
-      graphics.beginFill(bgcolor, bgalpha);
-      graphics.drawRect(0, 0, vport.x, vport.y);
-      graphics.endFill();
+      sprite.graphics.beginFill(bgcolor, bgalpha);
+      sprite.graphics.drawRect(0, 0, vport.x, vport.y);
+      sprite.graphics.endFill();
     }
     nextdraw = draworder.next;
     while (nextdraw != null) {
-      nextdraw.tilesheet.drawTiles(graphics, nextdraw.data, true, Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2);
+      nextdraw.tilesheet.drawTiles(sprite.graphics, nextdraw.data, true,
+        Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2);
       nextdraw = nextdraw.next;
     }
     draworder = nextdraw = {tilesheet: null, data: null, next: null};
