@@ -13,5 +13,6 @@
   <assets path="assets" />
   <set name="openfl-legacy" />
   <haxelib name="openfl" />
+  <haxelib name="format" />
   <haxelib name="vault" />
 </project>

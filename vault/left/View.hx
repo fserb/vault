@@ -81,7 +81,8 @@ class View extends Sprite {
   }
 
   public function draw(img: Image, x: Float, y: Float, ?angle: Float = 0.0,
-      scaleX: Float = 1.0, scaleY: Float = 1.0, alpha: Float = 1.0) {
+      scaleX: Float = 1.0, scaleY: Float = 1.0, alpha: Float = 1.0,
+      r: Float = 1.0, g: Float = 1.0, b: Float = 1.0) {
     var cos = Math.cos(angle);
     var sin = Math.sin(angle);
 
@@ -97,6 +98,9 @@ class View extends Sprite {
     nextdraw.data[l++] = scaleX*-sin;
     nextdraw.data[l++] = scaleY*sin;
     nextdraw.data[l++] = scaleY*cos;
+    nextdraw.data[l++] = r;
+    nextdraw.data[l++] = g;
+    nextdraw.data[l++] = b;
     nextdraw.data[l++] = alpha;
   }
 
@@ -113,7 +117,7 @@ class View extends Sprite {
     nextdraw = draworder.next;
     while (nextdraw != null) {
       nextdraw.tilesheet.drawTiles(sprite.graphics, nextdraw.data, true,
-        Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2);
+        Tilesheet.TILE_RGB | Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2);
       nextdraw = nextdraw.next;
     }
     draworder = nextdraw = {tilesheet: null, data: null, next: null};
