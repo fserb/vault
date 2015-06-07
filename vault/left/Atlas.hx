@@ -130,7 +130,7 @@ class Atlas {
       var bmp = new BitmapData(size, size, true, 0);
       if (bmp == null) {
         trace("Failed to create Atlas");
-        #if !html5
+        #if desktop
           Sys.exit(12);
         #end
         return null;
