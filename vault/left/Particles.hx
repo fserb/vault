@@ -4,6 +4,7 @@ import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import haxe.crypto.Base64;
 import haxe.io.BytesInput;
+import haxe.io.Path;
 import openfl.Assets;
 import vault.Graphics;
 import vault.left.Left;
@@ -97,7 +98,6 @@ class Particles extends View {
 
   public var active: Bool;
   public var restart: Bool;
-  public var emissionRate: Float;
   public var emitCounter: Float;
   public var elapsedTime: Float;
 
@@ -147,17 +147,38 @@ class Particles extends View {
       tangentialAcceleration = VALUE(map.tangentialAcceleration, map.tangentialAccelerationVariance);
       yCoordMultipler = map.yCoordFlipped == 1 ? -1.0 : 1.0;
       // TODO: blendFuncSource / blendFuncDestination
-      blendFuncSource = BF_SRC_ALPHA;
-      blendFuncDestination = BF_DST_ALPHA;
+      blendFuncSource = switch(map.blendFuncSource) {
+        case 1: BF_ONE;
+        case 772: BF_DST_ALPHA;
+        default: BF_SRC_ALPHA;
+      };
 
-      var data = Base64.decode(map.textureImageData);
-      if (data.get(0) == 0x1f && data.get(1) == 0x8b) {
-        var reader = new format.gz.Reader(new BytesInput(data));
-        data = reader.read().data;
+      blendFuncDestination = switch(map.blendFuncDestination) {
+        case 1: BF_ONE;
+        case 772: BF_DST_ALPHA;
+        default: BF_DST_ALPHA;
+      };
+
+      if (Type.enumEq(blendFuncSource, BF_DST_ALPHA)) {
+        blendFuncSource = BF_ONE;
       }
-      var decoded = TiffDecoder.decode(data);
-      textureBitmapData = new BitmapData(decoded.width, decoded.height, true, 0);
-      textureBitmapData.setPixels(new Rectangle(0, 0, decoded.width, decoded.height), decoded.pixels);
+
+      if (Type.enumEq(blendFuncDestination, BF_DST_ALPHA)) {
+        blendFuncDestination = BF_ONE;
+      }
+
+      if (map.textureImageData != "") {
+        var data = Base64.decode(map.textureImageData);
+        if (data.get(0) == 0x1f && data.get(1) == 0x8b) {
+          var reader = new format.gz.Reader(new BytesInput(data));
+          data = reader.read().data;
+        }
+        var decoded = TiffDecoder.decode(data);
+        textureBitmapData = new BitmapData(decoded.width, decoded.height, true, 0);
+        textureBitmapData.setPixels(new Rectangle(0, 0, decoded.width, decoded.height), decoded.pixels);
+      } else {
+        textureBitmapData = Assets.getBitmapData(Path.directory(filename) + "/" + map.textureFileName);
+      }
 
       image = createImage(textureBitmapData);
     }
@@ -198,9 +219,13 @@ class Particles extends View {
       });
     }
     particleCount = 0;
-    emissionRate = maxParticles / (switch(particleLifespan) { case VALUE(a, b): a; });
     emitCounter = 0.0;
     elapsedTime = 0.0;
+    flags = openfl.display.Tilesheet.TILE_BLEND_NORMAL;
+    if (Type.enumEq(blendFuncSource, BF_SRC_ALPHA) &&
+        Type.enumEq(blendFuncDestination, BF_ONE)) {
+      flags = openfl.display.Tilesheet.TILE_BLEND_ADD;
+    }
   }
 
   public function start(pos: Vec2 = null) {
@@ -218,10 +243,10 @@ class Particles extends View {
   }
 
   public function update() {
-    if (active && emissionRate > 0.0) {
-      var rate = 1.0 / emissionRate;
+    if (active && maxParticles > 0) {
+      var rate = (switch(particleLifespan) { case VALUE(a, b): a; }) / maxParticles;
       emitCounter += Left.elapsed;
-      while (particleCount < maxParticles && emitCounter > rate) {
+      while (particleCount < maxParticles && emitCounter >= rate) {
         particleInit(particles[particleCount++]);
         emitCounter -= rate;
       }

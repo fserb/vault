@@ -31,9 +31,11 @@ class View extends Sprite {
   var draworder: DrawOrder;
   var nextdraw: DrawOrder;
   var sprite: Sprite;
+  var flags: Int;
 
   public function new() {
     super();
+    flags = 0;
     sprite = this;
     atlas = new Atlas();
     draworder = nextdraw = {tilesheet: null, data: null, next: null};
@@ -117,7 +119,7 @@ class View extends Sprite {
     nextdraw = draworder.next;
     while (nextdraw != null) {
       nextdraw.tilesheet.drawTiles(sprite.graphics, nextdraw.data, true,
-        Tilesheet.TILE_RGB | Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2);
+        Tilesheet.TILE_RGB | Tilesheet.TILE_ALPHA | Tilesheet.TILE_TRANS_2x2 | flags);
       nextdraw = nextdraw.next;
     }
     draworder = nextdraw = {tilesheet: null, data: null, next: null};

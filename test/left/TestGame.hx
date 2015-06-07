@@ -28,7 +28,6 @@ class TestScene extends Scene {
 
   override public function update() {
     super.update();
-    ps.update();
   }
 }
 
