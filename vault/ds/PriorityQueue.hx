@@ -18,7 +18,7 @@ class PriorityQueue<T,P> {
 
   public function push(k:T, p:P) {
     var pe: PrioElem<T,P> = { elem: k, prio: p };
-    heap.push(pe);
+    heap.add(pe);
   }
 
   public function remove(index:Int):T {
@@ -37,14 +37,14 @@ class PriorityQueue<T,P> {
     if (heap.empty()) {
       return null;
     }
-    return heap.peek().elem;
+    return heap.top().elem;
   }
 
   public function peekPriority():P {
     if (heap.empty()) {
       return null;
     }
-    return heap.peek().prio;
+    return heap.top().prio;
   }
 
   public function empty() {
