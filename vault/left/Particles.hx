@@ -275,11 +275,9 @@ class Particles extends View {
       active = true;
     }
 
-    // var gfx = new Graphics(this);
-    // gfx.clear();
     for (i in 0...particleCount) {
       var p = particles[i];
-      draw(image, p.pos.x, p.pos.y, p.angle, p.size/image.width, p.size/image.width,
+      draw(image, p.pos.x, p.pos.y, p.rotation, p.size/image.width, p.size/image.width,
         p.a, p.r, p.g, p.b);
     }
     render();
