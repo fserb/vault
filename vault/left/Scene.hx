@@ -76,6 +76,7 @@ class Scene extends Sprite {
     } else {
       zoom = 1.0;
     }
+
     Lib.current.scaleX = Lib.current.scaleY = zoom;
     Left.width = Math.floor(Left.width/zoom);
     Left.height = Math.floor(Left.height/zoom);
