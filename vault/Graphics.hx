@@ -86,7 +86,7 @@ class Graphics {
   public function drawRect (x:Float, y:Float, width:Float, height:Float) {
     gfx.drawRect(x, y, width, height);
   }
-  public function drawRoundRect (x:Float, y:Float, width:Float, height:Float, rx:Float, ry:Float = -1) {
+  public function drawRoundRect (x:Float, y:Float, width:Float, height:Float, rx:Float, ry:Float = null) {
     gfx.drawRoundRect(x, y, width, height, rx, ry);
   }
   public function drawRoundRectComplex (x:Float, y:Float, width:Float, height:Float, topLeftRadius:Float, topRightRadius:Float, bottomLeftRadius:Float, bottomRightRadius:Float) {

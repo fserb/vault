@@ -183,8 +183,8 @@ class Particles extends View {
       image = createImage(textureBitmapData);
     }
 
-    active = true;
-    restart = true;
+    active = false;
+    restart = false;
     pos = new Vec2(0, 0);
 
     reset();
@@ -221,11 +221,6 @@ class Particles extends View {
     particleCount = 0;
     emitCounter = 0.0;
     elapsedTime = 0.0;
-    flags = openfl.display.Tilesheet.TILE_BLEND_NORMAL;
-    if (Type.enumEq(blendFuncSource, BF_SRC_ALPHA) &&
-        Type.enumEq(blendFuncDestination, BF_ONE)) {
-      flags = openfl.display.Tilesheet.TILE_BLEND_ADD;
-    }
   }
 
   public function start(pos: Vec2 = null) {

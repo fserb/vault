@@ -28,6 +28,17 @@ class Text extends Sprite {
   public var align(default, set): TextAlign = CENTER;
   public var valign(default, set): TextVAlign = MIDDLE;
 
+  public var twidth(get, null): Float;
+  public var theight(get, null): Float;
+
+  function get_twidth(): Float {
+    return tfield.textWidth;
+  }
+
+  function get_theight(): Float {
+    return tfield.textHeight;
+  }
+
   function set_text(text: String): String {
     this.text = tfield.text = text;
     redo();
@@ -35,7 +46,7 @@ class Text extends Sprite {
   }
 
   function set_size(size: Float): Float {
-    this.size = format.size = size;
+    this.size = format.size = Std.int(size);
     redo();
     return size;
   }
@@ -76,8 +87,8 @@ class Text extends Sprite {
     tfield = new TextField();
     addChild(tfield);
     tfield.selectable = false;
-    tfield.antiAliasType = flash.text.AntiAliasType.ADVANCED;
-    tfield.gridFitType = flash.text.GridFitType.SUBPIXEL;
+    // tfield.antiAliasType = flash.text.AntiAliasType.ADVANCED;
+    // tfield.gridFitType = flash.text.GridFitType.SUBPIXEL;
     tfield.mouseEnabled = false;
     tfield.multiline = true;
     tfield.autoSize = openfl.text.TextFieldAutoSize.LEFT;
