@@ -42,6 +42,7 @@ class Entity {
   public var rotationcenter: Vec2;
 
   public function update() {}
+  public function postUpdate() {}
   public var args: Array<Dynamic>;
   public function begin() {}
 
@@ -313,6 +314,15 @@ class Entity {
     return false;
   }
 
+  public function hitType(ht: HitType): Bool {
+    for (a in hits) {
+      if (isHit(transformHit(base_sprite.transform.matrix, a), ht)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public function hit(e: Entity): Bool {
     if (e == null || e == this) return false;
     if (dead || e.dead) return false;
@@ -350,6 +360,7 @@ class Entity {
     pos.y += Game.time*(vel.y + acc.y/2);
     vel.add(acc);
     acc.x = acc.y = 0;
+    postUpdate();
 
     _update_location();
   }

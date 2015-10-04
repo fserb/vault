@@ -21,7 +21,6 @@ class GestureEvent extends Event {
   public static var GESTURE_TAP_4 = "gestureTap4";
   public static var GESTURE_TAP_5 = "gestureTap5";
 
-
   public static var GESTURE_SWIPE = "gestureSwipe";
   public static var GESTURE_SWIPE_UP = "gestureSwipeUP";
   public static var GESTURE_SWIPE_DOWN = "gestureSwipeDOWN";
