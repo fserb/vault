@@ -1,5 +1,6 @@
 package vault;
 
+import flash.display.Sprite;
 import haxe.ds.ObjectMap;
 import vault.Vec2;
 
@@ -33,11 +34,13 @@ class Grid {
   public var width: Int;
   public var height: Int;
   public var objects: ObjectMap<Dynamic, Object>;
+  var debugsprite: Sprite;
 
-  public function new(width: Int, height: Int, tilesize: Int) {
+  public function new(width: Int, height: Int, tilesize: Int, debugsprite: Sprite) {
     this.width = width;
     this.height = height;
     this.tilesize = tilesize;
+    this.debugsprite = debugsprite;
     map = [];
     for (x in 0...width) {
       var c = new Array<Tile>();
@@ -56,7 +59,8 @@ class Grid {
       var c = data.charAt(i);
       if (c == '\n' || c == ' ') continue;
       if (c != '.') {
-        map[x][y] = obj[Std.parseInt(c)];
+        var o = obj[Std.parseInt(c)];
+        map[x][y] = { block: o.block, type: o.type };
       }
       x++;
       if (x >= width) {
@@ -77,10 +81,10 @@ class Grid {
   function hit(rect: Rect, pos: Vec2): Bool {
     var x1 = Std.int((pos.x + rect.x)/tilesize);
     var y1 = Std.int((pos.y + rect.y)/tilesize);
-    var x2 = Std.int((pos.x + rect.x + rect.w)/tilesize)+1;
-    var y2 = Std.int((pos.y + rect.y + rect.h)/tilesize)+1;
-    for (xx in x1...x2) {
-      for (yy in y1...y2) {
+    var x2 = Std.int((pos.x + rect.x + rect.w - 1)/tilesize);
+    var y2 = Std.int((pos.y + rect.y + rect.h - 1)/tilesize);
+    for (xx in x1...x2+1) {
+      for (yy in y1...y2+1) {
         if (map[xx][yy] != null && map[xx][yy].block) {
           return false;
         }
@@ -106,7 +110,7 @@ class Grid {
 
     if (dx > 0) {
       var p = obj.pos.x + obj.rect.x + obj.rect.w;
-      var go = Std.int((p + dx)/tilesize)*tilesize - 1;
+      var go = Math.floor((p + dx)/tilesize)*tilesize;
       tryDelta(obj, go - p, 0);
     } else if (dx < 0) {
       var p = obj.pos.x + obj.rect.x;
@@ -118,7 +122,7 @@ class Grid {
       tryDelta(obj, 0, go - p);
     } else if (dy > 0) {
       var p = obj.pos.y + obj.rect.y + obj.rect.h;
-      var go = Std.int((p + dy)/tilesize)*tilesize - 1;
+      var go = Math.floor((p + dy)/tilesize)*tilesize;
       tryDelta(obj, 0, go - p);
     }
     return false;
@@ -148,7 +152,7 @@ class Grid {
 
     obj.touch = 0;
 
-    var sp = 2;
+    var sp = 1;
     var left = Std.int((obj.pos.x + obj.rect.x-sp)/tilesize);
     var up = Std.int((obj.pos.y + obj.rect.y-sp)/tilesize);
     var right = Std.int((obj.pos.x + obj.rect.x + obj.rect.w+sp)/tilesize);
@@ -156,8 +160,8 @@ class Grid {
 
     var x1 = Std.int((obj.pos.x + obj.rect.x)/tilesize);
     var y1 = Std.int((obj.pos.y + obj.rect.y)/tilesize);
-    var x2 = Std.int((obj.pos.x + obj.rect.x + obj.rect.w)/tilesize);
-    var y2 = Std.int((obj.pos.y + obj.rect.y + obj.rect.h)/tilesize);
+    var x2 = Std.int((obj.pos.x + obj.rect.x + obj.rect.w-1)/tilesize);
+    var y2 = Std.int((obj.pos.y + obj.rect.y + obj.rect.h-1)/tilesize);
 
     for (xx in x1...x2+1) {
       if (map[xx][up] != null && map[xx][up].block) obj.touch |= 1;
@@ -171,4 +175,14 @@ class Grid {
     return obj.pos.copy();
   }
 
+  public function debug() {
+    var gfx = debugsprite.graphics;
+    gfx.clear();
+
+    return;
+    for (k in objects) {
+      gfx.lineStyle(1, 0xFF0000, 0.2);
+      gfx.drawRect(k.pos.x + k.rect.x, k.pos.y + k.rect.y, k.rect.w, k.rect.h);
+    }
+  }
 }
