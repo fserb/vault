@@ -90,6 +90,7 @@ class Grid {
   }
 
   function tryDelta(obj: Object, dx: Float, dy: Float): Bool {
+    if (dx == 0 && dy == 0) return true;
     var pos = obj.pos.copy();
     pos.x += dx;
     pos.y += dy;
@@ -102,10 +103,25 @@ class Grid {
     if (dx > 0) obj.collide |= 2;
     if (dy > 0) obj.collide |= 4;
     if (dx < 0) obj.collide |= 8;
-    if (Math.abs(dx) <= 1.0 && Math.abs(dy) <= 1.0) {
-      return false;
+
+    if (dx > 0) {
+      var p = obj.pos.x + obj.rect.x + obj.rect.w;
+      var go = Std.int((p + dx)/tilesize)*tilesize - 1;
+      tryDelta(obj, go - p, 0);
+    } else if (dx < 0) {
+      var p = obj.pos.x + obj.rect.x;
+      var go = Math.ceil((p + dx)/tilesize)*tilesize;
+      tryDelta(obj, go - p, 0);
+    } else if (dy < 0) {
+      var p = obj.pos.y + obj.rect.y;
+      var go = Math.ceil((p + dy)/tilesize)*tilesize;
+      tryDelta(obj, 0, go - p);
+    } else if (dy > 0) {
+      var p = obj.pos.y + obj.rect.y + obj.rect.h;
+      var go = Std.int((p + dy)/tilesize)*tilesize - 1;
+      tryDelta(obj, 0, go - p);
     }
-    return tryDelta(obj, dx/2.0, dy/2.0);
+    return false;
   }
 
   public function update(o: Dynamic, p: Vec2): Vec2 {
