@@ -4,7 +4,7 @@ import flash.events.Event;
 import flash.Lib;
 import vault.Ease;
 import vault.EMath;
-import vault.left.Left;
+import haxe.Timer;
 
 typedef ActEvent = {
   var func: Float->Void;
@@ -18,6 +18,7 @@ typedef ActEvent = {
 class Act {
   static var loaded = false;
   static var actions: Array<ActEvent>;
+  static var time: Float = 0;
 
   static function setup() {
     if (loaded) return;
@@ -28,6 +29,10 @@ class Act {
 
   static function onEnterFrame(ev: Event) {
     var blocked = new haxe.ds.ObjectMap<Dynamic, Bool>();
+
+    var t = Timer.stamp();
+    var elapsed = Math.min(0.1, (time > 0 ? t - time : 0));
+    time = t;
 
     var i = 0;
     while (i < actions.length) {
@@ -43,7 +48,7 @@ class Act {
         continue;
       }
       if (a.duration < 0.0) continue;
-      a.time = EMath.clamp(a.time + Left.elapsed/a.duration, 0.0, 1.0);
+      a.time = EMath.clamp(a.time + elapsed/a.duration, 0.0, 1.0);
       a.func(a.time);
       if (a.time >= 1.0) {
         actions.splice(i-1, 1);
