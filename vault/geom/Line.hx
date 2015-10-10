@@ -1,12 +1,7 @@
 package vault.geom;
 
 import vault.geom.Vec2;
-
-typedef WVec2 = {
-  var x: Float;
-  var y: Float;
-  var w: Float;
-};
+import vault.geom.Vec3;
 
 class Ray {
   // based on http://www.cse.yorku.ca/~amana/research/grid.pdf
@@ -124,7 +119,7 @@ class Wu {
   var dy: Float;
   var gradient: Float;
   var intery: Float;
-  var buffer: List<WVec2>;
+  var buffer: List<Vec3>;
   var x: Float;
   var xpxl2: Float;
 
@@ -144,7 +139,7 @@ class Wu {
     dy = b.y - a.y;
     gradient = dy / dx;
 
-    buffer = new List<WVec2>();
+    buffer = new List<Vec3>();
 
     // 1st. endpoint.
     var xend = Math.round(a.x);
@@ -153,11 +148,11 @@ class Wu {
     var xpxl1 = xend;
     var ypxl1 = Math.floor(yend);
     if (steep) {
-      buffer.add(vec(ypxl1, xpxl1, (xgap * (1 - yend%1))));
-      buffer.add(vec(ypxl1 + 1, xpxl1, (xgap * (yend%1))));
+      buffer.add(new Vec3(ypxl1, xpxl1, (xgap * (1 - yend%1))));
+      buffer.add(new Vec3(ypxl1 + 1, xpxl1, (xgap * (yend%1))));
     } else {
-      buffer.add(vec(xpxl1, ypxl1, (xgap * (1 - yend%1))));
-      buffer.add(vec(xpxl1, ypxl1 + 1, (xgap * (yend%1))));
+      buffer.add(new Vec3(xpxl1, ypxl1, (xgap * (1 - yend%1))));
+      buffer.add(new Vec3(xpxl1, ypxl1 + 1, (xgap * (yend%1))));
     }
     intery = yend + gradient;
 
@@ -168,11 +163,11 @@ class Wu {
     xpxl2 = xend;
     var ypxl2 = Math.floor(yend);
     if (steep) {
-      buffer.add(vec(ypxl2, xpxl2, (xgap * (1 - yend%1))));
-      buffer.add(vec(ypxl2 + 1, xpxl2, (xgap * (yend%1))));
+      buffer.add(new Vec3(ypxl2, xpxl2, (xgap * (1 - yend%1))));
+      buffer.add(new Vec3(ypxl2 + 1, xpxl2, (xgap * (yend%1))));
     } else {
-      buffer.add(vec(xpxl2, ypxl2, (xgap * (1 - yend%1))));
-      buffer.add(vec(xpxl2, ypxl2 + 1, (xgap * (yend%1))));
+      buffer.add(new Vec3(xpxl2, ypxl2, (xgap * (1 - yend%1))));
+      buffer.add(new Vec3(xpxl2, ypxl2 + 1, (xgap * (yend%1))));
     }
 
     x = xpxl1 + 1;
@@ -182,24 +177,20 @@ class Wu {
     return buffer.length > 0 || x <= xpxl2 - 1;
   }
 
-  public function next(): WVec2 {
+  public function next(): Vec3 {
     if (buffer.length > 0) {
       return buffer.pop();
     }
 
     if (steep) {
-      buffer.add(vec(Math.floor(intery), x, (1 - intery%1)));
-      buffer.add(vec(Math.floor(intery) + 1, x, (intery%1)));
+      buffer.add(new Vec3(Math.floor(intery), x, (1 - intery%1)));
+      buffer.add(new Vec3(Math.floor(intery) + 1, x, (intery%1)));
     } else {
-      buffer.add(vec(x, Math.floor(intery), (1 - intery%1)));
-      buffer.add(vec(x, Math.floor(intery) + 1, (intery%1)));
+      buffer.add(new Vec3(x, Math.floor(intery), (1 - intery%1)));
+      buffer.add(new Vec3(x, Math.floor(intery) + 1, (intery%1)));
     }
     intery += gradient;
     x += 1;
     return buffer.pop();
-  }
-
-  function vec(x: Float, y: Float, w: Float): WVec2 {
-    return {x: x, y: y, w: w};
   }
 }

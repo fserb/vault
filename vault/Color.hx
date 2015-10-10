@@ -2,7 +2,7 @@ package vault;
 
 import hxColorToolkit.ColorToolkit;
 import hxColorToolkit.spaces.*;
-import vault.Vec3;
+import vault.geom.Vec3;
 
 class Color {
   static public function lerp(fromColor: UInt, toColor: UInt, ratio: Float): UInt {

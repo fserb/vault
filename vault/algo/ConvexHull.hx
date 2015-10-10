@@ -1,7 +1,7 @@
 package vault.algo;
 
 import vault.geom.Vec2;
-import vault.Geom;
+import vault.geom.Geom;
 
 class ConvexHull {
   static public function generate(points: Array<Vec2>) {

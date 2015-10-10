@@ -18,7 +18,7 @@ import spinehaxe.Skeleton;
 import spinehaxe.SkeletonData;
 import spinehaxe.SkeletonJson;
 import spinehaxe.Skin;
-import vault.Point;
+import vault.geom.Point;
 import vault.geom.Vec2;
 
 class Spine extends Sprite {
