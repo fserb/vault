@@ -7,6 +7,7 @@ import flash.geom.Matrix;
 import vault.EMath;
 import vault.ugl.Color;
 import vault.Utils;
+import vault.geom.Vec2;
 
 class PatternArt {
   var sprite: Sprite;
