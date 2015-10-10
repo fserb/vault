@@ -1,6 +1,6 @@
-package vault;
+package vault.geom;
 
-import vault.Vec2;
+import vault.geom.Vec2;
 
 class Geom {
   static public function distanceLinePoint(a: Vec2, b: Vec2, p: Vec2): Float {

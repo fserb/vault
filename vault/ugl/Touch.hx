@@ -6,7 +6,7 @@ import flash.events.MouseEvent;
 import flash.events.TouchEvent;
 import flash.Lib;
 import vault.ugl.Key.Button;
-import vault.Vec2;
+import vault.geom.Vec2;
 
 class Touch {
   var evs: Map<Int, Vec2>;

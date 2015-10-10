@@ -19,7 +19,7 @@ import spinehaxe.SkeletonData;
 import spinehaxe.SkeletonJson;
 import spinehaxe.Skin;
 import vault.Point;
-import vault.Vec2;
+import vault.geom.Vec2;
 
 class Spine extends Sprite {
   var skels: Map<String, SkeletonData>;
@@ -197,4 +197,3 @@ class SpineAttachmentLoader implements AttachmentLoader {
     return null;
   }
 }
-

@@ -1,6 +1,6 @@
 package vault.ugl;
 
-import vault.Vec2;
+import vault.geom.Vec2;
 
 enum Value {
   Const(v:Float);

@@ -8,7 +8,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import openfl.display.Tilesheet;
 import vault.EMath;
-import vault.Vec2;
+import vault.geom.Vec2;
 
 class Sprite extends Object {
   public var pos: Vec2;

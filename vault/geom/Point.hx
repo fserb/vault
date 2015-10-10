@@ -1,4 +1,4 @@
-package vault;
+package vault.geom;
 
 typedef Point_ = {
   var x: Int;
@@ -44,4 +44,3 @@ abstract Point(Point_) from Point_ to Point_ {
     return new Point(Std.int(v.x), Std.int(v.y));
   }
 }
-

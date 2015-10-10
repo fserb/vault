@@ -10,7 +10,7 @@ import vault.Graphics;
 import vault.left.Left;
 import vault.left.View;
 import vault.TiffDecoder;
-import vault.Vec2;
+import vault.geom.Vec2;
 
 typedef Particle = {
   var start: Vec2;

@@ -1,6 +1,6 @@
 package vault;
 
-import vault.Vec2;
+import vault.geom.Vec2;
 
 class BMChar {
   public var x: Int;

@@ -1,7 +1,7 @@
 // NOT WORKING ON LEFT2
 package vault.left;
 
-import vault.Vec2;
+import vault.geom.Vec2;
 
 class Backdrop extends Object {
   public var pos: Vec2;

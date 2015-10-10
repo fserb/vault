@@ -2,7 +2,7 @@ package vault;
 
 import flash.display.Sprite;
 import haxe.ds.ObjectMap;
-import vault.Vec2;
+import vault.geom.Vec2;
 
 /*
 Grid is a 2D platform collision class
@@ -171,11 +171,10 @@ class Grid {
 
     obj.touch = 0;
 
-    var sp = 1;
-    var left = Std.int((obj.pos.x + obj.rect.x-sp - offset.x)/tilesize);
-    var up = Std.int((obj.pos.y + obj.rect.y-sp - offset.y)/tilesize);
-    var right = Std.int((obj.pos.x + obj.rect.x + obj.rect.w+sp - offset.x)/tilesize);
-    var down = Std.int((obj.pos.y + obj.rect.y + obj.rect.h+sp - offset.y)/tilesize);
+    var left = Std.int((obj.pos.x + obj.rect.x-1 - offset.x)/tilesize);
+    var up = Std.int((obj.pos.y + obj.rect.y-1 - offset.y)/tilesize);
+    var right = Std.int((obj.pos.x + obj.rect.x + obj.rect.w+1 - offset.x)/tilesize);
+    var down = Std.int((obj.pos.y + obj.rect.y + obj.rect.h+1 - offset.y)/tilesize);
 
     var x1 = Std.int((obj.pos.x + obj.rect.x - offset.x)/tilesize);
     var y1 = Std.int((obj.pos.y + obj.rect.y - offset.y)/tilesize);

@@ -1,6 +1,6 @@
 package vault.algo;
 
-import vault.Vec2;
+import vault.geom.Vec2;
 import vault.EMath;
 
 class Catmull {

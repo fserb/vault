@@ -9,7 +9,7 @@ import flash.events.TouchEvent;
 
 import vault.gesture.GestureEvent;
 
-import vault.Vec2;
+import vault.geom.Vec2;
 
 class GestureDetector {
   public function new() { }

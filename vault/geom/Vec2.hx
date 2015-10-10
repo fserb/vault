@@ -1,4 +1,4 @@
-package vault;
+package vault.geom;
 
 import flash.geom.Matrix;
 

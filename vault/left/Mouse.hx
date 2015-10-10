@@ -2,7 +2,7 @@ package vault.left;
 
 import flash.events.MouseEvent;
 import flash.Lib;
-import vault.Vec2;
+import vault.geom.Vec2;
 
 class Mouse {
   public var pos: Vec2;

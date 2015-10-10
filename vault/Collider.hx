@@ -1,7 +1,7 @@
 package vault;
 
 import flash.geom.Matrix;
-import vault.Vec2;
+import vault.geom.Vec2;
 
 enum HitType {
   CIRCLE(x: Float, y: Float, r: Float);

@@ -1,4 +1,4 @@
-package vault;
+package vault.geom;
 
 class Vec3 {
   public var x: Float;

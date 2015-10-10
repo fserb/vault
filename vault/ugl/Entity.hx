@@ -4,7 +4,7 @@ import flash.display.Sprite;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import vault.Vec2;
+import vault.geom.Vec2;
 
 enum HitType {
   Rect(x: Float, y: Float, w: Float, h: Float);
