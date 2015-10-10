@@ -3,13 +3,11 @@ package vault;
 import flash.display.Sprite;
 import haxe.ds.ObjectMap;
 import vault.geom.Vec2;
+import vault.Sight;
+import vault.Utils;
 
 /*
 Grid is a 2D platform collision class
-
-TODO:
-- support for raycasting-view
-
 */
 
 typedef Rect = {
@@ -195,6 +193,61 @@ class Grid {
     }
 
     return obj.pos.copy();
+  }
+
+  public function getSight(): Sight {
+    var marked = new Array<Array<Bool>>();
+    for (x in 0...map.length) {
+      var c = new Array<Bool>();
+      for (y in 0...map[0].length) {
+        c.push(map[x][y] == null || !map[x][y].block);
+      }
+      marked.push(c);
+    }
+
+    var s = new Sight();
+    for (x in 0...map.length) {
+      for (y in 0...map[0].length) {
+        if (marked[x][y]) continue;
+
+        var xx = x;
+        while (xx < map.length && !marked[xx][y]) xx++;
+        var yy = y;
+        while (yy < map[0].length && !marked[x][yy]) yy++;
+
+        var doleft = true;
+        var dotop = true;
+        var bx = x;
+        var by = y;
+
+        if (xx - bx <= 1 && dotop) {
+          doleft = false;
+        }
+        if (yy - by <= 1 && doleft) {
+          dotop = false;
+        }
+
+        if (doleft && dotop) {
+          by += 1;
+        }
+
+        if (doleft) {
+          for (cx in x...xx) {
+            marked[cx][y] = true;
+          }
+          s.addRect(new Vec2(bx*tilesize, y*tilesize),
+                    new Vec2(xx*tilesize, (y+1)*tilesize));
+        }
+        if (dotop) {
+          for (cy in y...yy) {
+            marked[x][cy] = true;
+          }
+          s.addRect(new Vec2(x*tilesize, by*tilesize),
+                    new Vec2((x+1)*tilesize, (yy)*tilesize));
+        }
+      }
+    }
+    return s;
   }
 
   public function debug() {

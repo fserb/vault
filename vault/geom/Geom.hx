@@ -28,8 +28,11 @@ class Geom {
     var s1 = b1.distance(a1);
     var s2 = b2.distance(a2);
 
-    var s = (-s1.y * (a1.x - a2.x) + s1.x * (a1.y - a2.y)) / (-s2.x * s1.y + s1.x * s2.y);
-    var t = ( s2.x * (a1.y - a2.y) - s2.y * (a1.x - a2.x)) / (-s2.x * s1.y + s1.x * s2.y);
+    var m = -s2.x * s1.y + s1.x * s2.y;
+    if (m == 0) return null;
+
+    var s = (-s1.y * (a1.x - a2.x) + s1.x * (a1.y - a2.y)) / m;
+    var t = ( s2.x * (a1.y - a2.y) - s2.y * (a1.x - a2.x)) / m;
 
     if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
       return Vec2.make(a1.x + t*s1.x, a1.y + t*s1.y);
