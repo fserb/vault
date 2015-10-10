@@ -37,23 +37,6 @@ class Geom {
     return null;
   }
 
-  static public function pointInsideTriangle(p: Vec2, p0: Vec2, p1: Vec2, p2: Vec2): Bool {
-    var s = p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x) * p.y;
-    var t = p0.x * p1.y - p0.y * p1.x + (p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y;
-
-    if ((s < 0) != (t < 0)) {
-      return false;
-    }
-
-    var A = -p1.y * p2.x + p0.y * (p2.x - p1.x) + p0.x * (p1.y - p2.y) + p1.x * p2.y;
-    if (A < 0.0) {
-      s = -s;
-      t = -t;
-      A = -A;
-    }
-    return s > 0 && t > 0 && (s + t) < A;
-  }
-
   // returns -1 if if @p is to the left of @ab, 1 if to the right or 0 if straight
   static public function directionSegmentPoint(a: Vec2, b: Vec2, p: Vec2): Int {
     var v = (p.x - a.x)*(b.y - a.y) - (b.x - a.x)*(p.y - a.y);
