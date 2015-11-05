@@ -7,12 +7,12 @@
   "releasenote": "Initial release",
   "version": "0.1.0",
   "url": "https://github.com/fserb/vault",
-  "dependencies": {
-    "sfxr": "",
-    "openfl": "",
-    "format": "",
-    "hxColorToolkit": "",
-    "spinehaxe": "",
-    "RTMidi": "",
-  }
+    "dependencies": {
+	"sfxr": "",
+	"openfl": "",
+	"format": "",
+	"hxColorToolkit": "",
+	"spinehaxe": "",
+	"RTMidi": "",
+    }
 }

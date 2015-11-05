@@ -82,10 +82,10 @@ class Grid {
   }
 
   function hit(rect: Rect, pos: Vec2): Bool {
-    var x1 = Std.int((pos.x + rect.x - offset.x)/tilesize);
-    var y1 = Std.int((pos.y + rect.y - offset.y)/tilesize);
-    var x2 = Std.int((pos.x + rect.x + rect.w - 1 - offset.x)/tilesize);
-    var y2 = Std.int((pos.y + rect.y + rect.h - 1 - offset.y)/tilesize);
+    var x1:Int = Math.floor((pos.x + rect.x - offset.x)/tilesize);
+    var y1:Int = Math.floor((pos.y + rect.y - offset.y)/tilesize);
+    var x2:Int = Math.floor((pos.x + rect.x + rect.w - offset.x)/tilesize);
+    var y2:Int = Math.floor((pos.y + rect.y + rect.h - offset.y)/tilesize);
 
     if (x1 < 0 || y1 < 0 || x2 >= map.length || y2 >= map[0].length) {
       return false;
@@ -118,22 +118,26 @@ class Grid {
     if (dx < 0) obj.collide |= 8;
 
     if (dx > 0) {
-      var p = obj.pos.x + obj.rect.x + obj.rect.w - offset.x;
-      var go = Math.floor((p + dx)/tilesize)*tilesize;
-      tryDelta(obj, go - p, 0);
+      var p:Float = obj.pos.x + obj.rect.x + obj.rect.w - offset.x;
+      var go:Float = Math.floor(p/tilesize)*tilesize + tilesize - 1;
+      dx = Math.min(dx, go - p);
     } else if (dx < 0) {
-      var p = obj.pos.x + obj.rect.x - offset.x;
-      var go = Math.ceil((p + dx)/tilesize)*tilesize;
-      tryDelta(obj, go - p, 0);
-    } else if (dy < 0) {
-      var p = obj.pos.y + obj.rect.y - offset.y;
-      var go = Math.ceil((p + dy)/tilesize)*tilesize;
-      tryDelta(obj, 0, go - p);
-    } else if (dy > 0) {
-      var p = obj.pos.y + obj.rect.y + obj.rect.h - offset.y;
-      var go = Math.floor((p + dy)/tilesize)*tilesize;
-      tryDelta(obj, 0, go - p);
+      var p:Float = obj.pos.x + obj.rect.x - offset.x;
+      var go:Float = Math.floor(p/tilesize)*tilesize;
+      dx = Math.max(dx, go - p);
     }
+
+    if (dy < 0) {
+      var p:Float = obj.pos.y + obj.rect.y - offset.y;
+      var go:Float = Math.floor(p/tilesize)*tilesize;
+      dy = Math.max(dy, go - p);
+    } else if (dy > 0) {
+      var p:Float = obj.pos.y + obj.rect.y + obj.rect.h - offset.y;
+      var go:Float = Math.floor(p/tilesize)*tilesize + tilesize - 1;
+      dy = Math.min(dy, go - p);
+    }
+
+    tryDelta(obj, dx, dy);
     return false;
   }
 
@@ -154,17 +158,15 @@ class Grid {
     var steps = delta.length/tilesize;
     for (i in 0...Math.ceil(steps)) {
       delta.normalize(tilesize*Math.min(1, steps-i));
-      var ret: Bool = true;
-      if (delta.x >= delta.y) {
-        ret = tryDelta(obj, delta.x, 0) && ret;
-        ret = tryDelta(obj, 0, delta.y) && ret;
+      var cont = true;
+      if (delta.x > delta.y) {
+        cont = tryDelta(obj, delta.x, 0) && cont;
+        cont = tryDelta(obj, 0, delta.y) && cont;
       } else {
-        ret = tryDelta(obj, 0, delta.y) && ret;
-        ret = tryDelta(obj, delta.x, 0) && ret;
+        cont = tryDelta(obj, 0, delta.y) && cont;
+        cont = tryDelta(obj, delta.x, 0) && cont;
       }
-      if (!ret) {
-        break;
-      }
+      if (!cont) break;
     }
 
     obj.touch = 0;

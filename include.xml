@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <haxelib name="openfl" />
+  <haxelib name="format" />
+  <haxelib name="hxColorToolkit" />
+<!--  <haxelib name="spinehaxe" /> -->
+  <haxelib name="RTMidi" />
+  <haxelib name="sfxr" />
+<!--  <haxelib name="thx.core" /> -->
+</project>

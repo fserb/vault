@@ -10,6 +10,7 @@ import flash.display.StageQuality;
 import vault.left.Left;
 import vault.left.Console.Profile;
 import haxe.Timer;
+import flash.display.DisplayObject;
 
 @:allow(vault.left.Left)
 class Scene extends Sprite {
@@ -66,6 +67,19 @@ class Scene extends Sprite {
     desiredHeight = height;
     onResize(null);
     return zoom;
+  }
+
+  public function sortChildren(key: DisplayObject->Int) {
+    var s = new Array<DisplayObject>();
+    for (i in 0...numChildren) {
+      var c = getChildAt(i);
+      s.push(c);
+    }
+    s.sort(function(a, b) return key(a) - key(b));
+
+    for (i in 0...numChildren) {
+      addChild(s[i]);
+    }
   }
 
   function onResize(ev) {

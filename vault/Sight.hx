@@ -96,6 +96,8 @@ class Sight {
     }
     var ret = new Array<Tri2>();
 
+    if (filtered.length == 0) return ret;
+
     for (i in 0...filtered.length-1) {
       var a = filtered[i].copy();
       a.add(from);
