@@ -1,6 +1,7 @@
 package vault.gesture;
 
 import flash.events.Event;
+import vault.geom.Vec2;
 
 enum Direction {
   UP;

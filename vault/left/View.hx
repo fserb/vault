@@ -5,6 +5,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import openfl.display.Tilesheet;
 import flash.display.Sprite;
+import vault.geom.Vec2;
 
 typedef Image = {
   var tilesheet: Tilesheet;

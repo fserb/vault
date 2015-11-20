@@ -3,6 +3,7 @@ package vault.gesture;
 import vault.gesture.Gesture;
 import vault.gesture.Gesture.GestureDetector;
 import vault.gesture.GestureEvent;
+import vault.geom.Vec2;
 
 class GestureDrag extends GestureDetector {
   var triggered = false;
