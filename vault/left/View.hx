@@ -111,7 +111,7 @@ class View extends Sprite {
     sprite.graphics.clear();
 
     if (vport != null) {
-    scrollRect = new Rectangle(0, 0, vport.x, vport.y);
+      scrollRect = new Rectangle(0, 0, vport.x, vport.y);
 
       sprite.graphics.beginFill(bgcolor, bgalpha);
       sprite.graphics.drawRect(0, 0, vport.x, vport.y);

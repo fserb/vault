@@ -28,6 +28,10 @@ class EMath {
     return f <= a ? a : ( f >= b ? b : f);
   }
 
+  static public inline function clampi(f:Int, a:Int, b:Int):Int {
+    return f <= a ? a : ( f >= b ? b : f);
+  }
+
   static public inline function PowerOf2(n: Float): Int {
     return Math.round(Math.pow(2, Math.ceil(Math.log(n)/Math.log(2))));
   }

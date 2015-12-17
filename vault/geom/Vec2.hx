@@ -147,4 +147,8 @@ class Vec2 {
   public inline function normal(): Vec2 {
     return new Vec2(-y, x);
   }
+
+  public inline function point(): Point {
+    return new Point(Std.int(x), Std.int(y));
+  }
 }

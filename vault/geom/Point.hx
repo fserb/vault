@@ -22,6 +22,11 @@ abstract Point(Point_) from Point_ to Point_ {
   inline function get_y() return this.y;
   inline function set_y(y:Int) return this.y = y;
 
+  public var length(get, never): Float;
+  public inline function get_length(): Float {
+    return Math.sqrt(x*x + y*y);
+  }
+
   public inline function make(x:Int, y:Int): Point {
     return new Point(x, y);
   }
@@ -34,10 +39,18 @@ abstract Point(Point_) from Point_ to Point_ {
     return new Vec2(x, y);
   }
 
-  public inline function distance(p: Point): Float {
-    var xx = p.x - x;
-    var yy = p.y - y;
-    return Math.sqrt(xx*xx + yy*yy);
+  public inline function add(b: Point) {
+    x += b.x;
+    y += b.y;
+  }
+
+  public inline function sub(b: Point) {
+    x -= b.x;
+    y -= b.y;
+  }
+
+  public inline function distance(p: Point): Point {
+    return new Point(x - p.x, y - p.y);
   }
 
   public inline function fromVec2(v: Vec2): Point {
