@@ -18,7 +18,9 @@ class Profile {
   }
 
   public function end(region: String) {
-    Left.console.time(region, (Timer.stamp() - regions[region])*1000);
+    if (regions.exists(region)) {
+      Left.console.time(region, (Timer.stamp() - regions[region])*1000);
+    }
   }
 
   public function update() {
