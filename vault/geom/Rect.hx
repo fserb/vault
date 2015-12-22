@@ -29,7 +29,7 @@ class Rect {
             py >= y && py < y + height);
   }
 
-  public function isEmpty(): Bool {
+  public inline function isEmpty(): Bool {
     return this.width <= 0 || this.height <= 0;
   }
 

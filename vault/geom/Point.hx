@@ -49,6 +49,15 @@ abstract Point(Point_) from Point_ to Point_ {
     y -= b.y;
   }
 
+  public inline function mul(i: Int) {
+    x *= i;
+    y *= i;
+  }
+
+  public inline function dot(b: Point): Float {
+    return x*b.x + y*b.y;
+  }
+
   public inline function distance(p: Point): Point {
     return new Point(x - p.x, y - p.y);
   }
