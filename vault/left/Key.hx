@@ -101,7 +101,7 @@ class Key {
   public inline static var CAPS_LOCK = 20;
   public inline static var DELETE = 46;
   public inline static var END = 35;
-  public inline static var ESCAPE = 27;
+  public inline static var ESC = 27;
   public inline static var HOME = 36;
   public inline static var INSERT = 45;
   public inline static var TAB = 9;
