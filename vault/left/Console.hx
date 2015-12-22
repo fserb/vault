@@ -51,11 +51,10 @@ class Console {
   var onelist: Map<String, OneVariable>;
   var timelist: Map<String, TimeVariable>;
   var maxsize: Int;
+  var everyn: Int = 30;
+  var count: Int = 0;
 
   public function new() {
-#if ((cpp || neko) && desktop)
-    logfile = sys.io.File.write("console.log", false);
-#end
     watchlist = [];
     onelist = new Map<String, OneVariable>();
     timelist = new Map<String, TimeVariable>();
@@ -115,22 +114,26 @@ class Console {
 
   function rt(n: Float, prec: Int = 1): String {
     n = Math.round(n * Math.pow(10, prec));
-    var str = ''+n;
+    var str = ""+n;
     var len = str.length;
     if(len <= prec){
       while(len < prec){
-        str = '0'+str;
+        str = '0' + str;
         len++;
       }
-      return '0.'+str;
+      return ' 0.' + str;
     }
-    else{
-    return str.substr(0, str.length-prec) + '.'+str.substr(str.length-prec);
+    else {
+      return (str.length-prec == 1 ? ' ' : '')  + str.substr(0, str.length-prec) + '.'+str.substr(str.length-prec);
     }
   }
 
 #if ((cpp || neko) && desktop)
   public function update() {
+    count += 1;
+    if (count < everyn) return;
+    count = 0;
+    logfile = sys.io.File.write("console.log", false);
     logfile.writeString("\x1B[2J\x1B[0;0H");
 
     for (w in watchlist) {
@@ -156,7 +159,7 @@ class Console {
         rt(t.value) + " - avg: " + rt(average) + " - worst: " + rt(worst)));
     }
 
-    logfile.flush();
+    logfile.close();
   }
 #else
   public function update() {}
