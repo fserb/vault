@@ -12,7 +12,7 @@ class Key {
     justpressed = [];
     state = [];
     realstate = [];
-    for (i in 0...256) {
+    for (i in 0...512) {
       state[i] = false;
       realstate[i] = false;
     }
@@ -64,6 +64,7 @@ class Key {
 
   inline function keyCode(ev: KeyboardEvent): Int {
     if (ev.keyCode < 0 || ev.keyCode >= 256) return 0;
+    if (ev.keyCode == 13 && ev.ctrlKey) return CTRL_ENTER;
     return ev.keyCode;
   }
 
@@ -181,5 +182,8 @@ class Key {
   public inline static var NUMPAD_ENTER = 108;
   public inline static var NUMPAD_MULTIPLY = 106;
   public inline static var NUMPAD_SUBTRACT = 109;
+
+  public inline static var CTRL_ENTER = 500;
+
 
 }

@@ -110,13 +110,13 @@ class View extends Sprite {
   public function render() {
     sprite.graphics.clear();
 
-    if (vport != null) {
-      scrollRect = new Rectangle(0, 0, vport.x, vport.y);
-
-      sprite.graphics.beginFill(bgcolor, bgalpha);
-      sprite.graphics.drawRect(0, 0, vport.x, vport.y);
-      sprite.graphics.endFill();
-    }
+    // if (vport != null) {
+    //   scrollRect = new Rectangle(0, 0, vport.x, vport.y);
+    //
+    //   sprite.graphics.beginFill(bgcolor, bgalpha);
+    //   sprite.graphics.drawRect(0, 0, vport.x, vport.y);
+    //   sprite.graphics.endFill();
+    // }
     nextdraw = draworder.next;
     while (nextdraw != null) {
       nextdraw.tilesheet.drawTiles(sprite.graphics, nextdraw.data, true,

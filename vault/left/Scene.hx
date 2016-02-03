@@ -118,7 +118,7 @@ class Scene extends Sprite {
       var c = getChildAt(i);
       var up = Reflect.field(c, 'update');
       if (up != null) {
-        up();
+        Reflect.callMethod(c, up, []);
       }
     }
   }
