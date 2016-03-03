@@ -305,7 +305,12 @@ class Entity {
 
   public function hitPoint(x: Float, y: Float, r: Float = 2): Bool {
     if (dead) return false;
-    var hp = Circle(x, y, r);
+    var hp;
+    if (r <= 2) {
+      hp = Rect(x-r/2, y-r/2, r, r);
+    } else {
+      hp = Circle(x, y, r);
+    }
     for (a in hits) {
       if (isHit(transformHit(base_sprite.transform.matrix, a), hp)) {
         return true;
@@ -404,7 +409,7 @@ class Entity {
     aabb_m = base_sprite.transform.matrix;
   }
 
-  inline function _update_location() {
+  inline public function _update_location() {
     var m = new Matrix();
     m.identity();
     if (rotationcenter == null) {

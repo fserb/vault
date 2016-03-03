@@ -40,6 +40,10 @@ class EMath {
     return f >= 0 ? 1 : -1;
   }
 
+  static public inline function abssign(x: Int): Int {
+    return x < 0 ? -1 : x > 0 ? 1 : 0;
+  }
+
   static public inline function angledistance(from: Float, to: Float): Float {
     var delta = (to - from) % (2*Math.PI);
     if (delta < 0) delta += 2*Math.PI;

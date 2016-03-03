@@ -17,7 +17,6 @@ class Left {
   static public var mouse(default, null): Mouse;
 
   static public var console(default, null): Console;
-
   static public var profile(default, null): Profile;
 
   static public function setScene(scenefunc: Void->Scene) {
@@ -25,5 +24,9 @@ class Left {
       Left.scene.onDestroy();
     }
     Left.scene = scenefunc();
+  }
+
+  static public function onFrame(frameFunc: Void->Void) {
+
   }
 }

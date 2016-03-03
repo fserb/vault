@@ -115,6 +115,16 @@ class Game {
     }
   }
 
+  static public function gc() {
+    for (g in groups) {
+      for (e in g.entities) {
+        if (e.dead) {
+          g.remove(e);
+        }
+      }
+    }
+  }
+
   static public function get(groupname: String): List<Entity> {
     return group(groupname, -1).entities;
   }
@@ -237,7 +247,9 @@ class Game {
     mouse = new Mouse();
     touch = new Touch();
 
-    scene.onBegin();
+    #if !tabletop
+      scene.onBegin();
+    #end
 
     Lib.current.addEventListener(Event.ENTER_FRAME, onFrame);
     Lib.current.addEventListener(Event.DEACTIVATE, onDeactivate);

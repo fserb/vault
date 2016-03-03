@@ -27,6 +27,14 @@ abstract Point(Point_) from Point_ to Point_ {
     return Math.sqrt(x*x + y*y);
   }
 
+  public var angle(get, never): Float;
+  public function get_angle(): Float {
+    if (x == 0 && y == 0) {
+      return 0.0;
+    }
+    return (2*Math.PI + Math.atan2(y, x)) % (2*Math.PI);
+  }
+
   public inline function make(x:Int, y:Int): Point {
     return new Point(x, y);
   }

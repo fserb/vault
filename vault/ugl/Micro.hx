@@ -58,6 +58,7 @@ class Micro extends Scene {
 
     Game.totalTime = 0;
     Game.clear();
+    Game.gc();
     begin();
   }
 

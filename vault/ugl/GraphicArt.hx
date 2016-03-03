@@ -28,7 +28,7 @@ class GraphicArt {
   }
 
   public function size(w: Int, h: Int): GraphicArt {
-    return this.fill(0x000000, 0.0).rect(0, 0, w, h);
+    return this.line().fill(0x000000, 0.0).rect(0, 0, w, h).fill();
   }
 
   public function cache(idx: Int): GraphicArt {
