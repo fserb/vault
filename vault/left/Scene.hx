@@ -11,6 +11,7 @@ import vault.left.Left;
 import vault.left.Console.Profile;
 import haxe.Timer;
 import flash.display.DisplayObject;
+import flash.display.DisplayObjectContainer;
 
 @:allow(vault.left.Left)
 class Scene extends Sprite {
@@ -69,17 +70,48 @@ class Scene extends Sprite {
     return zoom;
   }
 
-  public function sortChildren(key: DisplayObject->Int) {
+  public function sortChildrenWithFunc(key: DisplayObject->Int) {
     var s = new Array<DisplayObject>();
-    for (i in 0...numChildren) {
-      var c = getChildAt(i);
-      s.push(c);
+    while (numChildren > 0) {
+      s.push(removeChildAt(0));
     }
     s.sort(function(a, b) return key(a) - key(b));
 
-    for (i in 0...numChildren) {
-      addChild(s[i]);
+    for (x in s) {
+      addChild(x);
     }
+  }
+
+  public function sortChildren() {
+    sortChildrenWithFunc(function(o) {
+      var l: Null<Int> = Reflect.getProperty(o, 'layer');
+      var layer: Int = (l == null) ? 0 : l;
+      return layer;
+    });
+  }
+
+  function getClassOfDOC(doc: DisplayObjectContainer, name: String): Array<Dynamic> {
+    var ret = new Array<Dynamic>();
+    for (i in 0...doc.numChildren) {
+      var c = doc.getChildAt(i);
+
+      var d = Std.instance(c, DisplayObjectContainer);
+      if (d != null) {
+        ret = ret.concat(getClassOfDOC(d, name));
+      }
+
+      var cn = Type.getClassName(Type.getClass(c)).split(".");
+      var className = cn[cn.length - 1];
+
+      if (name == className) {
+        ret.push(c);
+      }
+    }
+    return ret;
+  }
+
+  public function getClass(name: String): Array<Dynamic> {
+    return getClassOfDOC(this, name);
   }
 
   function onResize(ev) {

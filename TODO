@@ -11,6 +11,8 @@ TODO
 - PathFinding: works for graph and map
 - Music library?
 
+- Smoother: macro generate interpolation curve
+
 
 left : the minimal game library
 ===============================

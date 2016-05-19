@@ -2,6 +2,7 @@ package vault.left;
 
 import vault.left.Console;
 import vault.left.Scene;
+import flash.display.DisplayObject;
 
 @:allow(vault.left.Scene)
 class Left {
@@ -26,7 +27,21 @@ class Left {
     Left.scene = scenefunc();
   }
 
-  static public function onFrame(frameFunc: Void->Void) {
+  static public function add(obj: DisplayObject) {
+    Left.scene.addChild(obj);
+    Left.scene.sortChildren();
+  }
 
+  static public function remove(obj: DisplayObject) {
+    Left.scene.removeChild(obj);
+  }
+
+  static public function get(name: String): Array<Dynamic> {
+    return Left.scene.getClass(name);
+  }
+
+  static public function one(name: String): Dynamic {
+    var g = Left.scene.getClass(name);
+    return g.length > 0 ? g[0] : null;
   }
 }

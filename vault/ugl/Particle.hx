@@ -7,6 +7,11 @@ enum Value {
   Rand(m:Float, d:Float);
 }
 
+enum ParticleType {
+  SQUARE;
+  CIRCLE;
+}
+
 typedef Part = {
   var pos: Vec2;
   var vel: Vec2;
@@ -25,6 +30,7 @@ class Particle extends Entity {
   var _duration: Value;
   var _delay: Value;
   var _spread: Value;
+  var _type: ParticleType;
 
   public function new() {
     super();
@@ -38,6 +44,7 @@ class Particle extends Entity {
     _delay = Const(0);
     _spread = Const(0);
     _duration = Rand(1.0, 0.2);
+    _type = SQUARE;
   }
 
   public function xy(x: Float, y: Float): Particle {
@@ -53,6 +60,7 @@ class Particle extends Entity {
   public function delay(v: Float, ?r: Float = 0.0): Particle { _delay = (r == 0) ? Const(v) : Rand(v, r); return this; }
   public function duration(v: Float, ?r: Float = 0.0): Particle { _duration = (r == 0) ? Const(v) : Rand(v, r); return this; }
   public function spread(v: Float, ?r: Float = 0.0): Particle { _spread = (r == 0) ? Const(v) : Rand(v, r); return this; }
+  public function type(v: ParticleType): Particle { _type = v; return this; }
 
   var particles : List<Part> = null;
   function create() {
@@ -103,7 +111,12 @@ class Particle extends Entity {
       p.pos.x += p.vel.x*Game.time*t;
       p.pos.y += p.vel.y*Game.time*t;
       sprite.graphics.beginFill(_color, t);
-      sprite.graphics.drawRect(p.pos.x - p.size/2.0, p.pos.y - p.size/2.0, p.size, p.size);
+      switch (_type) {
+        case SQUARE:
+          sprite.graphics.drawRect(p.pos.x - p.size/2.0, p.pos.y - p.size/2.0, p.size, p.size);
+        case CIRCLE:
+          sprite.graphics.drawCircle(p.pos.x, p.pos.y, p.size);
+      }
     }
     if (particles.length == 0) {
       remove();

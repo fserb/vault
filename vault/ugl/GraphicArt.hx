@@ -6,6 +6,19 @@ import flash.display.Sprite;
 import flash.display.BitmapData;
 import flash.geom.Matrix;
 import vault.Utils;
+import openfl.text.TextField;
+
+enum FontAlign {
+  TOP_LEFT;
+  MIDDLE_LEFT;
+  BOTTOM_LEFT;
+  TOP_CENTER;
+  MIDDLE_CENTER;
+  BOTTOM_CENTER;
+  TOP_RIGHT;
+  MIDDLE_RIGHT;
+  BOTTOM_RIGHT;
+}
 
 class GraphicArt {
   var sprite: Sprite;
@@ -92,6 +105,45 @@ class GraphicArt {
     m.translate((x - bmpd.width/2), (y - bmpd.height/2));
     sprite.graphics.beginBitmapFill(bmpd, m, false, false);
     sprite.graphics.drawRect(x - bmpd.width/2, y - bmpd.height/2, bmpd.width, bmpd.height);
+    return this;
+  }
+
+  public function font(x: Float, y: Float, text: String, color: UInt, size: Int, font: String, align: FontAlign): GraphicArt {
+    if (disabled) return this;
+
+    var tf = new TextField();
+    tf.selectable = false;
+    tf.multiline = true;
+    tf.autoSize = openfl.text.TextFieldAutoSize.LEFT;
+
+    tf.text = text;
+    var f = new openfl.text.TextFormat();
+    f.size = size;
+    f.color = color;
+    var ttf = openfl.Assets.getFont(font);
+    f.font = ttf.fontName;
+    f.kerning = true;
+    tf.setTextFormat(f);
+
+    var bmpd = new BitmapData(Math.ceil(tf.width), Math.ceil(tf.height), true, 0);
+    bmpd.draw(tf);
+
+    var px = switch(align) {
+      case TOP_LEFT | MIDDLE_LEFT | BOTTOM_LEFT: x;
+      case TOP_CENTER | MIDDLE_CENTER | BOTTOM_CENTER: x - bmpd.width/2.0;
+      case TOP_RIGHT | MIDDLE_RIGHT | BOTTOM_RIGHT: x - bmpd.width;
+    }
+    var py = switch(align) {
+      case TOP_LEFT | TOP_CENTER | TOP_RIGHT: y;
+      case MIDDLE_LEFT | MIDDLE_CENTER | MIDDLE_RIGHT: y - bmpd.height/2.0;
+      case BOTTOM_LEFT | BOTTOM_CENTER | BOTTOM_RIGHT: y - bmpd.height;
+    }
+
+    var m = new Matrix();
+    m.translate(px, py);
+    sprite.graphics.beginBitmapFill(bmpd, m, false, true);
+    sprite.graphics.drawRect(px, py, bmpd.width, bmpd.height);
+
     return this;
   }
 

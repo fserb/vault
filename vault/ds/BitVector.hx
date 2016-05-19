@@ -276,7 +276,7 @@ class BitVector {
     #if neko
     neko.NativeString.length(bytes);
     #else
-    bytes.length;
+    input.length;
     #end
 
     var numBytes = k & 3;
