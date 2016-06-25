@@ -21,6 +21,7 @@ enum Align {
 
 class Entity {
   static var layer = 10;
+  public var innerlayer(default, set): Int = 0;
   public var pos: Vec2;
   public var angle: Float;
   public var vel: Vec2;
@@ -45,6 +46,14 @@ class Entity {
   public function postUpdate() {}
   public var args: Array<Dynamic>;
   public function begin() {}
+
+  public function set_innerlayer(v: Int): Int {
+    innerlayer = v;
+    var cn = Type.getClassName(Type.getClass(this)).split(".");
+    className = cn[cn.length - 1];
+    Game.group(className, -1).sort();
+    return v;
+  }
 
   function get_art(): PixelArt {
     art.disabled = false;

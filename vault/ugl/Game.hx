@@ -125,12 +125,14 @@ class Game {
     }
   }
 
-  static public function get(groupname: String): List<Entity> {
+  static public function get(groupname: String): Array<Entity> {
     return group(groupname, -1).entities;
   }
 
   static public function one(groupname: String): Dynamic {
-    return group(groupname, -1).entities.first();
+    var g = group(groupname, -1);
+    if (g.entities.length == 0) return null;
+    return g.entities[0];
   }
 
   static public function orderGroups(names: Array<String>) {
@@ -351,6 +353,7 @@ class Game {
           gp.max = Math.max(gp.max, d);
         #end
       }
+      g.newentities = g.entities;
     }
 
     Game.updateShake();
@@ -366,19 +369,31 @@ class Game {
 }
 
 class EntityGroup extends Sprite {
-  public var entities: List<Entity>;
+  public var entities: Array<Entity>;
+  public var newentities: Array<Entity>;
+
   public var layer: Int = 10;
 
   public function new(name: String, layer: Int) {
     super();
     this.name = name;
     this.layer = layer;
-    entities = new List<Entity>();
+    newentities = entities = new Array<Entity>();
   }
 
   public function add(e: Entity) {
     addChild(e.base_sprite);
-    entities.add(e);
+    entities.push(e);
+  }
+
+  public function sort() {
+    if (entities == newentities) {
+      newentities = entities.copy();
+    }
+    newentities.sort(function(a, b) return a.innerlayer - b.innerlayer);
+    for (i in 0...newentities.length) {
+      setChildIndex(newentities[i].base_sprite, i);
+    }
   }
 
   public function remove(e: Entity) {
