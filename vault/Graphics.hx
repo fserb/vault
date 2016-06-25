@@ -14,6 +14,21 @@ import flash.display.TriangleCulling;
 import flash.geom.Matrix;
 import flash.Vector;
 import openfl.display.Tilesheet;
+import flash.text.TextField;
+import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFormat;
+
+enum FontAlign {
+  TOP_LEFT;
+  MIDDLE_LEFT;
+  BOTTOM_LEFT;
+  TOP_CENTER;
+  MIDDLE_CENTER;
+  BOTTOM_CENTER;
+  TOP_RIGHT;
+  MIDDLE_RIGHT;
+  BOTTOM_RIGHT;
+}
 
 class Graphics {
   var gfx: flash.display.Graphics;
@@ -48,6 +63,41 @@ class Graphics {
       gfx.curveTo(cx, cy, px, py);
     }
     return this;
+  }
+
+  public function text(x: Float, y: Float, text: String, color: UInt, size: Int, font: String, align: FontAlign) {
+    var tf = new TextField();
+    tf.selectable = false;
+    tf.multiline = true;
+    tf.autoSize = TextFieldAutoSize.LEFT;
+
+    tf.text = text;
+    var f = new TextFormat();
+    f.size = size;
+    f.color = color;
+    var ttf = openfl.Assets.getFont(font);
+    f.font = ttf.fontName;
+    f.kerning = true;
+    tf.setTextFormat(f);
+
+    var bmpd = new BitmapData(Math.ceil(tf.width), Math.ceil(tf.height), true, 0);
+    bmpd.draw(tf);
+
+    var px = switch(align) {
+      case TOP_LEFT | MIDDLE_LEFT | BOTTOM_LEFT: x;
+      case TOP_CENTER | MIDDLE_CENTER | BOTTOM_CENTER: x - bmpd.width/2.0;
+      case TOP_RIGHT | MIDDLE_RIGHT | BOTTOM_RIGHT: x - bmpd.width;
+    }
+    var py = switch(align) {
+      case TOP_LEFT | TOP_CENTER | TOP_RIGHT: y;
+      case MIDDLE_LEFT | MIDDLE_CENTER | MIDDLE_RIGHT: y - bmpd.height/2.0;
+      case BOTTOM_LEFT | BOTTOM_CENTER | BOTTOM_RIGHT: y - bmpd.height;
+    }
+
+    var m = new Matrix();
+    m.translate(px, py);
+    gfx.beginBitmapFill(bmpd, m, false, true);
+    gfx.drawRect(px, py, bmpd.width, bmpd.height);
   }
 
   public function beginBitmapFill(bitmap:BitmapData, matrix:Matrix = null, repeat:Bool = true, smooth:Bool = false) {
