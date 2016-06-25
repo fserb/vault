@@ -50,4 +50,12 @@ class EMath {
     if (delta > Math.PI) delta -= 2*Math.PI;
     return -delta;
   }
+
+  static public inline function randDelta(delta: Float): Float {
+    return -delta + 2*delta*Math.random();
+  }
+
+  static public inline function randRange(a: Float, b: Float): Float {
+    return a + (b - a)*Math.random();
+  }
 }
