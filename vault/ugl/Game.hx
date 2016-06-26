@@ -258,7 +258,6 @@ class Game {
     touch = new Touch();
 
     #if !tabletop
-      Card.staticReset();
       scene.onBegin();
     #end
 
