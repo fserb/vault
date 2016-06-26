@@ -5,6 +5,8 @@ import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import vault.geom.Vec2;
+import flash.display.Bitmap;
+import openfl.Assets;
 
 enum HitType {
   Rect(x: Float, y: Float, w: Float, h: Float);
@@ -36,6 +38,8 @@ class Entity {
   public var gfx(get, null): GraphicArt;
   public var pattern(get, null): PatternArt;
   public var effect(get, null): EffectArt;
+  public var image(default, set): String;
+  public var bitmap: Bitmap;
 
   public var sprite: Sprite;
   public var base_sprite(default, null): Sprite;
@@ -71,6 +75,18 @@ class Entity {
 
   function get_effect(): EffectArt {
     return effect;
+  }
+
+  function set_image(n: String): String {
+    image = n;
+    if (n == null) {
+      sprite.removeChild(bitmap);
+      bitmap = null;
+    } else {
+      bitmap = new Bitmap(Assets.getBitmapData(n));
+      sprite.addChild(bitmap);
+    }
+    return image;
   }
 
   public function new(?a: Dynamic, ?b: Dynamic, ?c: Dynamic, ?d: Dynamic, ?e: Dynamic) {

@@ -176,6 +176,16 @@ class Game {
     sprite.y = -mag + 2*mag*Math.random();
   }
 
+  public static function forceSize(w: Int, h: Int) {
+    Game.width = w;
+    Game.height = h;
+    var zoom = Math.min(Lib.current.stage.stageWidth/w, Lib.current.stage.stageHeight/h);
+    Lib.current.scaleX = Lib.current.scaleY = zoom;
+    Lib.current.x = (Lib.current.stage.stageWidth/zoom - w)/2.0;
+    Lib.current.y = (Lib.current.stage.stageHeight/zoom - h)/2.0;
+  }
+
+
   static public function delay(t: Float) {
     _delay = Math.max(t, _delay);
   }
@@ -242,14 +252,13 @@ class Game {
     Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0,
       width, height);
     #end
-    // Lib.current.stage.align = StageAlign.TOP;
-    // Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
 
     key = new Key();
     mouse = new Mouse();
     touch = new Touch();
 
     #if !tabletop
+      Card.staticReset();
       scene.onBegin();
     #end
 

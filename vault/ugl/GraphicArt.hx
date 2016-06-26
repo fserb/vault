@@ -141,7 +141,7 @@ class GraphicArt {
 
     var m = new Matrix();
     m.translate(px, py);
-    sprite.graphics.beginBitmapFill(bmpd, m, false, true);
+    sprite.graphics.beginBitmapFill(bmpd, m, false, false);
     sprite.graphics.drawRect(px, py, bmpd.width, bmpd.height);
 
     return this;
