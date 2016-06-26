@@ -55,7 +55,7 @@ class Entity {
     innerlayer = v;
     var cn = Type.getClassName(Type.getClass(this)).split(".");
     className = cn[cn.length - 1];
-    Game.group(className, -1).sort();
+    Game.group(className, -1).requestSort();
     return v;
   }
 

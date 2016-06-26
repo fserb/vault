@@ -13,6 +13,9 @@ TODO:
   - proper "stack" of cards
   - proper card "areas"
 
+
+  - card layer should change every frame
+  - card distribution is swapped on bowling
 */
 
 class Card extends Entity {
@@ -64,16 +67,15 @@ class Card extends Entity {
   public function moveTo(g: CardGroup, d: Float=0.0, f: Null<Bool>=null) {
     var length = g.pos.distance(pos).length;
 
-
     var duration = length/1500.0;
 
-    g.add(this);
+    var target = g.add(this);
     moving = true;
     Act.obj(this)
       .delay(d)
       .set("innerlayer", nextlayer++)
-      .attr("pos.x", g.pos.x, duration, Ease.quadOut)
-      .attr("pos.y", g.pos.y, duration, Ease.quadOut);
+      .attr("pos.x", target.x, duration, Ease.quadOut)
+      .attr("pos.y", target.y, duration, Ease.quadOut);
 
     if (f != null && f != _facing) {
       Act.obj(this)
@@ -92,7 +94,10 @@ class Card extends Entity {
   public function set_popup(v: Bool): Bool {
     if (popup == v) return popup;
     popup = v;
-    Act.obj(this).attr("baseZoom", popup ? 1.25 : 1.0, 0.2, Ease.quadIn);
+    Act.obj(this)
+      .set("innerlayer", nextlayer++)
+      .attr("baseZoom", popup ? 1.25 : 1.0, 0.2, Ease.quadIn)
+      .set("innerlayer", baseinner);
     return popup;
   }
 

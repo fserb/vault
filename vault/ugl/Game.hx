@@ -362,6 +362,9 @@ class Game {
         #end
       }
       g.newentities = g.entities;
+      if (g.needSort) {
+        g.sort();
+      }
     }
 
     Game.updateShake();
@@ -381,6 +384,7 @@ class EntityGroup extends Sprite {
   public var newentities: Array<Entity>;
 
   public var layer: Int = 10;
+  public var needSort: Bool = false;
 
   public function new(name: String, layer: Int) {
     super();
@@ -392,6 +396,11 @@ class EntityGroup extends Sprite {
   public function add(e: Entity) {
     addChild(e.base_sprite);
     entities.push(e);
+    needSort = true;
+  }
+
+  public function requestSort() {
+    needSort = true;
   }
 
   public function sort() {
@@ -402,6 +411,7 @@ class EntityGroup extends Sprite {
     for (i in 0...newentities.length) {
       setChildIndex(newentities[i].base_sprite, i);
     }
+    needSort = false;
   }
 
   public function remove(e: Entity) {
