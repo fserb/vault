@@ -122,6 +122,24 @@ class Act {
     return this;
   }
 
+  function getDeepProperty(obj: Dynamic, name: String): Dynamic {
+    var p = name.indexOf('.');
+    if (p == -1) {
+      return Reflect.getProperty(obj, name);
+    }
+    return getDeepProperty(Reflect.getProperty(obj, name.substr(0, p)),
+                           name.substr(p+1));
+  }
+
+  function setDeepProperty(obj: Dynamic, name: String, value: Dynamic) {
+    var p = name.indexOf('.');
+    if (p == -1) {
+      return Reflect.setProperty(obj, name, value);
+    }
+    return setDeepProperty(Reflect.getProperty(obj, name.substr(0, p)),
+                           name.substr(p+1), value);
+  }
+
   public function attr(attr: String, value: Float, duration: Float = -1.0, ease: Float->Float = null): Act {
     if (ease == null) {
       ease = lastEase;
@@ -134,9 +152,9 @@ class Act {
     var initial: Null<Float> = null;
     var func = function(t: Float) {
       if (initial == null) {
-        initial = Reflect.getProperty(object, attr);
+        initial = getDeepProperty(object, attr);
       }
-      Reflect.setProperty(object, attr, initial + (value - initial)*ease(t));
+      setDeepProperty(object, attr, initial + (value - initial)*ease(t));
     };
 
     Act.actions.push({
