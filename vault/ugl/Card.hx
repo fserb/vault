@@ -10,16 +10,13 @@ using lambda;
 /*
 TODO:
   - drag&drop
-  - proper "stack" of cards
-  - proper card "areas"
 
-
-  - card layer should change every frame
-  - card distribution is swapped on bowling
+  - group can orientate layout on cards smoothly
+  - click distribution
 */
 
 class Card extends Entity {
-  static var nextlayer: Int = 1000;
+  static var nextlayer: Int = 10000;
   public var tags: Array<String>;
   public var group: CardGroup = null;
 
@@ -49,8 +46,8 @@ class Card extends Entity {
   }
 
   override public function begin() {
-    group = args[0];
-    pos = group.pos.copy();
+    var g: CardGroup = args[0];
+    pos = g.add(this);
     angle = targetAngle + EMath.randDelta(angleError);
     tags = [];
     paint();
