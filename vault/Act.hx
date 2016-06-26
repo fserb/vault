@@ -11,7 +11,6 @@ typedef ActEvent = {
   var time: Float;
   var duration: Float;
   var object: Dynamic;
-  var property: String;
   var hold: Bool;
 }
 
@@ -105,7 +104,6 @@ class Act {
       time: 0,
       duration: -1,
       object: object,
-      property: null,
       hold: true
       });
     return this;
@@ -117,7 +115,6 @@ class Act {
       time: 0,
       duration: t,
       object: object,
-      property: null,
       hold: true});
     return this;
   }
@@ -162,7 +159,6 @@ class Act {
       time: 0,
       duration: duration,
       object: object,
-      property: attr,
       hold: false});
     return this;
   }
@@ -173,7 +169,6 @@ class Act {
       time: 0,
       duration: 0,
       object: object,
-      property: attr,
       hold: true});
     return this;
   }
@@ -184,7 +179,6 @@ class Act {
       time: 0,
       duration: 0,
       object: object,
-      property: null,
       hold: true});
     return this;
   }
@@ -198,7 +192,6 @@ class Act {
       time: 0,
       duration: duration,
       object: object,
-      property: null,
       hold: false});
     return this;
   }
