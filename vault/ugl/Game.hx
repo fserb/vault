@@ -37,6 +37,8 @@ class Game {
   static public var touch: Touch;
   static public var scene(default, set): Dynamic;
 
+  static public var pausable: Bool = true;
+
   static var groups: Map<String, EntityGroup>;
   static public var sprite: Sprite;
   #if ugldebug

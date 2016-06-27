@@ -167,6 +167,7 @@ class Micro extends Scene {
   }
 
   override public function onBackground() {
+    if (!Game.pausable) return;
     if (state.match(GAME)) {
       paused = true;
     }
