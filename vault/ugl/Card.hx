@@ -51,7 +51,6 @@ class Card extends Entity {
     angle = targetAngle + EMath.randDelta(angleError);
     tags = [];
     paint();
-    addHitBox(Rect(0, 0, cardFront.width, cardFront.height));
     cardSprite = new Sprite();
     cardSprite.addChild(cardHighlight);
     cardSprite.addChild(cardFront);
@@ -135,6 +134,10 @@ class Card extends Entity {
     cardSprite.scaleX = baseZoom*Ease.quadInOut(Math.abs(flipangle));
     cardSprite.scaleY = baseZoom;
     cardSprite.y = -15.0*Ease.quadInOut(1.0 - Math.abs(flipangle));
+
+    clearHitBox();
+    addHitBox(Rect(0, 0, cardFront.width*baseZoom, cardFront.height*baseZoom));
+
   }
 
   override public function update() {

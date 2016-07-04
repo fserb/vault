@@ -14,6 +14,8 @@ import flash.geom.Rectangle;
 import flash.Lib;
 import haxe.Timer;
 
+import vault.geom.Point;
+
 #if uglprof
 class GroupProf {
   public var frames: Int = 0;
@@ -38,6 +40,8 @@ class Game {
   static public var scene(default, set): Dynamic;
 
   static public var pausable: Bool = true;
+
+  static var desiredSize: Point = null;
 
   static var groups: Map<String, EntityGroup>;
   static public var sprite: Sprite;
@@ -179,14 +183,26 @@ class Game {
   }
 
   public static function forceSize(w: Int, h: Int) {
-    Game.width = w;
-    Game.height = h;
-    var zoom = Math.min(Lib.current.stage.stageWidth/w, Lib.current.stage.stageHeight/h);
-    Lib.current.scaleX = Lib.current.scaleY = zoom;
-    Lib.current.x = (Lib.current.stage.stageWidth/zoom - w)/2.0;
-    Lib.current.y = (Lib.current.stage.stageHeight/zoom - h)/2.0;
+    desiredSize = new Point(w, h);
   }
 
+  function onResize(ev) {
+    if (desiredSize == null) {
+      Game.width = Lib.current.stage.stageWidth;
+      Game.height = Lib.current.stage.stageHeight;
+    } else {
+      var w = desiredSize.x;
+      var h = desiredSize.y;
+      Game.width = w;
+      Game.height = h;
+      var zoom = Math.min(Lib.current.stage.stageWidth/w, Lib.current.stage.stageHeight/h);
+      trace(Lib.current.stage.stageWidth, Lib.current.stage.stageHeight, w, h, zoom);
+      Lib.current.scaleX = Lib.current.scaleY = zoom;
+      Lib.current.x = (Lib.current.stage.stageWidth/zoom - w)/2.0;
+      Lib.current.y = (Lib.current.stage.stageHeight/zoom - h)/2.0;
+    }
+    scene.onBegin();
+  }
 
   static public function delay(t: Float) {
     _delay = Math.max(t, _delay);
@@ -266,18 +282,8 @@ class Game {
     Lib.current.addEventListener(Event.ENTER_FRAME, onFrame);
     Lib.current.addEventListener(Event.DEACTIVATE, onDeactivate);
     Lib.current.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-    #if tabletop
     Lib.current.stage.addEventListener(Event.RESIZE, onResize);
-    #end
   }
-
-  #if tabletop
-  function onResize(ev) {
-    Game.width = Lib.current.stage.stageWidth;
-    Game.height = Lib.current.stage.stageHeight;
-    scene.onBegin();
-  }
-  #end
 
   function set_fullscreen(value: Bool): Bool {
     trace("fullscreen", fullscreen, value);
