@@ -18,6 +18,7 @@ import vault.geom.Point;
 
 #if uglprof
 class GroupProf {
+  public function new() { }
   public var frames: Int = 0;
   public var count: Int = 0;
   public var max: Float = 0.0;
@@ -200,6 +201,7 @@ class Game {
       Lib.current.x = (Lib.current.stage.stageWidth/zoom - w)/2.0;
       Lib.current.y = (Lib.current.stage.stageHeight/zoom - h)/2.0;
     }
+    clear();
     scene.onBegin();
   }
 
@@ -273,10 +275,6 @@ class Game {
     key = new Key();
     mouse = new Mouse();
     touch = new Touch();
-
-    #if !tabletop
-      scene.onBegin();
-    #end
 
     Lib.current.addEventListener(Event.ENTER_FRAME, onFrame);
     Lib.current.addEventListener(Event.DEACTIVATE, onDeactivate);
