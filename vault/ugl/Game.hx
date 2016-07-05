@@ -196,7 +196,6 @@ class Game {
       Game.width = w;
       Game.height = h;
       var zoom = Math.min(Lib.current.stage.stageWidth/w, Lib.current.stage.stageHeight/h);
-      trace(Lib.current.stage.stageWidth, Lib.current.stage.stageHeight, w, h, zoom);
       Lib.current.scaleX = Lib.current.scaleY = zoom;
       Lib.current.x = (Lib.current.stage.stageWidth/zoom - w)/2.0;
       Lib.current.y = (Lib.current.stage.stageHeight/zoom - h)/2.0;
