@@ -184,6 +184,4 @@ class Key {
   public inline static var NUMPAD_SUBTRACT = 109;
 
   public inline static var CTRL_ENTER = 500;
-
-
 }

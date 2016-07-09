@@ -1,4 +1,4 @@
-package vault.ugl;
+package vault.deck;
 
 import flash.display.Bitmap;
 import flash.display.Sprite;
@@ -10,13 +10,11 @@ using lambda;
 /*
 TODO:
   - drag&drop
-
   - group can orientate layout on cards smoothly
   - click distribution
 */
 
 class Card extends Entity {
-  static var nextlayer: Int = 10000;
   public var tags: Array<String>;
   public var group: CardGroup = null;
 
@@ -45,8 +43,8 @@ class Card extends Entity {
     return tags.indexOf(loc) != -1;
   }
 
-  override public function begin() {
-    var g: CardGroup = args[0];
+  public function new(g: CardGroup) {
+    super();
     pos = g.add(this);
     angle = targetAngle + EMath.randDelta(angleError);
     tags = [];
@@ -57,7 +55,7 @@ class Card extends Entity {
     cardSprite.addChild(cardBack);
     cardSprite.addChild(cardSelect);
     sprite.addChild(cardSprite);
-    draw();
+    update();
   }
 
   public function moveTo(g: CardGroup, d: Float=0.0, f: Null<Bool>=null) {
@@ -69,7 +67,7 @@ class Card extends Entity {
     moving = true;
     Act.obj(this)
       .delay(d)
-      .set("innerlayer", nextlayer++)
+      .incr("layer", 100)
       .attr("pos.x", target.x, duration, Ease.quadOut)
       .attr("pos.y", target.y, duration, Ease.quadOut);
 
@@ -84,16 +82,16 @@ class Card extends Entity {
       _facing = f;
     }
 
-    Act.obj(this).set("moving", false).set("innerlayer", baseinner);
+    Act.obj(this).set("moving", false).incr("layer", -100);
   }
 
   public function set_popup(v: Bool): Bool {
     if (popup == v) return popup;
     popup = v;
     Act.obj(this)
-      .set("innerlayer", nextlayer++)
+      .incr("layer", 100)
       .attr("baseZoom", popup ? 1.25 : 1.0, 0.2, Ease.quadIn)
-      .set("innerlayer", baseinner);
+      .incr("layer", -100);
     return popup;
   }
 
@@ -107,7 +105,7 @@ class Card extends Entity {
     var duration = 0.4;
     moving = true;
     Act.obj(this)
-      .set("innerlayer", nextlayer++)
+      .incr("layer", 100)
       .attr("flipangle", v ? 1.0 : -1.0, duration, Ease.linear)
       .tween(function(t) {
         if (t == 1.0) {
@@ -115,7 +113,7 @@ class Card extends Entity {
         }
       }, duration/2.0)
       .set("moving", false)
-      .set("innerlayer", baseinner);
+      .incr("layer", -100);
     return _facing;
   }
 
@@ -125,7 +123,7 @@ class Card extends Entity {
   function paint() { }
   function touch() { }
 
-  function draw() {
+  override public function update() {
     cardHighlight.visible = highlight;
     cardSelect.visible = select;
     cardFront.visible = (flipangle >= 0.0);
@@ -133,22 +131,12 @@ class Card extends Entity {
 
     cardSprite.scaleX = baseZoom*Ease.quadInOut(Math.abs(flipangle));
     cardSprite.scaleY = baseZoom;
-    cardSprite.y = -15.0*Ease.quadInOut(1.0 - Math.abs(flipangle));
+    cardSprite.x = -cardFront.width*baseZoom/2.0;
+    cardSprite.y = -cardFront.height*baseZoom/2.0 -15.0*Ease.quadInOut(1.0 - Math.abs(flipangle));
 
-    clearHitBox();
-    addHitBox(Rect(0, 0, cardFront.width*baseZoom, cardFront.height*baseZoom));
-
-  }
-
-  override public function update() {
-    if (!moving) {
-      for (t in Game.touch.press) {
-        if (hitPoint(t.x, t.y)) {
-          touch();
-        }
-      }
-    }
-
-    draw();
+    rect.x = cardSprite.x;
+    rect.y = cardSprite.y;
+    rect.width = cardFront.width*baseZoom;
+    rect.height = cardFront.height*baseZoom;
   }
 }

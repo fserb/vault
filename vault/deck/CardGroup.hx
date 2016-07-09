@@ -1,4 +1,4 @@
-package vault.ugl;
+package vault.deck;
 
 import vault.geom.Vec2;
 
@@ -12,15 +12,12 @@ class CardGroup extends Entity {
   var baselayer: Int = 0;
   var nextlayer: Int = 0;
 
-  public function new(?a: Dynamic, ?b: Dynamic, ?c: Dynamic, ?d: Dynamic, ?e: Dynamic) {
+  public function new(x: Float, y: Float) {
+    super();
     cards = [];
     layout = STACK(0);
-    super(a,b,c,d,e);
-  }
-
-  override public function begin() {
-    pos.x = args[0];
-    pos.y = args[1];
+    pos.x = x;
+    pos.y = y;
   }
 
   public function all(): Array<Card> {
@@ -32,7 +29,7 @@ class CardGroup extends Entity {
     for (i in 0...cards.length) {
       var c = cards[i];
       c.pos = getPos(i);
-      c.innerlayer = c.baseinner = baselayer + i;
+      c.layer = baselayer + i/100;
     }
   }
 
@@ -62,7 +59,7 @@ class CardGroup extends Entity {
       var c = cards[i];
       if (c.moving) continue;
       c.pos = getPos(i);
-      c.innerlayer = c.baseinner = baselayer + i;
+      c.layer = baselayer + i/100;
     }
   }
 }

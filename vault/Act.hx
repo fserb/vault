@@ -173,6 +173,19 @@ class Act {
     return this;
   }
 
+  public function incr(attr: String, value: Dynamic): Act {
+    Act.actions.push({
+      func: function(t) {
+        var v = getDeepProperty(object, attr);
+        setDeepProperty(object, attr, v + value); 
+      },
+      time: 0,
+      duration: 0,
+      object: object,
+      hold: true});
+    return this;
+  }
+
   public function then(func: Void->Void = null): Act {
     Act.actions.push({
       func: function(t) { if (func != null) func(); },
