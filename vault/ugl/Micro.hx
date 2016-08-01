@@ -52,6 +52,14 @@ class Micro extends Scene {
     final();
   }
 
+  function reset() {
+    Game.clear();
+    Game.mouse.clear();
+    Game.key.clear();
+    Game.touch.clear();
+    beginGame();
+  }
+
   function beginGame() {
     Game.mouse.update();
     Game.key.update();
